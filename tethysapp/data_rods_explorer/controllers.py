@@ -475,7 +475,7 @@ def load_tiff_ly(req_post, req_get):
 		# Add raster to map
 		title = '{0} {1}'.format(req_get['variable'], req_get['plotTime'])
 		geoserver_layer = MVLayer(source='ImageWMS',
-								  options={'url': 'http://127.0.0.1:8181/geoserver/wms',
+								  options={'url': 'https://127.0.0.1:8181/geoserver/wms',
 										   'params': {'LAYERS': store_id},
 										   'serverType': 'geoserver'},
 								  legend_title=title,
@@ -501,7 +501,7 @@ def load_tiff_ly(req_post, req_get):
 			# Add raster to map
 			title = '{0} {1}'.format(req_get['variable'], req_get['plotTime'])
 			geoserver_layer = MVLayer(source='ImageWMS',
-									  options={'url': 'http://127.0.0.1:8181/geoserver/wms',
+									  options={'url': 'https://127.0.0.1:8181/geoserver/wms',
 											   'params': {'LAYERS': store_id},
 											   'serverType': 'geoserver'},
 									  legend_title=title,
