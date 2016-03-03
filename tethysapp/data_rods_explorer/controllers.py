@@ -189,33 +189,9 @@ def plot2(request):
 							   )
 	
 	# Plot
-	'''if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
-		varunit = WMS_VARS[get['model']][get['variable']][2] #####Esta madre cambia
-		pointLonLat = post['pointLonLat']
-		datarod_ts = getDataRod_plot2(get, pointLonLat)
-		timeseries_plot = TimeSeries(
-			height='250px',
-			width='100%',
-			engine='highcharts',
-			title=False,
-			y_axis_title=' ',
-			y_axis_units=varunit,
-			series=datarod_ts
-		)
-	else:
-		timeseries_plot = None'''
 	if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
 		pointLonLat = post['pointLonLat']
 		datarod_ts = getDataRod_plot2(get, pointLonLat)
-		'''datarod_ts = [{"data": [[dt.datetime(2015, 1, 1, 0, 0), 10],
-								[dt.datetime(2015, 1, 1, 1, 0), 50],
-								[dt.datetime(2015, 1, 1, 2, 0), 10]],
-					   "name": "Prueba1"},
-					  {'data': [[dt.datetime(2015, 1, 1, 0, 0), 20],
-						        [dt.datetime(2015, 1, 1, 1, 0), 10],
-								[dt.datetime(2015, 1, 1, 2, 0), 30]],
-					   'name': "Prueba2"}]
-		'''
 		timeseries_plot = {'y1_axis_units': WMS_VARS[get['model']][get['variable']][2],
 						   'y2_axis_units': WMS_VARS[get['model2']][get['variable2']][2],
 						   'series': datarod_ts}

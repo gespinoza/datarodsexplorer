@@ -18,7 +18,7 @@ function load_default_home() {
 	if (GET['plotTime']) {
 		var plotTime = date_to_normal(GET['plotTime']);
 	} else {
-		var plotTime = date_to_normal(current_date(120));
+		var plotTime = date_to_normal(current_date(140));
 	    document.getElementById('plot_date').value = plotTime['date'];
 	    document.getElementById('plot_hour').value = plotTime['hour'];
 		counter = counter + 1;
@@ -469,7 +469,7 @@ function page_and_parameters(href, page) {
 	if (GET['plotTime']) {
 		var plotDate = GET['plotTime'];
 	} else {
-		var plotTime = date_to_normal(current_date(120));
+		var plotTime = date_to_normal(current_date(140));
 	    var plotDate = date_to_rods(plotTime['date']) + 'T' + plotTime['hour'];
 	}
 	href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
@@ -478,12 +478,12 @@ function page_and_parameters(href, page) {
 		if (GET['endDate']) {
 			endDate = GET['endDate'];
 		} else {
-			var endDate = current_date(113, '23');
+			var endDate = current_date(133, '23');
 		}
 		if (GET['startDate']) {
 			startDate =  GET['startDate'];
 		} else {
-			var startDate = current_date(120, '0');
+			var startDate = current_date(140, '0');
 		}
 		href = href + '&startDate=' + startDate + '&endDate=' + endDate;
 	} else if (page == 'plot2') {
@@ -500,16 +500,16 @@ function page_and_parameters(href, page) {
 		if (GET['endDate']) {
 			endDate = GET['endDate'];
 		} else {
-			var endDate = current_date(113, '23');
+			var endDate = current_date(133, '23');
 		}
 		if (GET['startDate']) {
 			startDate =  GET['startDate'];
 		} else {
-			var startDate = current_date(120, '0');
+			var startDate = current_date(140, '0');
 		}
 		href = href + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
 	} else if (page == 'years') {
-		var endDate = current_date(120, '23');
+		var endDate = current_date(140, '23');
 		years = endDate.substr(0, 4);
 		href =  href + '&years=' + years;
 	}
@@ -617,16 +617,18 @@ function createPlot() {
 	document.forms['parametersForm'].submit();
 }
 
-/*
-function two_axis_plot(series, y1_units, y2_units) {
-	$('plot2container').highcharts;
-}
-*/
-
 function two_axis_plot(series, y_axis_1, y_axis_2) {
 	series = series.replace(/\&#39;/g, "'")
 	series = series.replace(/datetime.datetime/g, "Date.UTC")
 	var datarods_ts = eval(series);
+
+	arrayLength = datarods_ts[0]['data'].length;
+	for (var i = 0; i < arrayLength; i++) {
+		var time1 = new Date(datarods_ts[0]['data'][i][0]);
+		var time2 = new Date(datarods_ts[1]['data'][i][0]);
+		datarods_ts[0]['data'][i][0] = time1.setMonth(time1.getMonth() - 1);
+	    datarods_ts[1]['data'][i][0] = time2.setMonth(time2.getMonth() - 1);
+	    }
 
     $('#plot2container').highcharts({
         chart: {
@@ -763,6 +765,7 @@ VAR_DICT["trmm"] = [
 			           {"text": "Precipitation (mm/hr)",
 			            "value": "precip"}
 				   ];
+
 VAR_DICT["grace"] = [
 			           {"text": "Surface Soil Moisture Percentile",
 			            "value": "surf"}, 
@@ -771,3 +774,4 @@ VAR_DICT["grace"] = [
 			           {"text": "Ground Water Percentile",
 			       		"value": "deep"}
 				   ];
+
