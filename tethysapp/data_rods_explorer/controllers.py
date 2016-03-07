@@ -9,7 +9,7 @@ import urllib2
 from math import copysign
 
 WORKSPACE = 'data_rods_explorer'
-GEOSERVER_URI = 'http://127.0.0.1:8000/apps/data-rods-explorer/'
+GEOSERVER_URI = 'http://appsdev.hydroshare.org:8000/apps/data-rods-explorer/' #'http://127.0.0.1:8000/apps/data-rods-explorer/'
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
 				'&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
 				'&LAYERS=Time-Averaged.{5}'  # NLDAS_NOAH0125_M_002_soilm0_100cm
@@ -475,7 +475,7 @@ def load_tiff_ly(req_post, req_get):
 		# Add raster to map
 		title = '{0} {1}'.format(req_get['variable'], req_get['plotTime'])
 		geoserver_layer = MVLayer(source='ImageWMS',
-								  options={'url': 'http://127.0.0.1:8181/geoserver/wms',
+								  options={'url': 'http://appsdev.hydroshare.org:8181/geoserver/wms', #'http://127.0.0.1:'
 										   'params': {'LAYERS': store_id},
 										   'serverType': 'geoserver'},
 								  legend_title=title,
@@ -501,7 +501,7 @@ def load_tiff_ly(req_post, req_get):
 			# Add raster to map
 			title = '{0} {1}'.format(req_get['variable'], req_get['plotTime'])
 			geoserver_layer = MVLayer(source='ImageWMS',
-									  options={'url': 'http://127.0.0.1:8181/geoserver/wms',
+									  options={'url': 'http://appsdev.hydroshare.org:8181/geoserver/wms', # 'http://127.0.0.1:'
 											   'params': {'LAYERS': store_id},
 											   'serverType': 'geoserver'},
 									  legend_title=title,
