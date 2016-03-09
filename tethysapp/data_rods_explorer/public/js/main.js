@@ -580,8 +580,10 @@ function getRanges(array) {
 function map_click_evt() {
 	var map = TETHYS_MAP_VIEW.getMap();
 	map.on('singleclick', function(evt) {
-		var lonlat = ol.proj.transform(map.getEventCoordinate(evt), 'EPSG:3857', 'EPSG:4326');
-		//window.alert(lonlat);
+		var coords = evt.coordinate;
+		//var coords = map.getEventCoordinate(evt);
+		var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
+		window.alert(lonlat);
 		document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
 	});
 }
