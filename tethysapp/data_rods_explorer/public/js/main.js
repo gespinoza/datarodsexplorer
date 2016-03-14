@@ -607,6 +607,7 @@ function load_map_post_parameters() {
 }
 
 function load_map() {
+	document.getElementById('loadMap').value = "no";
 	load_map_post_parameters();
 	document.getElementById('retrieveMap').value = "yes";
 	document.forms['parametersForm'].submit();
