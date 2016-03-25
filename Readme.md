@@ -9,6 +9,7 @@ Initial links (will change as DRE matures):
  - Run the [Data Rods Explorer web app](https://appsdev.hydroshare.org/apps/data-rods-explorer)
  - View/edit the draft [User/Developer Guide on googledocs](https://docs.google.com/document/d/1sePSne_aROY6W6rTr-mCKmN9nKBXL5iGfplaFCDE4ec/edit?usp=sharing)
  - View the Tethys Platform [home](http://www.tethysplatform.org/),  [documentation](http://docs.tethysplatform.org/en/latest/), and [tutorials](http://docs.tethysplatform.org/en/latest/tutorials.html)
+ - Prototype [ArcGIS Online web app](https://www.arcgis.com/home/webmap/viewer.html?webmap=93b7c28dca3b4c86863408a4a90f729f&extent=-180,-60.799,180,81.0806) showing GLDAS data rods for several hydromet variables. Clicking on a grid cell results in a popup with data service links to WaterML, Ascii tabular, and plot outputs of the time series at that cell. 
 
 This development was funded under the NASA ROSES program award NNH13ZDA001N-ACCESS. 
 
