@@ -112,10 +112,7 @@ def plot2(request):
 								name='model2',
 								multiple=False,
 								original=True,
-								options=[('NLDAS-Noah (LSM)', 'nldas'),
-										 ('GLDAS-Noah (LSM)', 'gldas'),
-										 ('TRMM (retrieval)', 'trmm'),
-										 ('GRACE soil moisture', 'grace')],
+								options=MODEL_OPTIONS,
 								attributes="onchange=oc_model2();"
 							   )
 	
@@ -210,10 +207,7 @@ def create_select_model():
 							   name='model',
 							   multiple=False,
 							   original=True,
-							   options=[('NLDAS-Noah (LSM)', 'nldas'),
-										('GLDAS-Noah (LSM)', 'gldas'),
-										('TRMM (retrieval)', 'trmm'),
-										('GRACE soil moisture', 'grace')],
+							   options=MODEL_OPTIONS,
 							   attributes="onchange=oc_model();"
 							  )
 	return select_model
@@ -461,7 +455,7 @@ def access_datarods_server(link, model, years):
 				data.append([dt.datetime.strptime(row_st[:14], '%Y-%m-%d %HZ'),
 							  float(row_st[14:])
 							])
-	elif model == 'trmm':
+	elif model in ['trmm', 'grace']:
 		sLines = sFile.readlines()[13:]
 		sFile.close()
 

@@ -78,9 +78,9 @@ VAR_DICT["trmm"] = [
 
 VAR_DICT["grace"] = [
 			           {"text": "Surface Soil Moisture Percentile",
-			            "value": "surf"}, 
+			            "value": "sfsm"}, 
 			           {"text": "Root Zone Soil Moisture Percentile",
-			            "value": "root"},
+			            "value": "rtzsm"},
 			           {"text": "Ground Water Percentile",
-			       		"value": "deep"}
+			       		"value": "gws"}
 				   ];
