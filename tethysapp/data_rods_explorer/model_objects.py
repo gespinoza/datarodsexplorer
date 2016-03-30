@@ -1,5 +1,7 @@
 WORKSPACE = 'data_rods_explorer'
-GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms' # 'http://127.0.0.1:8181/geoserver/wms'
+GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
+### Uncomment the following line for local development
+# GEOSERVER_URL =  'http://127.0.0.1:8181/geoserver/wms'
 MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
 				 ('GLDAS-Noah (LSM)', 'gldas'),
 				 ('TRMM (retrieval)', 'trmm'),
@@ -75,7 +77,7 @@ WMS_VARS['gldas'].update({"Evap": ["", "Total Evapotranspiration", "kg/m^2/s"],
 						  "TSOIL0-10cm": ["", "Average layer 1 soil temperature", "K"],
 						  "Wind": ["", "Near surface wind magnitude", "m/s"]
 						})
-WMS_VARS['trmm'].update({"precip": ["TmAvMp.TRMM_3B42_daily_precipitation_V7", "Precipitation", "mm/hr"]
+WMS_VARS['trmm'].update({"precip": ["TRMM_3B42_daily_precipitation_V7", "Precipitation", "mm/hr"]
 					    })
 WMS_VARS['grace'].update({"sfsm": ["GRACEDADM_CLSM025NA_7D_1_0_sfsm_inst", "Surface Soil Moisture", "percentile"],
 						  "rtzsm": ["GRACEDADM_CLSM025NA_7D_1_0_rtzsm_inst", "Root Zone Soil Moisture", "percentile"],
