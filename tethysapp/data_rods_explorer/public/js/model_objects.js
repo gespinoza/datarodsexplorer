@@ -46,7 +46,7 @@ VAR_DICT["nldas"] = [
 VAR_DICT["gldas"] = [
 						{"text": "Total Evapotranspiration (kg/m^2/s)",
 						"value": "Evap"},
-						{"text": "Precipitation rate (kg/m^s/hr)",
+						{"text": "Precipitation rate (kg/m^2/hr)",
 						"value": "precip"},
 						{"text": "Rain rate (kg/m^2/s)",
 						"value": "Rainf"},
