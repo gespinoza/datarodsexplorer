@@ -64,7 +64,7 @@ WMS_VARS['nldas'].update({"APCPsfc": ["NLDAS_FORA0125_H_002_apcpsfc", "Precipita
 						  "TSOIL0-10cm": ["NLDAS_NOAH0125_H_002_tsoil0_10cm", "0-10 cm soil temperature", "K"]
 						})
 WMS_VARS['gldas'].update({"Evap": ["", "Total Evapotranspiration", "kg/m^2/s"],
-						  "precip": ["", "Precipitation rate", "kg/m^s/hr"],
+						  "precip": ["", "Precipitation rate", "kg/m^2/hr"],
 						  "Rainf": ["", "Rain rate", "kg/m^2/s"],
 						  "Snowf": ["", "Snow rate", "kg/m^2/s"],
 						  "Qs": ["", "Surface Runoff", "kg/m^2/s"],
