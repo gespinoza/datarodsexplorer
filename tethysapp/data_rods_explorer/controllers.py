@@ -15,7 +15,7 @@ def home(request):
 	"""
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
+	select_date, select_hour = map_date_ctrls(model)
 
 	# If 'Display map' is clicked, load layers
 	map_layers = load_tiff_ly(request.POST, request.GET)
@@ -40,7 +40,7 @@ def plot(request):
 	"""
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
+	select_date, select_hour = map_date_ctrls(model)
 
 	# Load map if exists. If 'Display map' is clicked, load layers
 	post = request.POST
@@ -92,7 +92,7 @@ def plot2(request):
 	"""
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
+	select_date, select_hour = map_date_ctrls(model)
 
 	# If 'Display map' is clicked, load layers
 	post = request.POST
@@ -140,7 +140,7 @@ def years(request):
 	"""
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
+	select_date, select_hour = map_date_ctrls(model)
 
 	# If 'Display map' is clicked, load layers
 	post = request.POST
