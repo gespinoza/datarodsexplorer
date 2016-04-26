@@ -13,19 +13,22 @@ def home(request):
 	"""
 	Controller for the app 'home' page.
 	"""
+	get = request.GET
+	post = request.POST
+
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
+	select_date, select_hour = map_date_ctrls(get)
 
 	# If 'Display map' is clicked, load layers
-	map_layers = load_tiff_ly(request.POST, request.GET)
+	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
 	else:
 		load_layer = ''
 
 	# Load map
-	MapView, map_view_options = create_map(map_layers, request.POST)
+	MapView, map_view_options = create_map(map_layers, post)
 
 	# Context variables
 	context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
@@ -38,13 +41,14 @@ def plot(request):
 	"""
 	Controller for the plot page.
 	"""
+	get = request.GET
+	post = request.POST
+
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
+	select_date, select_hour = map_date_ctrls(get)
 
 	# Load map if exists. If 'Display map' is clicked, load layers
-	post = request.POST
-	get = request.GET
 	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
@@ -55,7 +59,7 @@ def plot(request):
 	MapView, map_view_options = create_map(map_layers, post)
 
 	# Load page parameters
-	start_date, end_date, plot_button = plot_ctrls()
+	start_date, end_date, plot_button = plot_ctrls(get)
 
 	# Plot
 	if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
@@ -90,13 +94,14 @@ def plot2(request):
 	"""
 	Controller for the plot2 page.
 	"""
-	# Load model selection, map date and hour, and display map button
-	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
-
-	# If 'Display map' is clicked, load layers
 	post = request.POST
 	get = request.GET
+
+	# Load model selection, map date and hour, and display map button
+	select_model = create_select_model()
+	select_date, select_hour = map_date_ctrls(get)
+
+	# If 'Display map' is clicked, load layers
 	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
@@ -104,10 +109,10 @@ def plot2(request):
 		load_layer = ''
 
 	# Load map
-	MapView, map_view_options = create_map(map_layers, request.POST)
+	MapView, map_view_options = create_map(map_layers, post)
 
 	# Load page parameters
-	start_date, end_date, plot_button = plot_ctrls()
+	start_date, end_date, plot_button = plot_ctrls(get)
 	select_model2 = SelectInput(display_text='',
 								name='model2',
 								multiple=False,
@@ -138,13 +143,14 @@ def years(request):
 	"""
 	Controller for the 'years' page.
 	"""
-	# Load model selection, map date and hour, and display map button
-	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
-
-	# If 'Display map' is clicked, load layers
 	post = request.POST
 	get = request.GET
+
+	# Load model selection, map date and hour, and display map button
+	select_model = create_select_model()
+	select_date, select_hour = map_date_ctrls(get)
+
+	# If 'Display map' is clicked, load layers
 	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
@@ -152,7 +158,7 @@ def years(request):
 		load_layer = ''
 
 	# Load map
-	MapView, map_view_options = create_map(map_layers, request.POST)
+	MapView, map_view_options = create_map(map_layers, post)
 
 	# Load page parameters
 	years_list = create_years_list(1979)
@@ -247,17 +253,18 @@ def create_map(layers_ls, req_post):
 	# Return map element
 	return [MapView, map_view_options]
 
-def map_date_ctrls():
+def map_date_ctrls(req_get):
 	'''
 	Function that creates and return the "select_date", "select_hour", and "Display map" elements
 	'''
+	model = req_get['model']
 
 	select_date = DatePicker(display_text=False,
 							 name='plot_date',
 							 autoclose=True,
 							 format='mm/dd/yyyy',
-							 start_date='1/2/1979',
-							 end_date=False,
+							 start_date=STARTDATE_OPTIONS[model],
+							 end_date=ENDDATE_OPTIONS[model],
 							 start_view=0,
 							 attributes='onchange=oc_map_dt();',#value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
 							 classes=''
@@ -279,16 +286,17 @@ def map_date_ctrls():
 
 	return [select_date, select_hour]
 
-def plot_ctrls() :
+def plot_ctrls(req_get) :
 	'''
 	Function that creates and return the "start_date", "end_hour", and "plot_button" elements
 	'''
+	model = req_get['model']
 
 	start_date = DatePicker(display_text=False,
 							name='startDate',
 							autoclose=True,
 							format='mm/dd/yyyy',
-							start_date='1/2/1979',
+							start_date=STARTDATE_OPTIONS[model],
 							start_view=0,
 							attributes='onchange=oc_sten_dt();',
 							)
@@ -297,7 +305,7 @@ def plot_ctrls() :
 						  name='endDate',
 						  autoclose=True,
 						  format='mm/dd/yyyy',
-						  start_date='1/2/1979',
+						  start_date=STARTDATE_OPTIONS[model],
 						  start_view=0,
 						  attributes='onchange=oc_sten_dt();',
 						  )

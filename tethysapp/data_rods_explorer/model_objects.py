@@ -7,6 +7,16 @@ MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
 				 ('TRMM (retrieval)', 'trmm'),
 				 ('GRACE soil moisture', 'grace')]
 
+STARTDATE_OPTIONS = {'nldas': '1/2/1979',
+				 'gldas': '3/1/2000',
+				 'trmm': '12/31/1997',
+				 'grace': '1/6/2003'}
+				 
+ENDDATE_OPTIONS = {'nldas': '4/7/2016',
+				 'gldas': '3/31/2016',
+				 'trmm': '1/31/2016',
+				 'grace': '5/3/2015'}
+
 DATARODS_TSB = {}
 DATARODS_TSB.update({'nldas': {'noah': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
 							   			'variable=NLDAS:NLDAS_NOAH0125_H.002:{0}&'  # SSRUNsfc
