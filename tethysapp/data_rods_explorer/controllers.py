@@ -261,8 +261,8 @@ def map_date_ctrls(req_get):
 							 name='plot_date',
 							 autoclose=True,
 							 format='mm/dd/yyyy',
-							 start_date=DATE_OPTIONS[req_get['model']][0],
-							 end_date=DATE_OPTIONS[req_get['model']][1],
+							 start_date=DATE_OPTIONS[req_get['model'[0]]]
+							 end_date=DATE_OPTIONS[req_get['model'[1]]],
 							 start_view=0,
 							 attributes='onchange=oc_map_dt();',#value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
 							 classes=''
@@ -293,7 +293,7 @@ def plot_ctrls(req_get) :
 							name='startDate',
 							autoclose=True,
 							format='mm/dd/yyyy',
-							start_date=DATE_OPTIONS[req_get['model']][0],
+							start_date=DATE_OPTIONS[req_get['model'[0]]],
 							start_view=0,
 							attributes='onchange=oc_sten_dt();',
 							)
@@ -302,7 +302,7 @@ def plot_ctrls(req_get) :
 						  name='endDate',
 						  autoclose=True,
 						  format='mm/dd/yyyy',
-						  start_date=DATE_OPTIONS[req_get['model']][0],
+						  start_date=DATE_OPTIONS[req_get['model'[0]]],
 						  start_view=0,
 						  attributes='onchange=oc_sten_dt();',
 						  )
