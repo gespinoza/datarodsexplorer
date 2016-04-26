@@ -7,19 +7,17 @@ MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
 				 ('TRMM (retrieval)', 'trmm'),
 				 ('GRACE soil moisture', 'grace')]
 
-DATE_OPTIONS = {}
+STARTDATE_OPTIONS = {'nldas': '01/02/1979',
+					 'gldas': '03/01/2000',
+					 'trmm': '12/31/1997', 
+					 'grace': '01/06/2003'
+					 }
 
-models = ['nldas', 'gldas', 'trmm', 'grace']
-
-startdates = ['1/2/1979', '3/1/2000', '12/31/1997', '1/6/2003']
-
-enddates = ['4/7/2016', '3/31/2016', '1/31/2016', '5/3/2015']
-
-for key in range(len(models)): 
-	model = models[key]
-	startdate = startdates[key]
-	enddate = enddates[key]
-	DATE_OPTIONS[model] = startdate, enddate
+ENDDATE_OPTIONS = {'nldas': '04/07/2016',
+				   'gldas': '03/31/2016',
+				   'trmm': '01/31/2016', 
+				   'grace': '05/03/2015'
+				   }
 
 DATARODS_TSB = {}
 DATARODS_TSB.update({'nldas': {'noah': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'

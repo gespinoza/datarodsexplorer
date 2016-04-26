@@ -257,12 +257,14 @@ def map_date_ctrls(req_get):
 	'''
 	Function that creates and return the "select_date", "select_hour", and "Display map" elements
 	'''
+	model = req_get['model']
+
 	select_date = DatePicker(display_text=False,
 							 name='plot_date',
 							 autoclose=True,
 							 format='mm/dd/yyyy',
-							 start_date=DATE_OPTIONS[req_get['model'[0]]]
-							 end_date=DATE_OPTIONS[req_get['model'[1]]],
+							 start_date=STARTDATE_OPTIONS[model],
+							 end_date=ENDDATE_OPTIONS[model],
 							 start_view=0,
 							 attributes='onchange=oc_map_dt();',#value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
 							 classes=''
@@ -288,12 +290,13 @@ def plot_ctrls(req_get) :
 	'''
 	Function that creates and return the "start_date", "end_hour", and "plot_button" elements
 	'''
+	model = req_get['model']
 
 	start_date = DatePicker(display_text=False,
 							name='startDate',
 							autoclose=True,
 							format='mm/dd/yyyy',
-							start_date=DATE_OPTIONS[req_get['model'[0]]],
+							start_date=STARTDATE_OPTIONS[model],
 							start_view=0,
 							attributes='onchange=oc_sten_dt();',
 							)
@@ -302,7 +305,7 @@ def plot_ctrls(req_get) :
 						  name='endDate',
 						  autoclose=True,
 						  format='mm/dd/yyyy',
-						  start_date=DATE_OPTIONS[req_get['model'[0]]],
+						  start_date=STARTDATE_OPTIONS[model],
 						  start_view=0,
 						  attributes='onchange=oc_sten_dt();',
 						  )
