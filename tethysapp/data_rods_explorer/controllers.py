@@ -256,8 +256,8 @@ def map_date_ctrls():
 							 name='plot_date',
 							 autoclose=True,
 							 format='mm/dd/yyyy',
-							 start_date='01/02/1979',
-							 end_date='04/07/2016',
+							 start_date=STARTDATE_OPTIONS[model],
+							 end_date=ENDDATE_OPTIONS[model],
 							 start_view=0,
 							 attributes='onchange=oc_map_dt();',#value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
 							 classes=''
