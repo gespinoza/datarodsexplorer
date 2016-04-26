@@ -55,7 +55,7 @@ def plot(request):
 	MapView, map_view_options = create_map(map_layers, post)
 
 	# Load page parameters
-	start_date, end_date, plot_button = plot_ctrls()
+	start_date, end_date, plot_button = plot_ctrls(model)
 
 	# Plot
 	if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
@@ -107,7 +107,7 @@ def plot2(request):
 	MapView, map_view_options = create_map(map_layers, request.POST)
 
 	# Load page parameters
-	start_date, end_date, plot_button = plot_ctrls()
+	start_date, end_date, plot_button = plot_ctrls(model)
 	select_model2 = SelectInput(display_text='',
 								name='model2',
 								multiple=False,
@@ -247,7 +247,7 @@ def create_map(layers_ls, req_post):
 	# Return map element
 	return [MapView, map_view_options]
 
-def map_date_ctrls():
+def map_date_ctrls(model):
 	'''
 	Function that creates and return the "select_date", "select_hour", and "Display map" elements
 	'''
@@ -256,8 +256,8 @@ def map_date_ctrls():
 							 name='plot_date',
 							 autoclose=True,
 							 format='mm/dd/yyyy',
-							 start_date=STARTDATE_OPTIONS[model],
-							 end_date=ENDDATE_OPTIONS[model],
+							 start_date=STARTDATE_OPTIONS[req_get['model']],
+							 end_date=ENDDATE_OPTIONS[req_get['model']],
 							 start_view=0,
 							 attributes='onchange=oc_map_dt();',#value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
 							 classes=''
@@ -279,7 +279,7 @@ def map_date_ctrls():
 
 	return [select_date, select_hour]
 
-def plot_ctrls() :
+def plot_ctrls(model) :
 	'''
 	Function that creates and return the "start_date", "end_hour", and "plot_button" elements
 	'''
@@ -288,7 +288,7 @@ def plot_ctrls() :
 							name='startDate',
 							autoclose=True,
 							format='mm/dd/yyyy',
-							start_date='1/2/1979',
+							start_date=STARTDATE_OPTIONS[req_get['model']],
 							start_view=0,
 							attributes='onchange=oc_sten_dt();',
 							)
@@ -297,7 +297,7 @@ def plot_ctrls() :
 						  name='endDate',
 						  autoclose=True,
 						  format='mm/dd/yyyy',
-						  start_date='1/2/1979',
+						  start_date=STARTDATE_OPTIONS[req_get['model']],
 						  start_view=0,
 						  attributes='onchange=oc_sten_dt();',
 						  )
