@@ -253,18 +253,59 @@ def create_map(layers_ls, req_post):
 	# Return map element
 	return [MapView, map_view_options]
 
+def start_end_date(model): 
+	"""
+	Function that retrieves start and end date for current model
+	"""
+
+	# Read URL1
+	url1 = TEMPORAL_BOUNDS(model)
+	url_text1 = urllib2.urlopen(url1)
+	url_lines1 = url_text1.readlines()
+	
+	# Find URL2 in URL1 source code
+	url2 = ""
+	for i in range(len(url_lines1)):
+		soup1 = BeautifulSoup(url_lines1[i],'html.parser')
+		if soup1.find('location') is not None: 
+			url2 = soup1.location.getText()
+	url_text2 = urllib.urlopen(url2)
+	url_lines2 = url_text2.readlines()
+
+	# Find start_date and end_date in URL2
+	start = ""
+	end = ""
+	for j in range(len(url_lines2)): 
+		soup2 = BeautifulSoup(urlLines2[j], 'html.parser')
+		if soup2.find('startingdatetime') is not None: 
+			start = soup2.startingdatetime.getText()
+		if soup2.find('endingdatetime') is not None: 
+			end = soup2.endingdatetime.getText()
+	
+	# Create start_date variable
+	start_day = start[8:10]
+	start_month = start[5:7]
+	start_year = start[:4]
+	start_date = start_day + '/' + start_month + '/' + start_year
+	
+	# Create end_date variable
+	end_day = end[8:10]
+	end_month = end[5:7]
+	end_year = end[:4]
+	end_date = end_day + '/' + end_month + '/' + end_year
+
+	return [start_date, end_date]
+
 def map_date_ctrls(req_get):
 	'''
 	Function that creates and return the "select_date", "select_hour", and "Display map" elements
 	'''
-	model = req_get['model']
-
 	select_date = DatePicker(display_text=False,
 							 name='plot_date',
 							 autoclose=True,
 							 format='mm/dd/yyyy',
-							 start_date=STARTDATE_OPTIONS[model],
-							 end_date=ENDDATE_OPTIONS[model],
+							 start_date=start_end_date(req_get['model'])[0],
+							 end_date=start_end_date(request.GET)[1],
 							 start_view=0,
 							 attributes='onchange=oc_map_dt();',#value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
 							 classes=''
@@ -290,13 +331,11 @@ def plot_ctrls(req_get) :
 	'''
 	Function that creates and return the "start_date", "end_hour", and "plot_button" elements
 	'''
-	model = req_get['model']
-
 	start_date = DatePicker(display_text=False,
 							name='startDate',
 							autoclose=True,
 							format='mm/dd/yyyy',
-							start_date=STARTDATE_OPTIONS[model],
+							start_date=start_end_date(req_get['model'])[0],
 							start_view=0,
 							attributes='onchange=oc_sten_dt();',
 							)
@@ -305,7 +344,7 @@ def plot_ctrls(req_get) :
 						  name='endDate',
 						  autoclose=True,
 						  format='mm/dd/yyyy',
-						  start_date=STARTDATE_OPTIONS[model],
+						  start_date=start_end_date(request.GET)[0],
 						  start_view=0,
 						  attributes='onchange=oc_sten_dt();',
 						  )

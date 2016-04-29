@@ -1,23 +1,27 @@
 WORKSPACE = 'data_rods_explorer'
 GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
 ### Uncomment the following line for local development
-# GEOSERVER_URL =  'http://127.0.0.1:8181/geoserver/wms'
+GEOSERVER_URL =  'http://127.0.0.1:8181/geoserver/wms'
 MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
 				 ('GLDAS-Noah (LSM)', 'gldas'),
 				 ('TRMM (retrieval)', 'trmm'),
 				 ('GRACE soil moisture', 'grace')]
 
-STARTDATE_OPTIONS = {'nldas': '01/02/1979',
-					 'gldas': '03/01/2000',
-					 'trmm': '12/31/1997', 
-					 'grace': '01/06/2003'
-					 }
+TEMPORAL_BOUNDS = {}
+TEMPORAL_BOUNDS.update({'nldas': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS'
+											'_NOAH0125_H&version=002&page_size=1&sort_key=-start_date')
+							  })
+TEMPORAL_BOUNDS.update({'gldas': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_VIC10_3H&'
+								'version=001&page_size=1&sort_key=-start_date')
+					})
+TEMPORAL_BOUNDS.update({'trmm': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=TRMM_3B42&'
+								'version=7&page_size=1&sort_key=-start_date')
+					})
 
-ENDDATE_OPTIONS = {'nldas': '04/07/2016',
-				   'gldas': '03/31/2016',
-				   'trmm': '01/31/2016', 
-				   'grace': '05/03/2015'
-				   }
+# TEMPORARILY SET TO GLDAS WEBPAGE
+TEMPORAL_BOUNDS.update({'grace': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_VIC10_3H&'
+								'version=001&page_size=1&sort_key=-start_date')
+					})
 
 DATARODS_TSB = {}
 DATARODS_TSB.update({'nldas': {'noah': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
