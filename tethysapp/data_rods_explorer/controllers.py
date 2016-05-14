@@ -13,19 +13,22 @@ def home(request):
 	"""
 	Controller for the app 'home' page.
 	"""
+	get = request.GET
+	post = request.POST
+
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
 	select_date, select_hour = map_date_ctrls()
 
 	# If 'Display map' is clicked, load layers
-	map_layers = load_tiff_ly(request.POST, request.GET)
+	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
 	else:
 		load_layer = ''
 
 	# Load map
-	MapView, map_view_options = create_map(map_layers, request.POST)
+	MapView, map_view_options = create_map(map_layers, post)
 
 	# Context variables
 	context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
@@ -38,13 +41,14 @@ def plot(request):
 	"""
 	Controller for the plot page.
 	"""
+	get = request.GET
+	post = request.POST
+
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
 	select_date, select_hour = map_date_ctrls()
 
 	# Load map if exists. If 'Display map' is clicked, load layers
-	post = request.POST
-	get = request.GET
 	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
@@ -90,13 +94,14 @@ def plot2(request):
 	"""
 	Controller for the plot2 page.
 	"""
+	post = request.POST
+	get = request.GET
+
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
 	select_date, select_hour = map_date_ctrls()
 
 	# If 'Display map' is clicked, load layers
-	post = request.POST
-	get = request.GET
 	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
@@ -104,7 +109,7 @@ def plot2(request):
 		load_layer = ''
 
 	# Load map
-	MapView, map_view_options = create_map(map_layers, request.POST)
+	MapView, map_view_options = create_map(map_layers, post)
 
 	# Load page parameters
 	start_date, end_date, plot_button = plot_ctrls()
@@ -138,13 +143,14 @@ def years(request):
 	"""
 	Controller for the 'years' page.
 	"""
+	post = request.POST
+	get = request.GET
+
 	# Load model selection, map date and hour, and display map button
 	select_model = create_select_model()
 	select_date, select_hour = map_date_ctrls()
 
 	# If 'Display map' is clicked, load layers
-	post = request.POST
-	get = request.GET
 	map_layers = load_tiff_ly(post, get)
 	if map_layers:
 		load_layer = map_layers[0]['options']['params']['LAYERS']
@@ -152,7 +158,7 @@ def years(request):
 		load_layer = ''
 
 	# Load map
-	MapView, map_view_options = create_map(map_layers, request.POST)
+	MapView, map_view_options = create_map(map_layers, post)
 
 	# Load page parameters
 	years_list = create_years_list(1979)
@@ -444,7 +450,7 @@ def access_datarods_server(link, model, years):
 		sFile.close()
 
 		if years:
-			for row in sLines:
+			for row in sLines[:-1]:
 				row_st = row.strip()
 				data.append([dt.datetime.strptime('2000' + row_st[4:14], '%Y-%m-%d %HZ'),
 							  float(row_st[14:])
@@ -455,7 +461,7 @@ def access_datarods_server(link, model, years):
 				data.append([dt.datetime.strptime(row_st[:14], '%Y-%m-%d %HZ'),
 							  float(row_st[14:])
 							])
-	elif model in ['trmm', 'grace']:
+	elif model in ['trmm', 'grace', 'gldas2']:
 		sLines = sFile.readlines()[13:]
 		sFile.close()
 

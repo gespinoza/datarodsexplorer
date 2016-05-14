@@ -71,6 +71,15 @@ VAR_DICT["gldas"] = [
 						{"text": "Near surface wind magnitude (m/s)",
 						"value": "Wind"}
 				   ];
+VAR_DICT["gldas2"] = [
+						{"text": "10-40 cm layer 2 soil moisture content (kg/m^2)",
+						"value": "SOILM10_40cm"},
+						{"text": "40-100 cm layer 3 soil moisture content (kg/m^2)",
+						"value": "SOILM40_100cm"},
+						{"text": "100-200 cm layer 4 soil moisture content (kg/m^2)",
+						"value": "SOILM100_200cm"}
+
+				   ];
 VAR_DICT["trmm"] = [
 			           {"text": "Precipitation (mm/hr)",
 			            "value": "precip"}
