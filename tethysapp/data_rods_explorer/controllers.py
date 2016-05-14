@@ -450,7 +450,7 @@ def access_datarods_server(link, model, years):
 		sFile.close()
 
 		if years:
-			for row in sLines:
+			for row in sLines[:-1]:
 				row_st = row.strip()
 				data.append([dt.datetime.strptime('2000' + row_st[4:14], '%Y-%m-%d %HZ'),
 							  float(row_st[14:])
@@ -461,7 +461,7 @@ def access_datarods_server(link, model, years):
 				data.append([dt.datetime.strptime(row_st[:14], '%Y-%m-%d %HZ'),
 							  float(row_st[14:])
 							])
-	elif model in ['trmm', 'grace']:
+	elif model in ['trmm', 'grace', 'gldas2']:
 		sLines = sFile.readlines()[13:]
 		sFile.close()
 

@@ -4,6 +4,7 @@ GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
 GEOSERVER_URL =  'http://127.0.0.1:8181/geoserver/wms'
 MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
 				 ('GLDAS-Noah (LSM)', 'gldas'),
+				 ('GLDAS 2-Noah (LSM)', 'gldas2'),
 				 ('TRMM (retrieval)', 'trmm'),
 				 ('GRACE soil moisture', 'grace')]
 
@@ -21,6 +22,11 @@ DATARODS_TSB.update({'gldas': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/
 							   'variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&'  # precip
 							   'type=asc2&location=GEOM:POINT({1})&'
 							   'startDate={2}&endDate={3}')
+					})
+DATARODS_TSB.update({'gldas2': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
+							   'variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&' # SOILM40_100cm
+							   'startDate={2}&endDate={3}&'
+							   'location=GEOM:POINT({1})&type=asc2') # %28-112.3,%2030.4%29
 					})
 DATARODS_TSB.update({'trmm': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
 							  'variable=TRMM:TRMM_3B42.007:{0}itation&'
@@ -40,7 +46,7 @@ DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION
 				'&time={4}'  # 2008-01-01T00:00:00Z/2008-01-01T00:00:00Z
 				'&bbox={0},{1},{2},{3}')  # -119,30,-107,36
 
-WMS_VARS = {"nldas": {}, "gldas": {}, "trmm": {}, "grace": {}}
+WMS_VARS = {"nldas": {}, "gldas": {}, "gldas2": {}, "trmm": {}, "grace": {}}
 WMS_VARS['nldas'].update({"APCPsfc": ["NLDAS_FORA0125_H_002_apcpsfc", "Precipitation hourly total", "kg/m^2"],
 						  "DLWRFsfc": ["NLDAS_FORA0125_H_002_dlwrfsfc", "Surface DW longwave radiation flux", "W/m^2"],
 						  "DSWRFsfc": ["NLDAS_FORA0125_H_002_dswrfsfc", "Surface DW shortwave radiation flux", "W/m^2"],
@@ -76,6 +82,11 @@ WMS_VARS['gldas'].update({"Evap": ["", "Total Evapotranspiration", "kg/m^2/s"],
 						  "Tair": ["", "Near surface air temperature", "K"],
 						  "TSOIL0-10cm": ["", "Average layer 1 soil temperature", "K"],
 						  "Wind": ["", "Near surface wind magnitude", "m/s"]
+						})
+WMS_VARS['gldas2'].update({
+						  "SOILM10_40cm": ["", "10-40 cm layer 2 soil moisture content", "kg/m^2"],
+						  "SOILM40_100cm": ["", "40-100 cm layer 3 soil moisture content", "kg/m^2"],
+						  "SOILM100_200cm": ["", "0-10 cm layer 1 soil moisture content", "kg/m^2"]
 						})
 WMS_VARS['trmm'].update({"precip": ["TRMM_3B42_daily_precipitation_V7", "Precipitation", "mm/hr"]
 					    })
