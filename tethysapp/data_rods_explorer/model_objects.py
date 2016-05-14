@@ -7,22 +7,6 @@ MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
 				 ('TRMM (retrieval)', 'trmm'),
 				 ('GRACE soil moisture', 'grace')]
 
-TEMPORAL_BOUNDS = {}
-TEMPORAL_BOUNDS.update({'nldas': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS'
-											'_NOAH0125_H&version=002&page_size=1&sort_key=-start_date')
-							  })
-TEMPORAL_BOUNDS.update({'gldas': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_VIC10_3H&'
-								'version=001&page_size=1&sort_key=-start_date')
-					})
-TEMPORAL_BOUNDS.update({'trmm': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=TRMM_3B42&'
-								'version=7&page_size=1&sort_key=-start_date')
-					})
-
-# TEMPORARILY SET TO GLDAS WEBPAGE
-TEMPORAL_BOUNDS.update({'grace': ('https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_VIC10_3H&'
-								'version=001&page_size=1&sort_key=-start_date')
-					})
-
 DATARODS_TSB = {}
 DATARODS_TSB.update({'nldas': {'noah': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
 							   			'variable=NLDAS:NLDAS_NOAH0125_H.002:{0}&'  # SSRUNsfc
