@@ -5,6 +5,7 @@ tethysapp/data_rods_explorer/app.py
 tethysapp/data_rods_explorer/controllers.py
 tethysapp/data_rods_explorer/init_stores.py
 tethysapp/data_rods_explorer/model.py
+tethysapp/data_rods_explorer/model_objects.py
 tethysapp/data_rods_explorer/utilities.py
 tethysapp_data_rods_explorer.egg-info/PKG-INFO
 tethysapp_data_rods_explorer.egg-info/SOURCES.txt
