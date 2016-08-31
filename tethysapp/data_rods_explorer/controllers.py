@@ -8,6 +8,7 @@ from tempfile import NamedTemporaryFile
 import urllib2
 from math import copysign
 from model_objects import *
+from utilities import get_fences
 
 def home(request):
 	"""
@@ -15,25 +16,7 @@ def home(request):
 	"""
 	get = request.GET
 	post = request.POST
-
-	# Load model selection, map date and hour, and display map button
-	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
-
-	# If 'Display map' is clicked, load layers
-	map_layers = load_tiff_ly(post, get)
-	if map_layers:
-		load_layer = map_layers[0]['options']['params']['LAYERS']
-	else:
-		load_layer = ''
-
-	# Load map
-	MapView, map_view_options = create_map(map_layers, post)
-
-	# Context variables
-	context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
-			   'select_date': select_date, 'select_hour': select_hour, 'map_layers': map_layers,
-			   'load_layer': load_layer}
+	context = initialize_model_map_context(get, post)
 
 	return render(request, 'data_rods_explorer/home.html', context)
 
@@ -43,20 +26,7 @@ def plot(request):
 	"""
 	get = request.GET
 	post = request.POST
-
-	# Load model selection, map date and hour, and display map button
-	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
-
-	# Load map if exists. If 'Display map' is clicked, load layers
-	map_layers = load_tiff_ly(post, get)
-	if map_layers:
-		load_layer = map_layers[0]['options']['params']['LAYERS']
-	else:
-		load_layer = ''
-
-	# Load map
-	MapView, map_view_options = create_map(map_layers, post)
+	context = initialize_model_map_context(get, post)
 
 	# Load page parameters
 	start_date, end_date, plot_button = plot_ctrls()
@@ -83,10 +53,9 @@ def plot(request):
 		timeseries_plot = None
 
 	# Context variables
-	context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
-			   'select_date': select_date, 'select_hour': select_hour,
-			   'start_date': start_date, 'end_date': end_date, 'plot_button': plot_button,
-			   'timeseries_plot': timeseries_plot, 'load_layer': load_layer}
+	context['start_date'] = start_date
+	context['plot_button'] = plot_button
+	context['timeseries_plot'] = timeseries_plot
 
 	return render(request, 'data_rods_explorer/plot.html', context)
 
@@ -96,20 +65,7 @@ def plot2(request):
 	"""
 	post = request.POST
 	get = request.GET
-
-	# Load model selection, map date and hour, and display map button
-	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
-
-	# If 'Display map' is clicked, load layers
-	map_layers = load_tiff_ly(post, get)
-	if map_layers:
-		load_layer = map_layers[0]['options']['params']['LAYERS']
-	else:
-		load_layer = ''
-
-	# Load map
-	MapView, map_view_options = create_map(map_layers, post)
+	context = initialize_model_map_context(get, post)
 
 	# Load page parameters
 	start_date, end_date, plot_button = plot_ctrls()
@@ -132,10 +88,10 @@ def plot2(request):
 		timeseries_plot = None
 
 	# Context variables
-	context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
-			   'select_date': select_date, 'select_hour': select_hour, 'select_model2': select_model2,
-			   'start_date': start_date, 'end_date': end_date, 'plot_button': plot_button,
-			   'timeseries_plot': timeseries_plot, 'load_layer': load_layer}
+	context['start_date'] = start_date
+	context['plot_button'] = plot_button
+	context['timeseries_plot'] = timeseries_plot
+	context['select_model2'] = select_model2
 
 	return render(request, 'data_rods_explorer/plot2.html', context)
 
@@ -145,20 +101,7 @@ def years(request):
 	"""
 	post = request.POST
 	get = request.GET
-
-	# Load model selection, map date and hour, and display map button
-	select_model = create_select_model()
-	select_date, select_hour = map_date_ctrls()
-
-	# If 'Display map' is clicked, load layers
-	map_layers = load_tiff_ly(post, get)
-	if map_layers:
-		load_layer = map_layers[0]['options']['params']['LAYERS']
-	else:
-		load_layer = ''
-
-	# Load map
-	MapView, map_view_options = create_map(map_layers, post)
+	context = initialize_model_map_context(get, post)
 
 	# Load page parameters
 	years_list = create_years_list(1979)
@@ -198,14 +141,13 @@ def years(request):
 	else:
 		timeseries_plot = None
 	# Context variables
-	context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
-			   'select_date': select_date, 'select_hour': select_hour,
-			   'select_years': select_years, 'plot_button': plot_button,
-			   'timeseries_plot': timeseries_plot, 'load_layer': load_layer}
+	context['plot_button'] = plot_button
+	context['timeseries_plot'] = timeseries_plot
+	context['select_years'] = select_years
 
 	return render(request, 'data_rods_explorer/years.html', context)
 
-def create_select_model():
+def create_select_model(modelname):
 	'''
 	Function that creates the 'model selection' element
 	'''
@@ -253,7 +195,7 @@ def create_map(layers_ls, req_post):
 	# Return map element
 	return [MapView, map_view_options]
 
-def map_date_ctrls():
+def map_date_ctrls(begin_date, end_date):
 	'''
 	Function that creates and return the "select_date", "select_hour", and "Display map" elements
 	'''
@@ -262,10 +204,10 @@ def map_date_ctrls():
 							 name='plot_date',
 							 autoclose=True,
 							 format='mm/dd/yyyy',
-							 start_date='1/2/1979',
-							 end_date=False,
+							 start_date=begin_date,
+							 end_date=end_date,
 							 start_view=0,
-							 attributes='onchange=oc_map_dt();',#value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
+							 attributes='onchange=oc_map_dt();',  #value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
 							 classes=''
 							 )
 
@@ -279,22 +221,25 @@ def map_date_ctrls():
 									   ('12:00', '12'), ('13:00', '13'), ('14:00', '14'), ('15:00', '15'),
 									   ('16:00', '16'), ('17:00', '17'), ('18:00', '18'), ('19:00', '19'),
 									   ('20:00', '20'), ('21:00', '21'), ('22:00', '22'), ('23:00', '23')],
+							  initial=['00:00'],
 							  attributes='onchange=oc_map_dt();',
 							  classes=''
 							  )
 
 	return [select_date, select_hour]
 
-def plot_ctrls() :
+def plot_ctrls(begin_year, end_year) :
 	'''
 	Function that creates and return the "start_date", "end_hour", and "plot_button" elements
 	'''
+# read ascii file with output date ranges and spatial extents for all models
 
 	start_date = DatePicker(display_text=False,
 							name='startDate',
 							autoclose=True,
 							format='mm/dd/yyyy',
-							start_date='1/2/1979',
+							start_date=begin_year,
+							end_date=end_year,
 							start_view=0,
 							attributes='onchange=oc_sten_dt();',
 							)
@@ -303,7 +248,8 @@ def plot_ctrls() :
 						  name='endDate',
 						  autoclose=True,
 						  format='mm/dd/yyyy',
-						  start_date='1/2/1979',
+						  start_date=begin_year,
+						  end_date=end_year,
 						  start_view=0,
 						  attributes='onchange=oc_sten_dt();',
 						  )
@@ -576,6 +522,30 @@ def getDataRod_years(req_get, pointLonLat):
 					   	  'data': data})
 	return dr_ts
 
+
+def initialize_model_map_context(get, post):
+    # read from external cron-created file with current start & end dates & spatial ranges
+    modelname, begin_date, end_date, nbound, ebound, sbound, wbound = get_fences()
+
+    # Load model selection, map date and hour, and display map button
+    select_model = create_select_model(modelname)
+    select_date, select_hour = map_date_ctrls(begin_date, end_date)
+
+    # If 'Display map' is clicked, load layers
+    map_layers = load_tiff_ly(post, get)
+    if map_layers:
+        load_layer = map_layers[0]['options']['params']['LAYERS']
+    else:
+        load_layer = ''
+
+    # Load map
+    MapView, map_view_options = create_map(map_layers, post)
+
+    context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
+               'select_date': select_date, 'select_hour': select_hour, 'map_layers': map_layers,
+               'load_layer': load_layer, 'end_date': end_date}
+
+    return context
 
 
 

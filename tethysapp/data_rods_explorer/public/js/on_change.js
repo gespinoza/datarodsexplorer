@@ -3,6 +3,7 @@ function oc_model() {
 	var href = window.location.href.split('?')[0];
 	var model = document.getElementById('model').value;
 	var varia = VAR_DICT[model][0].value; //1st element
+	var fences = get_fences();
 	var plotDate = GET['plotTime'];
 	href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
 	if (GET['model2'] && GET['variable2']) {

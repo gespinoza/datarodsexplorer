@@ -70,7 +70,7 @@ function page_and_parameters(href, page) {
 	window.location = href;
 }
 
-function load_default_home() {
+function load_default_home(end_date) {
 	var counter = 0;
 	var GET = getUrlVars();
 	var href = window.location.href.split('?')[0];
@@ -90,7 +90,10 @@ function load_default_home() {
 	if (GET['plotTime']) {
 		var plotTime = date_to_normal(GET['plotTime']);
 	} else {
-		var plotTime = date_to_normal(current_date(140));
+		var plotTime = {}
+		plotTime['date'] = end_date;
+		plotTime['hour'] = '00';
+		console.log(plotTime);
 	    document.getElementById('plot_date').value = plotTime['date'];
 	    document.getElementById('plot_hour').value = plotTime['hour'];
 		counter = counter + 1;

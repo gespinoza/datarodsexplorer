@@ -3,6 +3,7 @@ tethysapp/__init__.py
 tethysapp/data_rods_explorer/__init__.py
 tethysapp/data_rods_explorer/app.py
 tethysapp/data_rods_explorer/controllers.py
+tethysapp/data_rods_explorer/enddate_bounds.py
 tethysapp/data_rods_explorer/init_stores.py
 tethysapp/data_rods_explorer/model.py
 tethysapp/data_rods_explorer/model_objects.py
