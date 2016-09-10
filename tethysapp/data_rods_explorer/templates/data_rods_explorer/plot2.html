@@ -5,11 +5,6 @@
 
 {% block title %}- {{ tethys_app.name }}{% endblock %}
 
-{% block styles %}
-  {{ block.super }}
-  <link href="{% static 'data_rods_explorer/css/main.css' %}" rel="stylesheet"/>
-{% endblock %}
-
 {% block app_icon %}
   {# The path you provided in your app.py is accessible through the tethys_app.icon context variable #}
   <img src="{% static tethys_app.icon %}">
@@ -18,11 +13,6 @@
 {% block app_navigation_items %}
         <!-- set in app_base_dre.html -->
    {{ block.super }}
-   {% if load_layer %}
-  <script>
-  	document.getElementById('loadMap').value = '{{ load_layer }}';
-  </script>
-  {% endif %}
 
   <li class="nav-divider"></li>
 
