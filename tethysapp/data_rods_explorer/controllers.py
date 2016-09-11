@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from tethys_apps.sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button, MVLayer, TimeSeries
 from tethys_apps.sdk import get_spatial_dataset_engine
 import os
@@ -19,7 +20,27 @@ def home(request):
     post = request.POST
     context = initialize_model_map_context(get, post)
 
-    return render(request, 'data_rods_explorer/home.html', context)
+    return render(request, 'data_rods_explorer/app_base_dre.html', context)
+
+
+def map_view(request):
+    get = request.GET
+    post = request.POST
+    # If 'Display map' is clicked, load layers
+    map_layers = load_tiff_ly(post, get)
+    if map_layers:
+        load_layer = map_layers[0]['options']['params']['LAYERS']
+        print load_layer
+    else:
+        load_layer = ''
+        document
+
+    context = {
+        'load_layer': load_layer,
+        'geoserver_url': GEOSERVER_URL
+    }
+
+    return JsonResponse(context)
 
 
 def plot(request):
@@ -28,12 +49,12 @@ def plot(request):
     """
     get = request.GET
     post = request.POST
-    for key in get:
-        print get[key]
-    context = initialize_model_map_context(get, post)
+    # context = initialize_model_map_context(get, post)
+    start_date_str = get['startDate']
+    end_date_str = get['endDate']
 
     # Load page parameters
-    start_date, end_date, plot_button = plot_ctrls(context['start_date_str'], context['end_date_str'])
+    start_date, end_date, plot_button = plot_ctrls(start_date_str, end_date_str)
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
@@ -57,12 +78,18 @@ def plot(request):
         timeseries_plot = None
 
     # Context variables
-    context['start_date'] = start_date
-    context['end_date'] = end_date
-    context['plot_button'] = plot_button
-    context['timeseries_plot'] = timeseries_plot
+    context = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'plot_button': plot_button,
+        'timeseries_plot': timeseries_plot
+    }
+    # context['start_date'] = start_date
+    # context['end_date'] = end_date
+    # context['plot_button'] = plot_button
+    # context['timeseries_plot'] = timeseries_plot
 
-    return render(request, 'data_rods_explorer/plot.html', context)
+    return render(request, 'data_rods_explorer/nav_plot.html', context)
 
 
 def plot2(request):
@@ -71,10 +98,12 @@ def plot2(request):
     """
     post = request.POST
     get = request.GET
-    context = initialize_model_map_context(get, post)
+    start_date_str = get['startDate']
+    end_date_str = get['endDate']
+    # context = initialize_model_map_context(get, post)
 
     # Load page parameters
-    start_date, end_date, plot_button = plot_ctrls(context['start_date'], context['end_date'])
+    start_date, end_date, plot_button = plot_ctrls(start_date_str, end_date_str)
     select_model2 = SelectInput(display_text='',
                                 name='model2',
                                 multiple=False,
@@ -94,12 +123,15 @@ def plot2(request):
         timeseries_plot = None
 
     # Context variables
-    context['start_date'] = start_date
-    context['plot_button'] = plot_button
-    context['timeseries_plot'] = timeseries_plot
-    context['select_model2'] = select_model2
+    context = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'plot_button': plot_button,
+        'timeseries_plot': timeseries_plot,
+        'select_model2': select_model2
+    }
 
-    return render(request, 'data_rods_explorer/plot2.html', context)
+    return render(request, 'data_rods_explorer/nav_plot2.html', context)
 
 
 def years(request):
@@ -108,7 +140,7 @@ def years(request):
     """
     post = request.POST
     get = request.GET
-    context = initialize_model_map_context(get, post)
+    # context = initialize_model_map_context(get, post)
 
     # Load page parameters
     years_list = create_years_list(1979)
@@ -148,11 +180,13 @@ def years(request):
     else:
         timeseries_plot = None
     # Context variables
-    context['plot_button'] = plot_button
-    context['timeseries_plot'] = timeseries_plot
-    context['select_years'] = select_years
+    context = {
+        'plot_button': plot_button,
+        'timeseries_plot': timeseries_plot,
+        'select_years': select_years
+    }
 
-    return render(request, 'data_rods_explorer/years.html', context)
+    return render(request, 'data_rods_explorer/nav_years.html', context)
 
 
 def create_select_model(modelname):
@@ -167,7 +201,7 @@ def create_select_model(modelname):
     select_model = SelectInput(display_text='',
                                name='model',
                                multiple=False,
-							   initial=[selected_model if selected_model else None],
+                               initial=[selected_model if selected_model else None],
                                original=True,
                                options=MODEL_OPTIONS,
                                attributes="onchange=oc_model();"
@@ -245,7 +279,7 @@ def map_date_ctrls(start_date, end_date):
     return [select_date, select_hour]
 
 
-def plot_ctrls(start_date, end_date) :
+def plot_ctrls(start_date, end_date):
     '''
     Function that creates and return the "start_date", "end_hour", and "plot_button" elements
     '''
@@ -371,23 +405,44 @@ def load_tiff_ly(req_post, req_get):
     """
     map_layers = []
     add_map = False
+    if req_get and req_get.get('plotTime'):
+        plot_time = req_get['plotTime']
+    elif req_post and req_post.get('plotTime'):
+        plot_time = req_post['plotTime']
+    else:
+        plot_time = None
+
+    if req_get and req_get.get('model'):
+        model = req_get['model']
+    elif req_post and req_post.get('model'):
+        model = req_post['model']
+    else:
+        model = None
+
+    if req_get and req_get.get('variable'):
+        variable = req_get['variable']
+    elif req_post and req_post.get('variable'):
+        variable = req_post['variable']
+    else:
+        variable = None
 
     if req_post and req_post['loadMap'] != 'no':
         store_id = req_post['loadMap']
         add_map = True
-    elif req_get and req_get['loadMap']:
+    elif req_get and req_get.get('loadMap') and req_get['loadMap'] != 'no':
         store_id = req_get['loadMap']
         add_map = True
+
     elif req_post and req_post['retrieveMap'] == 'yes':
         # Geoserver parameters
         geo_eng = get_spatial_dataset_engine(name='default')
         # Data rods parameters
         latlonbox = [req_post['lonW'], req_post['latS'],req_post['lonE'], req_post['latN']]
-        time_st = req_get['plotTime'] + ':00:00Z/' + req_get['plotTime'] + ':00:30Z'
-        # time_dt = dt.datetime.strptime(req_get['plotTime'], '%Y-%m-%dT%H')
+        time_st = plot_time + ':00:00Z/' + plot_time + ':00:30Z'
+        # time_dt = dt.datetime.strptime(plotTime, '%Y-%m-%dT%H')
         # time_st = dt.datetime.strptime(time_dt, '%Y-%m-%dT%H:00:00Z/%Y-%m-%dT%H:00:00Z')
         # Get image from url and zip it including the .prj file
-        zip_file, store_name, store_id = get_raster_zip(latlonbox, time_st, req_get['model'], req_get['variable'])
+        zip_file, store_name, store_id = get_raster_zip(latlonbox, time_st, model, variable)
         # Create raster in geoserver
         response = geo_eng.create_coverage_resource(store_id=store_id,
                                                     coverage_file=zip_file,
@@ -399,7 +454,7 @@ def load_tiff_ly(req_post, req_get):
 
     if add_map == True:
         # Add raster to map
-        title = '{0} {1}'.format(req_get['variable'], req_get['plotTime'])
+        title = '{0} {1}'.format(variable, plot_time)
         geoserver_layer = MVLayer(source='ImageWMS',
                                   options={'url': GEOSERVER_URL,
                                            'params': {'LAYERS': store_id},

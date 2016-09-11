@@ -10,34 +10,34 @@ MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
 
 DATARODS_TSB = {}
 DATARODS_TSB.update({'nldas': {'noah': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   			'variable=NLDAS:NLDAS_NOAH0125_H.002:{0}&'  # SSRUNsfc
-							            'type=asc2&location=GEOM:POINT({1})&'
-							            'startDate={2}&endDate={3}'),
+										'variable=NLDAS:NLDAS_NOAH0125_H.002:{0}&'  # SSRUNsfc
+										'type=asc2&location=GEOM:POINT({1})&'
+										'startDate={2}&endDate={3}'),
 							   'forcing': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   			   'variable=NLDAS:NLDAS_FORA0125_H.002:{0}&'  # SSRUNsfc
-							               'type=asc2&location=GEOM:POINT({1})&'
-							               'startDate={2}&endDate={3}')
-							  }})
+										   'variable=NLDAS:NLDAS_FORA0125_H.002:{0}&'  # SSRUNsfc
+										   'type=asc2&location=GEOM:POINT({1})&'
+										   'startDate={2}&endDate={3}')
+							   }})
 DATARODS_TSB.update({'gldas': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
 							   'variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&'  # precip
 							   'type=asc2&location=GEOM:POINT({1})&'
 							   'startDate={2}&endDate={3}')
-					})
+					 })
 DATARODS_TSB.update({'gldas2': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   'variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&' # SOILM40_100cm
-							   'startDate={2}&endDate={3}&'
-							   'location=GEOM:POINT({1})&type=asc2') # %28-112.3,%2030.4%29
-					})
+								'variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&' # SOILM40_100cm
+								'startDate={2}&endDate={3}&'
+								'location=GEOM:POINT({1})&type=asc2') # %28-112.3,%2030.4%29
+					 })
 DATARODS_TSB.update({'trmm': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
 							  'variable=TRMM:TRMM_3B42.007:{0}itation&'
 							  'type=asc2&location=GEOM:POINT({1})&'
 							  'startDate={2}&endDate={3}')
-					})
+					 })
 DATARODS_TSB.update({'grace': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
 							   'variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}_inst&'
 							   'type=asc2&location=GEOM:POINT({1})&'
 							   'startDate={2}&endDate={3}')
-					})
+					 })
 
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
 				'&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
@@ -68,7 +68,7 @@ WMS_VARS['nldas'].update({"APCPsfc": ["NLDAS_FORA0125_H_002_apcpsfc", "Precipita
 						  "SOILM40-100cm": ["NLDAS_NOAH0125_H_002_soilm40_100cm", "40-100 cm soil moisture content", "kg/m^2"],
 						  "SOILM100-200cm": ["NLDAS_NOAH0125_H_002_soilm100_200cm", "100-200 cm soil moisture content", "kg/m^2"],
 						  "TSOIL0-10cm": ["NLDAS_NOAH0125_H_002_tsoil0_10cm", "0-10 cm soil temperature", "K"]
-						})
+						  })
 WMS_VARS['gldas'].update({"Evap": ["", "Total Evapotranspiration", "kg/m^2/s"],
 						  "precip": ["", "Precipitation rate", "kg/m^2/hr"],
 						  "Rainf": ["", "Rain rate", "kg/m^2/s"],
@@ -82,15 +82,15 @@ WMS_VARS['gldas'].update({"Evap": ["", "Total Evapotranspiration", "kg/m^2/s"],
 						  "Tair": ["", "Near surface air temperature", "K"],
 						  "TSOIL0-10cm": ["", "Average layer 1 soil temperature", "K"],
 						  "Wind": ["", "Near surface wind magnitude", "m/s"]
-						})
+						  })
 WMS_VARS['gldas2'].update({
-						  "SOILM10_40cm": ["", "10-40 cm layer 2 soil moisture content", "kg/m^2"],
-						  "SOILM40_100cm": ["", "40-100 cm layer 3 soil moisture content", "kg/m^2"],
-						  "SOILM100_200cm": ["", "0-10 cm layer 1 soil moisture content", "kg/m^2"]
-						})
+	"SOILM10_40cm": ["", "10-40 cm layer 2 soil moisture content", "kg/m^2"],
+	"SOILM40_100cm": ["", "40-100 cm layer 3 soil moisture content", "kg/m^2"],
+	"SOILM100_200cm": ["", "0-10 cm layer 1 soil moisture content", "kg/m^2"]
+})
 WMS_VARS['trmm'].update({"precip": ["TRMM_3B42_daily_precipitation_V7", "Precipitation", "mm/hr"]
-					    })
+						 })
 WMS_VARS['grace'].update({"sfsm": ["GRACEDADM_CLSM025NA_7D_1_0_sfsm_inst", "Surface Soil Moisture", "percentile"],
 						  "rtzsm": ["GRACEDADM_CLSM025NA_7D_1_0_rtzsm_inst", "Root Zone Soil Moisture", "percentile"],
 						  "gws": ["GRACEDADM_CLSM025NA_7D_1_0_gws_inst", "Ground Water", "percentile"]
-						})
+						  })

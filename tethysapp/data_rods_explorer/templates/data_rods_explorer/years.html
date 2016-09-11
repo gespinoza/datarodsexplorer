@@ -25,12 +25,7 @@
   <li class="active"><a style="padding-bottom:15px;" href="javascript:void(0)" onclick="page_and_parameters('{% url 'data_rods_explorer:years' %}', 'years');">Year-on-year changes</a></li>
 
   <div style="padding-left:30px;padding-bottom:15px;">
-	<li style="padding-top:15px;">Select years:</li>
-	{% gizmo select_input select_years %}
-	<script>
-	  load_default_years();
-	</script>
-	{% gizmo button plot_button %}
+
   </div>
 
 {% endblock %}

@@ -1,3 +1,13 @@
+function onClickLink(link, href, page) {
+    if ($(link).hasClass('open')) {
+        $('#nav-' + page).html('');
+        $(link).removeClass('open');
+    } else {
+        page_and_parameters(href, page);
+        $(link).addClass('open');
+    }
+}
+
 function page_and_parameters_html(href, page) {
     var GET = getUrlVars();
     var href = href + '?';
@@ -9,72 +19,119 @@ function page_and_parameters_html(href, page) {
 
 function page_and_parameters(href, page) {
     var GET = getUrlVars(href);
-    href = href.split('?')[0]
+    href = href.split('?')[0];
+    data = {};
+
     if (GET['model']) {
         var model = GET['model'];
     } else {
         var model = document.getElementById('model').value;
     }
+    data['model'] = model;
     if (GET['variable']) {
         var varia = GET['variable'];
     } else {
         var varia = VAR_DICT[model][0].value;//document.getElementById('variable').value;
     }
+    data['variable'] = varia;
     if (GET['plotTime']) {
         var plotDate = GET['plotTime'];
     } else {
         var plotTime = date_to_normal(current_date(140));
         var plotDate = date_to_rods(plotTime['date']) + 'T' + plotTime['hour'];
     }
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
+    data['plotTime'] = plotDate;
+    // href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
 
-    if (document.getElementById('loadMap').value !== 'no') {
-        href += '&loadMap=' + document.getElementById('loadMap').value
-    }
+    // if (document.getElementById('loadMap').value !== 'no') {
+    //     href += '&loadMap=' + document.getElementById('loadMap').value
+    // }
 
     if (page == 'plot') {
+
         if (GET['endDate']) {
             endDate = GET['endDate'];
         } else {
             var endDate = current_date(133, '23');
         }
+
+        data['endDate'] = endDate;
+
         if (GET['startDate']) {
             startDate =  GET['startDate'];
         } else {
             var startDate = current_date(140, '0');
         }
-        href = href + '&startDate=' + startDate + '&endDate=' + endDate;
+
+        data['startDate'] = startDate;
+        // href = href + '&startDate=' + startDate + '&endDate=' + endDate;
     } else if (page == 'plot2') {
         if (GET['model2']) {
             var model2 = GET['model2'];
         } else {
             var model2 = 'nldas'; //1st element
         }
+
+        data['model2'] = model2;
+
         if (model === model2 && varia == VAR_DICT[model][0].value) {
             var varia2 = VAR_DICT[model2][1].value;
         } else {
             var varia2 = VAR_DICT[model2][0].value;
         }
+
+        data['variable2'] = varia2;
+
         if (GET['endDate']) {
             endDate = GET['endDate'];
         } else {
             var endDate = current_date(133, '23');
         }
+
+        data['endDate'] = endDate;
+
         if (GET['startDate']) {
             startDate =  GET['startDate'];
         } else {
             var startDate = current_date(140, '0');
         }
-        href = href + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
+
+        data['startDate'] = startDate;
+
+        // href = href + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
     } else if (page == 'years') {
         var endDate = current_date(140, '23');
         years = endDate.substr(0, 4);
-        href =  href + '&years=' + years;
+        // href =  href + '&years=' + years;
+        data['years'] = years;
     }
-    window.location = href;
+    // window.location = href;
+    $.ajax({
+        url: href,
+        type: 'GET',
+        data: data,
+        dataType: 'html',
+        success: function (htmlResponse) {
+            if (page == 'plot') {
+                $('#nav-plot').html(htmlResponse);
+                load_default_plot(data);
+            } else if (page == 'plot2') {
+                $('#nav-plot2').html(htmlResponse);
+                load_default_plot2(data);
+                load_variable_options('model2', 'variable2');
+            } else if (page == 'years') {
+                $('#nav-years').html(htmlResponse);
+                load_default_years(data);
+            }
+            addVarsToURL(data);
+        },
+        error: function () {
+            console.error('Nice try... :(');
+        }
+    })
 }
 
-function load_default_home(end_date) {
+function load_default_home(end_date, start_date) {
     var counter = 0;
     var GET = getUrlVars();
     var href = window.location.href.split('?')[0];
@@ -94,12 +151,12 @@ function load_default_home(end_date) {
     if (GET['plotTime']) {
         var plotTime = date_to_normal(GET['plotTime']);
     } else {
-        var plotTime = {}
+        var plotTime = {};
         plotTime['date'] = end_date;
         plotTime['hour'] = '00';
-        console.log(plotTime);
         document.getElementById('plot_date').value = plotTime['date'];
         document.getElementById('plot_hour').value = plotTime['hour'];
+        $('#plot_date').data('start_date', start_date);
         counter = counter + 1;
     }
 
@@ -116,9 +173,9 @@ function load_default_home(end_date) {
     }
 }
 
-function load_default_plot() {
+function load_default_plot(data) {
     var counter = 0;
-    var GET = getUrlVars();
+    var GET = data ? data : getUrlVars();
     var href = window.location.href; //.split('?')[0]
     if (GET['model']) {
         var model = GET['model'];
@@ -158,9 +215,9 @@ function load_default_plot() {
     }
 }
 
-function load_default_plot2() {
+function load_default_plot2(data) {
     var counter = 0;
-    var GET = getUrlVars();
+    var GET = data ? data : getUrlVars();
     var href = window.location.href; //.split('?')[0]
     if (GET['model']) {
         var model = GET['model'];
@@ -212,9 +269,9 @@ function load_default_plot2() {
     }
 }
 
-function load_default_years() {
+function load_default_years(data) {
     var counter = 0;
-    var GET = getUrlVars();
+    var GET = data ? data : getUrlVars();
     var href = window.location.href; //.split('?')[0]
     if (GET['model']) {
         var model = GET['model'];
@@ -265,4 +322,13 @@ function load_default_years() {
             }
         }
     }
+}
+
+function addVarsToURL(vars) {
+    var href = window.location.href.split('?')[0] + '?';
+    Object.keys(vars).forEach(function (key) {
+        href = href + key + '=' + vars[key] + '&';
+    });
+    href = href.slice(0, -1);
+    window.history.pushState({}, 'None', href);
 }

@@ -12,7 +12,7 @@ class DataRodsExplorer(TethysAppBase):
     package = 'data_rods_explorer'
     root_url = 'data-rods-explorer'
     color = '#5971A8'
-        
+
     def url_maps(self):
         """
         Add controllers
@@ -31,6 +31,9 @@ class DataRodsExplorer(TethysAppBase):
                     UrlMap(name='years',
                            url='data-rods-explorer/years',
                            controller='data_rods_explorer.controllers.years'),
+                    UrlMap(name='map',
+                           url='data-rods-explorer/map',
+                           controller='data_rods_explorer.controllers.map_view')
         )
 
         return url_maps
