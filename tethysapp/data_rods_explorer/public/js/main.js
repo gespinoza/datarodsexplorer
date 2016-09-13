@@ -157,6 +157,8 @@ function load_map() {
                         })
                     });
                     map.addLayer(newLayer);
+                    newLayer['tethys_legend_title'] = response['load_layer'].split(':')[1];
+                    addLegendItem(newLayer);
                     document.getElementById('loadMap').value = response['load_layer'];
                 }
             }
@@ -172,7 +174,8 @@ function createPlot() {
     load_map_post_parameters();
     document.getElementById('retrieveMap').value = "no";
     document.getElementById('prevPlot').value = "yes";
-    document.forms['parametersForm'].submit();
+
+    // document.forms['parametersForm'].submit();
 }
 
 function showMapLoading() {
@@ -186,4 +189,121 @@ function showMapLoading() {
 
 function hideMapLoading() {
     $('#map-loading').addClass('hidden');
+}
+
+function addLegendItem(layer) {
+    var title = layer.tethys_legend_title;
+    var html =  '<li class="legend-item">' +
+        '<div class="legend-buttons">' +
+        '<a class="btn btn-default btn-legend-action zoom-control">' + title + '</a>' +
+        '<a class="btn btn-default legend-dropdown-toggle">' +
+        '<span class="caret"></span>' +
+        '<span class="sr-only">Toggle Dropdown</span>' +
+        '</a>' +
+        '<div class="tethys-legend-dropdown">' +
+        '<ul>' +
+        '<li><a class="opacity-control">' +
+        '<span>Opacity</span> ' +
+        '<input type="range" min="0.0" max="1.0" step="0.01" value="' + layer.getOpacity() + '">' +
+        '</a></li>' +
+        '<li><a class="display-control" href="javascript:void(0);">Hide Layer</a></li>' +
+        '</ul>' +
+        '</div>' +
+        '</div>';
+
+    html += '</li>';
+
+    // Append to the legend items
+    $('.legend-items').append(html);
+
+    // Bind events for controls
+    last_item = $('.legend-items').children(':last-child');
+    menu_toggle_control = $(last_item).find('.legend-dropdown-toggle');
+    opacity_control = $(last_item).find('.opacity-control input[type=range]');
+    display_control = $(last_item).find('.display-control');
+    zoom_control = $(last_item).find('.zoom-control');
+
+    // Bind toggle control
+    menu_toggle_control.on('click', function(){
+        var dropdown_menu = $(last_item).find('.tethys-legend-dropdown');
+        dropdown_menu.toggleClass('open');
+    });
+
+    // Bind Opacity Control
+    opacity_control.on('input', function() {
+        layer.setOpacity(this.value);
+    });
+
+    // Bind Display Control
+    display_control.on('click', function() {
+        if (layer.getVisible()){
+            layer.setVisible(false);
+            $(this).html('Show Layer');
+        } else {
+            layer.setVisible(true);
+            $(this).html('Hide Layer');
+        }
+    });
+
+    // Bind Zoom to Layer Control
+    zoom_control.on('click', function() {
+        var extent;
+
+        extent = layer.tethys_legend_extent;
+
+        if (is_defined(extent)) {
+            var lat_lon_extent = ol.proj.transformExtent(extent, layer.tethys_legend_extent_projection, DEFAULT_PROJECTION);
+            m_map.getView().fit(lat_lon_extent, m_map.getSize());
+        }
+    });
+}
+
+function is_defined(variable) {
+    return !!(typeof variable !== typeof undefined && variable !== false);
+}
+
+function updateFences(model) {
+    var newEndDate = MODEL_FENCES[model].end_date;
+    var newStartDate = MODEL_FENCES[model].start_date;
+    $('[data-provide=datepicker]').each(function (idx, elem) {
+        if (Date.parse($(elem).val()) > Date.parse(newEndDate)) {
+            $(elem).val(newEndDate);
+        } else if (Date.parse($(elem).val()) < Date.parse(newStartDate)) {
+            $(elem).val(newStartDate);
+        }
+        $(elem).datepicker('setStartDate', newStartDate);
+        $(elem).datepicker('setEndDate', newEndDate);
+    });
+
+    var extents = MODEL_FENCES[model].extents;
+    var minX = parseFloat(extents.minX);
+    var maxX = parseFloat(extents.maxX);
+    var minY = parseFloat(extents.minY);
+    var maxY = parseFloat(extents.maxY);
+
+    var geojsonObject = {
+        'type': 'FeatureCollection',
+        'crs': {
+            'type': 'name',
+            'properties': {
+                'name': 'EPSG:4326'
+            }
+        },
+        'features': [{
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Polygon',
+                'coordinates': [[
+                    ol.proj.fromLonLat([minX, maxY]),
+                    ol.proj.fromLonLat([maxX, maxY]),
+                    ol.proj.fromLonLat([maxX, minY]),
+                    ol.proj.fromLonLat([minX, minY]),
+                    ol.proj.fromLonLat([minX, maxY])
+                ]]
+            }
+        }]
+    };
+
+    MODEL1_LAYER.getSource().clear();
+    MODEL1_LAYER.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojsonObject));
 }

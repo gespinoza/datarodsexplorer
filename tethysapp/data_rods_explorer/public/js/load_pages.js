@@ -18,8 +18,8 @@ function page_and_parameters_html(href, page) {
 }
 
 function page_and_parameters(href, page) {
-    var GET = getUrlVars(href);
-    href = href.split('?')[0];
+    var GET = getUrlVars();
+    // href = href.split('?')[0];
     data = {};
 
     if (GET['model']) {
@@ -131,7 +131,9 @@ function page_and_parameters(href, page) {
     })
 }
 
-function load_default_home(end_date, start_date) {
+function load_default_home(modelFencesEncoded) {
+    var modelFencesStr = modelFencesEncoded.replace(/&quot;/g, '"');
+    MODEL_FENCES = JSON.parse(modelFencesStr);
     var counter = 0;
     var GET = getUrlVars();
     var href = window.location.href.split('?')[0];
@@ -152,11 +154,11 @@ function load_default_home(end_date, start_date) {
         var plotTime = date_to_normal(GET['plotTime']);
     } else {
         var plotTime = {};
-        plotTime['date'] = end_date;
+        plotTime['date'] = MODEL_FENCES[model.toUpperCase()].end_date;
         plotTime['hour'] = '00';
         document.getElementById('plot_date').value = plotTime['date'];
         document.getElementById('plot_hour').value = plotTime['hour'];
-        $('#plot_date').data('start_date', start_date);
+        $('#plot_date').data('start_date', MODEL_FENCES[model.toUpperCase()].start_date);
         counter = counter + 1;
     }
 
@@ -171,6 +173,8 @@ function load_default_home(end_date, start_date) {
         document.getElementById('plot_date').value = plotTime['date'];
         document.getElementById('plot_hour').value = plotTime['hour'];
     }
+
+    load_extents_layer(model.toUpperCase())
 }
 
 function load_default_plot(data) {
@@ -206,9 +210,9 @@ function load_default_plot(data) {
     if (counter > 0) {
         page_and_parameters(href, 'plot');
     } else {
-        document.getElementById('model').value = model;
-        document.getElementById('variable').value = varia;
-        document.getElementById('plot_date').value = plotTime['date'];
+        // document.getElementById('model').value = model;
+        // document.getElementById('variable').value = varia;
+        // document.getElementById('plot_date').value = plotTime['date'];
         document.getElementById('plot_hour').value = plotTime['hour'];
         document.getElementById('startDate').value = startDate['date'];
         document.getElementById('endDate').value = endDate['date'];
@@ -331,4 +335,60 @@ function addVarsToURL(vars) {
     });
     href = href.slice(0, -1);
     window.history.pushState({}, 'None', href);
+}
+
+function load_extents_layer(model) {
+    $(function () {
+        var extents = MODEL_FENCES[model].extents;
+        var minX = parseFloat(extents.minX);
+        var maxX = parseFloat(extents.maxX);
+        var minY = parseFloat(extents.minY);
+        var maxY = parseFloat(extents.maxY);
+        var map = TETHYS_MAP_VIEW.getMap();
+
+        var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: 'blue',
+                width: 3
+            }),
+            fill: new ol.style.Fill({
+                color: 'rgba(0, 0, 255, 0.1)'
+            })
+        });
+
+        var geojsonObject = {
+            'type': 'FeatureCollection',
+            'crs': {
+                'type': 'name',
+                'properties': {
+                    'name': 'EPSG:4326'
+                }
+            },
+            'features': [{
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [[
+                        ol.proj.fromLonLat([minX, maxY]),
+                        ol.proj.fromLonLat([maxX, maxY]),
+                        ol.proj.fromLonLat([maxX, minY]),
+                        ol.proj.fromLonLat([minX, minY]),
+                        ol.proj.fromLonLat([minX, maxY])
+                    ]]
+                }
+            }]
+        };
+
+        var source = new ol.source.Vector({
+            features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+        });
+
+        MODEL1_LAYER = new ol.layer.Vector({
+            source: source,
+            style: style
+        });
+        map.addLayer(MODEL1_LAYER);
+        MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
+        addLegendItem(MODEL1_LAYER);
+    });
 }

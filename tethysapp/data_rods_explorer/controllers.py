@@ -3,19 +3,21 @@ from django.http import JsonResponse
 from tethys_apps.sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button, MVLayer, TimeSeries
 from tethys_apps.sdk import get_spatial_dataset_engine
 import os
-import datetime as dt
+from datetime import datetime
 import zipfile
 from tempfile import NamedTemporaryFile
 import urllib2
 from math import copysign
 from model_objects import *
 from utilities import get_fences
+from json import dumps
 
 
 def home(request):
     """
     Controller for the app 'home' page.
     """
+    get_fences()
     get = request.GET
     post = request.POST
     context = initialize_model_map_context(get, post)
@@ -33,7 +35,6 @@ def map_view(request):
         print load_layer
     else:
         load_layer = ''
-        document
 
     context = {
         'load_layer': load_layer,
@@ -52,9 +53,9 @@ def plot(request):
     # context = initialize_model_map_context(get, post)
     start_date_str = get['startDate']
     end_date_str = get['endDate']
-
+    model = str(get['model'].upper())
     # Load page parameters
-    start_date, end_date, plot_button = plot_ctrls(start_date_str, end_date_str)
+    start_date, end_date, plot_button = plot_ctrls(model)
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
@@ -100,10 +101,11 @@ def plot2(request):
     get = request.GET
     start_date_str = get['startDate']
     end_date_str = get['endDate']
+    model = get['model'].upper()
     # context = initialize_model_map_context(get, post)
 
     # Load page parameters
-    start_date, end_date, plot_button = plot_ctrls(start_date_str, end_date_str)
+    start_date, end_date, plot_button = plot_ctrls(model)
     select_model2 = SelectInput(display_text='',
                                 name='model2',
                                 multiple=False,
@@ -194,7 +196,6 @@ def create_select_model(modelname):
     Function that creates the 'model selection' element
     """
     selected_model = None
-
     for model in MODEL_OPTIONS:
         if model[1] == modelname.lower():
             selected_model = model[0]
@@ -210,26 +211,26 @@ def create_select_model(modelname):
 
 
 def create_map(layers_ls, req_post):
-    '''
+    """
     Function that creates the 'map' element
-    '''
+    """
     # Center and Zoom level
     if req_post:
         center = [round(float(req_post['centerX']), 4), round(float(req_post['centerY']), 4)]
         if req_post['zoom'] != 'undefined':
             zoom = round(float(req_post['zoom']), 2)
         else:
-            zoom = 4.25
+            zoom = 4
     else:
         center = [-96.5, 38.5]
-        zoom = 4.25
+        zoom = 4
     # Define view options
     view_options = MVView(
         projection='EPSG:4326',
         center=center,
         zoom=zoom,
         maxZoom=10,
-        minZoom=4
+        minZoom=3
     )
     # Define map view options
     map_view_options = MapView(
@@ -245,19 +246,19 @@ def create_map(layers_ls, req_post):
     return [MapView, map_view_options]
 
 
-def map_date_ctrls(start_date, end_date):
-    '''
+def map_date_ctrls(model):
+    """
     Function that creates and return the "select_date", "select_hour", and "Display map" elements
-    '''
+    """
 
     select_date = DatePicker(display_text=False,
                              name='plot_date',
                              autoclose=True,
                              format='mm/dd/yyyy',
-                             start_date=start_date,
-                             end_date=end_date,
+                             start_date=MODEL_FENCES[model]['start_date'],
+                             end_date=MODEL_FENCES[model]['end_date'],
                              start_view=0,
-                             attributes='onchange=oc_map_dt();',  #value=02/01/2015 'value="{0}"'.format(dt.datetime.strftime(dt.datetime.now() - dt.timedelta(days=7), '%m/%d/%Y')),
+                             attributes='onchange=oc_map_dt();',  #value=02/01/2015 'value="{0}"'.format(datetime.strftime(datetime.now() - timedelta(days=7), '%m/%d/%Y')),
                              classes=''
                              )
 
@@ -279,18 +280,20 @@ def map_date_ctrls(start_date, end_date):
     return [select_date, select_hour]
 
 
-def plot_ctrls(start_date, end_date):
-    '''
+def plot_ctrls(model):
+    """
     Function that creates and return the "start_date", "end_hour", and "plot_button" elements
-    '''
-    # read ascii file with output date ranges and spatial extents for all models
+    """
+    # start_date = (datetime.strptime(start_date_raw.split('T')[0], '%Y-%m-%d')-timedelta(days=1)).strftime('%m/%d/%Y')
+    # end_date = (datetime.strptime(end_date_raw.split('T')[0], '%Y-%m-%d') - timedelta(days=1)).strftime('%m/%d/%Y')
 
+    # read ascii file with output date ranges and spatial extents for all models
     start_date = DatePicker(display_text=False,
                             name='startDate',
                             autoclose=True,
                             format='mm/dd/yyyy',
-                            start_date=start_date,
-                            end_date=end_date,
+                            start_date=MODEL_FENCES[model]['start_date'],
+                            end_date=MODEL_FENCES[model]['end_date'],
                             start_view=0,
                             attributes='onchange=oc_sten_dt();',
                             )
@@ -299,8 +302,8 @@ def plot_ctrls(start_date, end_date):
                           name='endDate',
                           autoclose=True,
                           format='mm/dd/yyyy',
-                          start_date=start_date,
-                          end_date=end_date,
+                          start_date=MODEL_FENCES[model]['start_date'],
+                          end_date=MODEL_FENCES[model]['end_date'],
                           start_view=0,
                           attributes='onchange=oc_sten_dt();',
                           )
@@ -319,12 +322,12 @@ def plot_ctrls(start_date, end_date):
 
 
 def create_years_list(first_year=1979):
-    '''
+    """
     This function creates a list of tuples
     with the years available for selection
-    '''
+    """
     years_list = []
-    last_year = dt.datetime.now().year
+    last_year = datetime.now().year
     for yyyy in range(first_year, last_year + 1):
         years_list.append((str(yyyy), str(yyyy)))
     return years_list
@@ -345,9 +348,9 @@ def create_tfw_file(path, lonW, latS, lonE, latN, h=256, w=512):
 
 
 def create_prj_file(path):
-    '''
+    """
     This function creates the missing .prj file for the raster
-    '''
+    """
     prj_file = open(path, 'w')
     prj_file.write(('GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
                     'SPHEROID["WGS_1984",6378137,298.257223563]],'
@@ -358,9 +361,9 @@ def create_prj_file(path):
 
 
 def create_zip_file(zip_path, tiff_path, tfw_path, prj_path):
-    '''
+    """
     this function zips the tiff and prj files into
-    '''
+    """
     zip_file = zipfile.ZipFile(zip_path, "w")
     zip_file.write(tiff_path, arcname=os.path.basename(tiff_path))
     zip_file.write(tfw_path, arcname=os.path.basename(tfw_path))
@@ -439,8 +442,8 @@ def load_tiff_ly(req_post, req_get):
         # Data rods parameters
         latlonbox = [req_post['lonW'], req_post['latS'],req_post['lonE'], req_post['latN']]
         time_st = plot_time + ':00:00Z/' + plot_time + ':00:30Z'
-        # time_dt = dt.datetime.strptime(plotTime, '%Y-%m-%dT%H')
-        # time_st = dt.datetime.strptime(time_dt, '%Y-%m-%dT%H:00:00Z/%Y-%m-%dT%H:00:00Z')
+        # time_dt = datetime.strptime(plotTime, '%Y-%m-%dT%H')
+        # time_st = datetime.strptime(time_dt, '%Y-%m-%dT%H:00:00Z/%Y-%m-%dT%H:00:00Z')
         # Get image from url and zip it including the .prj file
         zip_file, store_name, store_id = get_raster_zip(latlonbox, time_st, model, variable)
         # Create raster in geoserver
@@ -478,13 +481,13 @@ def access_datarods_server(link, model, years):
         if years:
             for row in sLines[:-1]:
                 row_st = row.strip()
-                data.append([dt.datetime.strptime('2000' + row_st[4:14], '%Y-%m-%d %HZ'),
+                data.append([datetime.strptime('2000' + row_st[4:14], '%Y-%m-%d %HZ'),
                              float(row_st[14:])
                              ])
         else:
             for row in sLines:
                 row_st = row.strip()
-                data.append([dt.datetime.strptime(row_st[:14], '%Y-%m-%d %HZ'),
+                data.append([datetime.strptime(row_st[:14], '%Y-%m-%d %HZ'),
                              float(row_st[14:])
                              ])
     elif model in ['trmm', 'grace', 'gldas2']:
@@ -494,13 +497,13 @@ def access_datarods_server(link, model, years):
         if years:
             for row in sLines:
                 row_ls = row.split('\t')
-                data.append([dt.datetime.strptime('2000' + row_ls[0][4:], '%Y-%m-%dT%H:%M:%S'),
+                data.append([datetime.strptime('2000' + row_ls[0][4:], '%Y-%m-%dT%H:%M:%S'),
                              float(row_ls[1])
                              ])
         else:
             for row in sLines:
                 row_ls = row.split('\t')
-                data.append([dt.datetime.strptime(row_ls[0], '%Y-%m-%dT%H:%M:%S'),
+                data.append([datetime.strptime(row_ls[0], '%Y-%m-%dT%H:%M:%S'),
                              float(row_ls[1])
                              ])
     return data
@@ -607,18 +610,22 @@ def getDataRod_years(req_get, pointLonLat):
 
 
 def initialize_model_map_context(get, post):
-    # read from external cron-created file with current start & end dates & spatial ranges
-    modelname, start_date_str, end_date_str, nbound, ebound, sbound, wbound = get_fences()
-
     # Load model selection, map date and hour, and display map button
-    select_model = create_select_model(modelname)
-    select_date, select_hour = map_date_ctrls(start_date_str, end_date_str)
+
+    if get and get.get('model'):
+        model = get['model'].upper()
+    elif post and post.get('model'):
+        model = post['model'].upper()
+    else:
+        model = 'NLDAS'
+
+    select_model = create_select_model(model)
+    select_date, select_hour = map_date_ctrls(model)
 
     # If 'Display map' is clicked, load layers
     map_layers = load_tiff_ly(post, get)
     if map_layers:
         load_layer = map_layers[0]['options']['params']['LAYERS']
-        print load_layer
     else:
         load_layer = ''
 
@@ -627,28 +634,28 @@ def initialize_model_map_context(get, post):
 
     context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
                'select_date': select_date, 'select_hour': select_hour, 'map_layers': map_layers,
-               'load_layer': load_layer, 'end_date_str': end_date_str, 'start_date_str': start_date_str}
+               'load_layer': load_layer, 'MODEL_FENCES': dumps(MODEL_FENCES)
+               }
 
     return context
-
 
 
 '''
                     [{'name': 'Winter 2007-2008',
                      'data': [
-                        [dt.datetime(2008, 12, 2), 0.8],
-                        [dt.datetime(2008, 12, 9), 0.6],
-                        [dt.datetime(2008, 12, 16), 0.6],
-                        [dt.datetime(2008, 12, 28), 0.67],
-                        [dt.datetime(2009, 1, 1), 0.81]
+                        [datetime(2008, 12, 2), 0.8],
+                        [datetime(2008, 12, 9), 0.6],
+                        [datetime(2008, 12, 16), 0.6],
+                        [datetime(2008, 12, 28), 0.67],
+                        [datetime(2009, 1, 1), 0.81]
                         ]},
                     {'name': 'Winter 2010-2011',
                      'data': [
-                        [dt.datetime(2008, 12, 2), 10.8],
-                        [dt.datetime(2008, 12, 9), 10.6],
-                        [dt.datetime(2008, 12, 16), 10.6],
-                        [dt.datetime(2008, 12, 28), 10.67],
-                        [dt.datetime(2009, 1, 1), 10.81]
+                        [datetime(2008, 12, 2), 10.8],
+                        [datetime(2008, 12, 9), 10.6],
+                        [datetime(2008, 12, 16), 10.6],
+                        [datetime(2008, 12, 28), 10.67],
+                        [datetime(2009, 1, 1), 10.81]
                         ]}
                     ]
 '''
