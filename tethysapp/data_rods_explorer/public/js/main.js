@@ -20,14 +20,14 @@ function current_date(day_offset, hh) {
     return date_st;
 }
 
-function load_variable_options(mod12, var12) {
-    var GET = getUrlVars();
+function load_variable_options(mod12, var12, data) {
+    var GET = data ? data : getUrlVars();
     if (GET[mod12]) {
         var model12 = GET[mod12];
         clear_previous_options(var12);
         var vecOption = VAR_DICT[model12];
         var selectElement = document.getElementById(var12);
-        for(i=0, l=vecOption.length; i<l; i++) {
+        for(var i = 0, l = vecOption.length; i < l; i++) {
             var vec = vecOption[i];
             selectElement.options.add(new Option(vec.text, vec.value, vec.selected));
         }
@@ -98,16 +98,21 @@ function getRanges(array) {
     return ranges;
 }
 
-function map_click_evt() {
+$(function() {
     var map = TETHYS_MAP_VIEW.getMap();
     map.on('singleclick', function(evt) {
+        var pointSource = map.getLayers().item(1).getSource();
+        if (pointSource.getFeatures().length > 1) {
+            pointSource.removeFeature(pointSource.getFeatures()[0]);
+        }
         var coords = evt.coordinate;
         //var coords = map.getEventCoordinate(evt);
         var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
         //window.alert(lonlat);
         document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
     });
-}
+    map.getLayers().item(1).setZIndex(10000);
+});
 
 function load_map_post_parameters() {
     var map = TETHYS_MAP_VIEW.getMap();
@@ -134,6 +139,8 @@ function load_map() {
     data += '&plotTime=' + getUrlVars()['plotTime'];
     data += '&variable=' + getUrlVars()['variable'];
     data += '&model=' + getUrlVars()['model'];
+    var variaIndex = $('#variable').find(':selected').index();
+    var variaLyrName = VAR_DICT[getUrlVars()['model']][variaIndex].layerName;
     showMapLoading();
     $.ajax({
         url: '/apps/data-rods-explorer/map/',
@@ -157,8 +164,8 @@ function load_map() {
                         })
                     });
                     map.addLayer(newLayer);
-                    newLayer['tethys_legend_title'] = response['load_layer'].split(':')[1];
-                    addLegendItem(newLayer);
+                    newLayer['tethys_legend_title'] = variaLyrName;
+                    update_legend();
                     document.getElementById('loadMap').value = response['load_layer'];
                 }
             }
@@ -170,11 +177,48 @@ function load_map() {
     // document.forms['parametersForm'].submit();
 }
 
-function createPlot() {
+function createPlot(name) {
+    $('#plot-loading').removeClass('hidden');
     load_map_post_parameters();
     document.getElementById('retrieveMap').value = "no";
     document.getElementById('prevPlot').value = "yes";
+    var data = {};
+    var formParams = $('#parametersForm').serializeArray();
+    var urlParams = getUrlVars();
+    Object.keys(urlParams).forEach(function (param) {
+        data[param] = urlParams[param];
+    });
+    $(formParams).each(function(index, obj) {
+        data[obj.name] = obj.value;
+    });
 
+    $.ajax({
+        url: '/apps/data-rods-explorer/' + name + '/',
+        type: 'POST',
+        dataType: 'html',
+        data: data,
+        beforeSend: function (xhr, settings) {
+            if (!checkCsrfSafe(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+            }
+        },
+        success: function (responseHTML) {
+            $('#plot-container').html(responseHTML);
+            var plotType = $('.highcharts-plot').attr('data-type');
+            initHighChartsPlot($('.highcharts-plot'), plotType);
+            $('#plot-loading').addClass('hidden');
+
+            var opts = $('#plot2-options');
+            var series = opts.attr('data-series');
+            var y1Units = opts.attr('data-y1units');
+            var y2Units = opts.attr('data-y2units');
+            two_axis_plot(series, y1Units, y2Units);
+
+        }, error: function () {
+            $('#plot-loading').addClass('hidden');
+            console.error('Nice try... :(');
+        }
+    });
     // document.forms['parametersForm'].submit();
 }
 
@@ -217,11 +261,11 @@ function addLegendItem(layer) {
     $('.legend-items').append(html);
 
     // Bind events for controls
-    last_item = $('.legend-items').children(':last-child');
-    menu_toggle_control = $(last_item).find('.legend-dropdown-toggle');
-    opacity_control = $(last_item).find('.opacity-control input[type=range]');
-    display_control = $(last_item).find('.display-control');
-    zoom_control = $(last_item).find('.zoom-control');
+    var last_item = $('.legend-items').children(':last-child');
+    var menu_toggle_control = $(last_item).find('.legend-dropdown-toggle');
+    var opacity_control = $(last_item).find('.opacity-control input[type=range]');
+    var display_control = $(last_item).find('.display-control');
+    var zoom_control = $(last_item).find('.zoom-control');
 
     // Bind toggle control
     menu_toggle_control.on('click', function(){
@@ -262,10 +306,14 @@ function is_defined(variable) {
     return !!(typeof variable !== typeof undefined && variable !== false);
 }
 
-function updateFences(model) {
+function updateFences(differentiator, model) {
     var newEndDate = MODEL_FENCES[model].end_date;
     var newStartDate = MODEL_FENCES[model].start_date;
-    $('[data-provide=datepicker]').each(function (idx, elem) {
+    var divId = differentiator === 'model1' ? 'plot' : 'plot2';
+    var datePickers = $('#nav-' + divId).find('[data-provide=datepicker]');
+    datePickers = differentiator === 'model1' ? datePickers.add($('#plot_date')) : datePickers;
+
+    datePickers.each(function (idx, elem) {
         if (Date.parse($(elem).val()) > Date.parse(newEndDate)) {
             $(elem).val(newEndDate);
         } else if (Date.parse($(elem).val()) < Date.parse(newStartDate)) {
@@ -274,6 +322,10 @@ function updateFences(model) {
         $(elem).datepicker('setStartDate', newStartDate);
         $(elem).datepicker('setEndDate', newEndDate);
     });
+
+    if (differentiator === 'model1') {
+        $('plot_date')
+    }
 
     var extents = MODEL_FENCES[model].extents;
     var minX = parseFloat(extents.minX);
@@ -304,6 +356,135 @@ function updateFences(model) {
         }]
     };
 
-    MODEL1_LAYER.getSource().clear();
-    MODEL1_LAYER.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojsonObject));
+    var layer = differentiator === 'model1' ? MODEL1_LAYER : MODEL2_LAYER;
+
+    layer.getSource().clear();
+    layer.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojsonObject));
 }
+
+var update_legend = function() {
+    var layers;
+
+    // Clear the legend items
+    $('.legend-items').empty();
+
+    // Get current layers from the map
+    layers = TETHYS_MAP_VIEW.getMap().getLayers();
+
+    for (var i = layers.getLength(); i--; ) {
+        addLegendItem(layers.item(i));
+    }
+
+    // Activate the drop down menus
+    $('.dropdown-toggle').dropdown();
+};
+
+var initHighChartsPlot = function($element, plot_type) {
+    if ($element.attr('data-json')) {
+        var json_string, json;
+
+        // Get string from data-json attribute of element
+        json_string = $element.attr('data-json');
+
+        // Parse the json_string with special reviver
+        json = JSON.parse(json_string, functionReviver);
+        $element.highcharts(json);
+    }
+    else if (plot_type === 'line' || plot_type === 'spline') {
+        initLinePlot($element[0], plot_type);
+    }
+};
+
+var functionReviver = function(k, v) {
+    if (typeof v === 'string' && v.indexOf('function') !== -1) {
+        var fn;
+        // Pull out the 'function()' portion of the string
+        v = v.replace('function ()', '');
+        v = v.replace('function()', '');
+
+        // Create a function from the string passed in
+        fn = Function(v);
+
+        // Return the handle to the function that was created
+        return fn;
+    } else {
+        return v;
+    }
+};
+
+var initLinePlot = function(element, plot_type) {
+    var title = $(element).attr('data-title');
+    var subtitle = $(element).attr('data-subtitle');
+    var series = $.parseJSON($(element).attr('data-series'));
+    var xAxis = $.parseJSON($(element).attr('data-xAxis'));
+    var yAxis = $.parseJSON($(element).attr('data-yAxis'));
+
+    $(element).highcharts({
+        chart: {
+            type: plot_type
+        },
+        title: {
+            text: title,
+            x: -20 //center
+        },
+        subtitle: {
+            text: subtitle,
+            x: -20
+        },
+        xAxis: {
+            title: {
+                text: xAxis['title']
+            },
+            labels: {
+                formatter: function() {
+                    return this.value + xAxis['label'];
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: yAxis['title']
+            },
+            labels: {
+                formatter: function() {
+                    return this.value + yAxis['label'];
+                }
+            }
+        },
+        tooltip: {
+            valueSuffix: '°C'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: series
+    });
+};
+
+var checkCsrfSafe = function (method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+};
+
+var getCookie = function (name) {
+    var cookie;
+    var cookies;
+    var cookieValue = null;
+    var i;
+
+    if (document.cookie && document.cookie !== '') {
+        cookies = document.cookie.split(';');
+        for (i = 0; i < cookies.length; i += 1) {
+            cookie = $.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+};

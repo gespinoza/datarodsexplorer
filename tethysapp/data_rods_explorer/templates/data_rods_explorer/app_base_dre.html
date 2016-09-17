@@ -203,6 +203,12 @@
                             <img src="/static/data_rods_explorer/images/main-loading-anim.gif" />
                         </div>
                         {% gizmo map_view map_view_options %}
+                        <div style="position: relative;">
+                            <div id="plot-loading" class="hidden">
+                                <img src="/static/data_rods_explorer/images/main-loading-anim.gif" />
+                            </div>
+                            <div id="plot-container"></div>
+                        </div>
                     {% endblock %}
 
                     {# App actions are fixed to the bottom #}

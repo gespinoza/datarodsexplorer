@@ -19,8 +19,7 @@ function page_and_parameters_html(href, page) {
 
 function page_and_parameters(href, page) {
     var GET = getUrlVars();
-    // href = href.split('?')[0];
-    data = {};
+    var data = {};
 
     if (GET['model']) {
         var model = GET['model'];
@@ -31,7 +30,7 @@ function page_and_parameters(href, page) {
     if (GET['variable']) {
         var varia = GET['variable'];
     } else {
-        var varia = VAR_DICT[model][0].value;//document.getElementById('variable').value;
+        var varia = VAR_DICT[model][0].value;
     }
     data['variable'] = varia;
     if (GET['plotTime']) {
@@ -41,11 +40,6 @@ function page_and_parameters(href, page) {
         var plotDate = date_to_rods(plotTime['date']) + 'T' + plotTime['hour'];
     }
     data['plotTime'] = plotDate;
-    // href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
-
-    // if (document.getElementById('loadMap').value !== 'no') {
-    //     href += '&loadMap=' + document.getElementById('loadMap').value
-    // }
 
     if (page == 'plot') {
 
@@ -64,7 +58,7 @@ function page_and_parameters(href, page) {
         }
 
         data['startDate'] = startDate;
-        // href = href + '&startDate=' + startDate + '&endDate=' + endDate;
+
     } else if (page == 'plot2') {
         if (GET['model2']) {
             var model2 = GET['model2'];
@@ -98,14 +92,13 @@ function page_and_parameters(href, page) {
 
         data['startDate'] = startDate;
 
-        // href = href + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
     } else if (page == 'years') {
         var endDate = current_date(140, '23');
-        years = endDate.substr(0, 4);
-        // href =  href + '&years=' + years;
+        var years = endDate.substr(0, 4);
+
         data['years'] = years;
     }
-    // window.location = href;
+
     $.ajax({
         url: href,
         type: 'GET',
@@ -118,9 +111,10 @@ function page_and_parameters(href, page) {
             } else if (page == 'plot2') {
                 $('#nav-plot2').html(htmlResponse);
                 load_default_plot2(data);
-                load_variable_options('model2', 'variable2');
+                load_variable_options('model2', 'variable2', data);
             } else if (page == 'years') {
                 $('#nav-years').html(htmlResponse);
+                $('#years').select2();
                 load_default_years(data);
             }
             addVarsToURL(data);
@@ -147,7 +141,7 @@ function load_default_home(modelFencesEncoded) {
     if (GET['variable']) {
         var varia = GET['variable'];
     } else {
-        var varia = VAR_DICT[model][0].value;//document.getElementById('variable').value;
+        var varia = VAR_DICT[model][0].value;
         counter = counter + 1;
     }
     if (GET['plotTime']) {
@@ -174,35 +168,36 @@ function load_default_home(modelFencesEncoded) {
         document.getElementById('plot_hour').value = plotTime['hour'];
     }
 
-    load_extents_layer(model.toUpperCase())
+    load_extents_layers(model.toUpperCase())
 }
 
 function load_default_plot(data) {
     var counter = 0;
     var GET = data ? data : getUrlVars();
-    var href = window.location.href; //.split('?')[0]
+    var href = window.location.href;
+    var model, varia, plotTime, startDate, endDate;
     if (GET['model']) {
         var model = GET['model'];
     } else {
         counter = counter + 1;
     }
     if (GET['variable']) {
-        var varia = GET['variable'];
+        varia = GET['variable'];
     } else {
         counter = counter + 1;
     }
     if (GET['plotTime']) {
-        var plotTime = date_to_normal(GET['plotTime']);
+        plotTime = date_to_normal(GET['plotTime']);
     } else {
         counter = counter + 1;
     }
     if (GET['startDate']) {
-        var startDate = date_to_normal(GET['startDate']);
+        startDate = date_to_normal(GET['startDate']);
     } else {
         counter = counter + 1;
     }
     if (GET['endDate']) {
-        var endDate = date_to_normal(GET['endDate']);
+        endDate = date_to_normal(GET['endDate']);
     } else {
         counter = counter + 1;
     }
@@ -276,7 +271,7 @@ function load_default_plot2(data) {
 function load_default_years(data) {
     var counter = 0;
     var GET = data ? data : getUrlVars();
-    var href = window.location.href; //.split('?')[0]
+    var href = window.location.href;
     if (GET['model']) {
         var model = GET['model'];
     } else {
@@ -308,7 +303,7 @@ function load_default_years(data) {
         //from here the code is new
         var years_list = years.split(',');
         var years_array = [];
-        for (var i=0; i < years_list.length; i++) {
+        for (var i = 0; i < years_list.length; i++) {
             if (years_list[i].indexOf('-') === -1) {
                 years_array = years_array.concat(years_list[i])
             } else {
@@ -320,11 +315,12 @@ function load_default_years(data) {
             }
         }
         var years_options = document.getElementById('years');
-        for (var i=0; i < years_options.length; i++) {
+        for (var i = 0; i < years_options.length; i++) {
             if (years_array.indexOf(years_options[i].value) != -1) {
                 years_options[i].selected = true;
             }
         }
+        $('#years').trigger('change');
     }
 }
 
@@ -337,7 +333,7 @@ function addVarsToURL(vars) {
     window.history.pushState({}, 'None', href);
 }
 
-function load_extents_layer(model) {
+function load_extents_layers(model) {
     $(function () {
         var extents = MODEL_FENCES[model].extents;
         var minX = parseFloat(extents.minX);
@@ -346,15 +342,20 @@ function load_extents_layer(model) {
         var maxY = parseFloat(extents.maxY);
         var map = TETHYS_MAP_VIEW.getMap();
 
-        var style = new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: 'blue',
-                width: 3
-            }),
-            fill: new ol.style.Fill({
-                color: 'rgba(0, 0, 255, 0.1)'
-            })
-        });
+        var getStyle = function (layer) {
+            var strokeColor = layer === 1 ? 'blue' : 'red';
+            var fillColor = layer === 1 ? 'rgba(0, 0, 255, 0.1)' : 'rgba(255, 0, 0, 0.1)';
+
+            return new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: strokeColor,
+                    width: 3
+                }),
+                fill: new ol.style.Fill({
+                    color: fillColor
+                })
+            });
+        };
 
         var geojsonObject = {
             'type': 'FeatureCollection',
@@ -379,16 +380,28 @@ function load_extents_layer(model) {
             }]
         };
 
-        var source = new ol.source.Vector({
+        var source1 = new ol.source.Vector({
+            features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+        });
+
+        var source2 = new ol.source.Vector({
             features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
         });
 
         MODEL1_LAYER = new ol.layer.Vector({
-            source: source,
-            style: style
+            source: source1,
+            style: getStyle(1),
+            name: 'model1_extents'
+        });
+        MODEL2_LAYER = new ol.layer.Vector({
+            source: source2,
+            style: getStyle(2),
+            name: 'model2_extents'
         });
         map.addLayer(MODEL1_LAYER);
+        map.addLayer(MODEL2_LAYER);
         MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
-        addLegendItem(MODEL1_LAYER);
+        MODEL2_LAYER['tethys_legend_title'] = 'Model 2 Extents';
+        update_legend();
     });
 }

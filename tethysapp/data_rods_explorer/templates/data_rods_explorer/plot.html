@@ -1,57 +1,13 @@
-{% extends "data_rods_explorer/app_base_dre.html" %}
 {% load tethys_gizmos %}
-
-{% load staticfiles %}
-
-{% block title %}- {{ tethys_app.name }}{% endblock %}
-
-{% block app_icon %}
-    {# The path you provided in your app.py is accessible through the tethys_app.icon context variable #}
-    <img src="{% static tethys_app.icon %}">
-{% endblock %}
-
-{% block app_navigation_items %}
-    <!-- set in app_base_dre.html -->
-    {{ block.super }}
-
-    <li class="nav-divider"></li>
-
-    <li style="padding-top:0px;" class="title">Time series</li>
-
-    <li class="active"><a href="javascript:void(0)" onclick="page_and_parameters_html('{% url 'data_rods_explorer:plot' %}', 'plot');">Plot one variable</a></li>
-
-    <div style="padding-left:30px;padding-bottom:15px;">
-        <li style="padding-top:15px;">Start date:</li>
-        {% gizmo date_picker start_date %}
-        <li>End date:</li>
-        {% gizmo date_picker end_date %}
-        {% gizmo button plot_button %}
+{% if plot2 %}
+    <div id='plot2container' style="height: 250px; width: 100%"></div>
+    {% gizmo plot_view timeseries_plot %}
+    <div id="plot2-options"
+         data-series="{{ timeseries_plot.series }}"
+         data-y1units="{{ timeseries_plot.y1_axis_units }}"
+         data-y2units="{{ timeseries_plot.y2_axis_units }}"
+         class="hidden">
     </div>
-
-    <li><a href="javascript:void(0)" onclick="page_and_parameters_html('{% url 'data_rods_explorer:plot2' %}', 'plot2');">Compare two variables</a></li>
-
-    <li><a style="padding-bottom:15px;" href="javascript:void(0)" onclick="page_and_parameters_html('{% url 'data_rods_explorer:years' %}', 'years');">Year-on-year changes</a></li>
-
-{% endblock %}
-
-{% block app_content %}
-    <p>Click on the map to select location for plot</p>
-    {% gizmo map_view map_view_options %}
-    {% if timeseries_plot %}
-        {% gizmo plot_view timeseries_plot %}
-    {% endif %}
-
-{% endblock %}
-
-{% block app_actions %}
-    <!--<li><a>Contact:</br>Gonzalo E. Espinoza</br>gespinoza@utexas.edu</a></li>-->
-{% endblock %}
-
-{% block scripts %}
-    {{ block.super }}
-    <script>
-        window.onload = map_click_evt;
-        load_default_plot();
-    </script>
-{% endblock %}
-
+{% else %}
+    {% gizmo plot_view timeseries_plot %}
+{% endif %}

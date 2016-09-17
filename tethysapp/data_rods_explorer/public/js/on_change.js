@@ -3,7 +3,7 @@ function oc_model() {
     var href = window.location.href.split('?')[0];
     var model = document.getElementById('model').value;
     var varia = VAR_DICT[model][0].value; //1st element
-    updateFences(model.toUpperCase());
+    updateFences('model1', model.toUpperCase());
     var plotDate = GET['plotTime'];
     href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
     if (GET['model2'] && GET['variable2']) {
@@ -98,6 +98,7 @@ function oc_model2() {
     var endDate = GET['endDate'];//date_to_rods(document.getElementById('endDate').value) + 'T23'; //Last hour
     var model2 = document.getElementById('model2').value;
     var varia2 = VAR_DICT[model2][0].value; //1st element
+    updateFences('model2', model2.toUpperCase());
     href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
     history.pushState("", "", href);
     load_variable_options('model2', 'variable2');
@@ -134,7 +135,7 @@ function oc_years() {
     for (var i=0; i<yearsObj.length; i++) {
         years = years + yearsObj[i] + ',';
     }
-    years = years.substr(0, years.length - 1)
+    years = years.substr(0, years.length - 1);
 
     href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate + '&years=' + years;
     history.pushState("", "", href)

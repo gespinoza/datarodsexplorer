@@ -50,19 +50,13 @@ def plot(request):
     """
     get = request.GET
     post = request.POST
-    # context = initialize_model_map_context(get, post)
-    start_date_str = get['startDate']
-    end_date_str = get['endDate']
-    model = str(get['model'].upper())
-    # Load page parameters
-    start_date, end_date, plot_button = plot_ctrls(model)
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
-        varname = WMS_VARS[get['model']][get['variable']][1]
-        varunit = WMS_VARS[get['model']][get['variable']][2]
+        varname = WMS_VARS[post['model']][post['variable']][1]
+        varunit = WMS_VARS[post['model']][post['variable']][2]
         pointLonLat = post['pointLonLat']
-        datarod_ts = getDataRod_plot(get, pointLonLat)
+        datarod_ts = getDataRod_plot(post, pointLonLat)
         timeseries_plot = TimeSeries(
             height='250px',
             width='100%',
@@ -75,20 +69,18 @@ def plot(request):
                 'data': datarod_ts
             }]
         )
-    else:
-        timeseries_plot = None
+        context = {'timeseries_plot': timeseries_plot}
 
-    # Context variables
-    context = {
-        'start_date': start_date,
-        'end_date': end_date,
-        'plot_button': plot_button,
-        'timeseries_plot': timeseries_plot
-    }
-    # context['start_date'] = start_date
-    # context['end_date'] = end_date
-    # context['plot_button'] = plot_button
-    # context['timeseries_plot'] = timeseries_plot
+        return render(request, 'data_rods_explorer/plot.html', context)
+
+    else:
+        model = str(get['model'].upper())
+        start_date, end_date, plot_button = plot_ctrls(model, 'plot')
+        context = {
+            'start_date': start_date,
+            'end_date': end_date,
+            'plot_button': plot_button
+        }
 
     return render(request, 'data_rods_explorer/nav_plot.html', context)
 
@@ -99,39 +91,35 @@ def plot2(request):
     """
     post = request.POST
     get = request.GET
-    start_date_str = get['startDate']
-    end_date_str = get['endDate']
-    model = get['model'].upper()
-    # context = initialize_model_map_context(get, post)
-
-    # Load page parameters
-    start_date, end_date, plot_button = plot_ctrls(model)
-    select_model2 = SelectInput(display_text='',
-                                name='model2',
-                                multiple=False,
-                                original=True,
-                                options=MODEL_OPTIONS,
-                                attributes="onchange=oc_model2();"
-                                )
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
         pointLonLat = post['pointLonLat']
-        datarod_ts = getDataRod_plot2(get, pointLonLat)
-        timeseries_plot = {'y1_axis_units': WMS_VARS[get['model']][get['variable']][2],
-                           'y2_axis_units': WMS_VARS[get['model2']][get['variable2']][2],
+        datarod_ts = getDataRod_plot2(post, pointLonLat)
+        timeseries_plot = {'y1_axis_units': WMS_VARS[post['model']][post['variable']][2],
+                           'y2_axis_units': WMS_VARS[post['model2']][post['variable2']][2],
                            'series': datarod_ts}
-    else:
-        timeseries_plot = None
+        context = {'timeseries_plot': timeseries_plot, 'plot2': True}
 
-    # Context variables
-    context = {
-        'start_date': start_date,
-        'end_date': end_date,
-        'plot_button': plot_button,
-        'timeseries_plot': timeseries_plot,
-        'select_model2': select_model2
-    }
+        return render(request, 'data_rods_explorer/plot.html', context)
+
+    else:
+        model = get['model'].upper()
+        start_date, end_date, plot_button = plot_ctrls(model, 'plot2')
+        select_model2 = SelectInput(display_text='',
+                                    name='model2',
+                                    multiple=False,
+                                    original=True,
+                                    options=MODEL_OPTIONS,
+                                    attributes="onchange=oc_model2();"
+                                    )
+        # Context variables
+        context = {
+            'start_date': start_date,
+            'end_date': end_date,
+            'plot_button': plot_button,
+            'select_model2': select_model2
+        }
 
     return render(request, 'data_rods_explorer/nav_plot2.html', context)
 
@@ -155,13 +143,13 @@ def years(request):
                                )
 
     plot_button = Button(display_text='Plot',
-                         name='plot_btn',
+                         name='years',
                          style='',
                          icon='',
                          href='',
                          submit=False,
                          disabled=False,
-                         attributes='onclick=createPlot();',
+                         attributes='onclick=createPlot(this.name);',
                          classes='')
 
     # Plot
@@ -258,7 +246,7 @@ def map_date_ctrls(model):
                              start_date=MODEL_FENCES[model]['start_date'],
                              end_date=MODEL_FENCES[model]['end_date'],
                              start_view=0,
-                             attributes='onchange=oc_map_dt();',  #value=02/01/2015 'value="{0}"'.format(datetime.strftime(datetime.now() - timedelta(days=7), '%m/%d/%Y')),
+                             attributes='onchange=oc_map_dt(); class=datepicker-model1',  #value=02/01/2015 'value="{0}"'.format(datetime.strftime(datetime.now() - timedelta(days=7), '%m/%d/%Y')),
                              classes=''
                              )
 
@@ -280,7 +268,7 @@ def map_date_ctrls(model):
     return [select_date, select_hour]
 
 
-def plot_ctrls(model):
+def plot_ctrls(model, controller):
     """
     Function that creates and return the "start_date", "end_hour", and "plot_button" elements
     """
@@ -288,6 +276,9 @@ def plot_ctrls(model):
     # end_date = (datetime.strptime(end_date_raw.split('T')[0], '%Y-%m-%d') - timedelta(days=1)).strftime('%m/%d/%Y')
 
     # read ascii file with output date ranges and spatial extents for all models
+
+    differentiator = 1 if controller == 'plot' else 2
+
     start_date = DatePicker(display_text=False,
                             name='startDate',
                             autoclose=True,
@@ -295,7 +286,7 @@ def plot_ctrls(model):
                             start_date=MODEL_FENCES[model]['start_date'],
                             end_date=MODEL_FENCES[model]['end_date'],
                             start_view=0,
-                            attributes='onchange=oc_sten_dt();',
+                            attributes='onchange=oc_sten_dt(); class=datepicker-model%s' % differentiator
                             )
 
     end_date = DatePicker(display_text=False,
@@ -305,17 +296,17 @@ def plot_ctrls(model):
                           start_date=MODEL_FENCES[model]['start_date'],
                           end_date=MODEL_FENCES[model]['end_date'],
                           start_view=0,
-                          attributes='onchange=oc_sten_dt();',
+                          attributes='onchange=oc_sten_dt(); class=datepicker-model%s' % differentiator
                           )
 
     plot_button = Button(display_text='Plot',
-                         name='plot_btn',
+                         name=controller,
                          style='',
                          icon='',
                          href='',
                          submit=False,
                          disabled=False,
-                         attributes='onclick=createPlot();',
+                         attributes='onclick=createPlot(this.name);',
                          classes='')
 
     return [start_date, end_date, plot_button]

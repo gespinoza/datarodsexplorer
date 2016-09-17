@@ -1,9 +1,9 @@
 function two_axis_plot(series, y_axis_1, y_axis_2) {
-	series = series.replace(/\&#39;/g, "'")
-	series = series.replace(/datetime.datetime/g, "Date.UTC")
+	series = series.replace(/\&#39;/g, "'");
+	series = series.replace(/datetime.datetime/g, "Date.UTC");
 	var datarods_ts = eval(series);
 
-	arrayLength = datarods_ts[0]['data'].length;
+	var arrayLength = datarods_ts[0]['data'].length;
 	for (var i = 0; i < arrayLength; i++) {
 		var time1 = new Date(datarods_ts[0]['data'][i][0]);
 		var time2 = new Date(datarods_ts[1]['data'][i][0]);
@@ -58,11 +58,11 @@ function two_axis_plot(series, y_axis_1, y_axis_2) {
         },
         series: [{
             name: datarods_ts[0].name,
-            data: datarods_ts[0].data,
+            data: datarods_ts[0].data.sort(),
             yAxis: 0
         }, {
             name: datarods_ts[1].name,
-            data: datarods_ts[1].data,
+            data: datarods_ts[1].data.sort(),
             yAxis: 1
         }]
     });
