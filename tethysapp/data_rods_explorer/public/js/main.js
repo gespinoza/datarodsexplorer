@@ -208,11 +208,13 @@ function createPlot(name) {
             initHighChartsPlot($('.highcharts-plot'), plotType);
             $('#plot-loading').addClass('hidden');
 
-            var opts = $('#plot2-options');
-            var series = opts.attr('data-series');
-            var y1Units = opts.attr('data-y1units');
-            var y2Units = opts.attr('data-y2units');
-            two_axis_plot(series, y1Units, y2Units);
+            if (name === 'plot2') {
+                var opts = $('#plot2-options');
+                var series = opts.attr('data-series');
+                var y1Units = opts.attr('data-y1units');
+                var y2Units = opts.attr('data-y2units');
+                two_axis_plot(series, y1Units, y2Units);
+            }
 
         }, error: function () {
             $('#plot-loading').addClass('hidden');
@@ -318,6 +320,8 @@ function updateFences(differentiator, model) {
             $(elem).val(newEndDate);
         } else if (Date.parse($(elem).val()) < Date.parse(newStartDate)) {
             $(elem).val(newStartDate);
+        } else {
+            $(elem).val(newEndDate);
         }
         $(elem).datepicker('setStartDate', newStartDate);
         $(elem).datepicker('setEndDate', newEndDate);

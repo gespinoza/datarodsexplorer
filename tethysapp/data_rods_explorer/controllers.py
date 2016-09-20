@@ -132,32 +132,12 @@ def years(request):
     get = request.GET
     # context = initialize_model_map_context(get, post)
 
-    # Load page parameters
-    years_list = create_years_list(1979)
-    select_years = SelectInput(display_text='',
-                               name='years',
-                               multiple=True,
-                               original=False,
-                               options=years_list,
-                               attributes="onchange=oc_years();"
-                               )
-
-    plot_button = Button(display_text='Plot',
-                         name='years',
-                         style='',
-                         icon='',
-                         href='',
-                         submit=False,
-                         disabled=False,
-                         attributes='onclick=createPlot(this.name);',
-                         classes='')
-
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
-        varname = WMS_VARS[get['model']][get['variable']][1]
-        varunit = WMS_VARS[get['model']][get['variable']][2]
+        varname = WMS_VARS[post['model']][post['variable']][1]
+        varunit = WMS_VARS[post['model']][post['variable']][2]
         pointLonLat = post['pointLonLat']
-        datarod_ts = getDataRod_years(get, pointLonLat)
+        datarod_ts = getDataRod_years(post, pointLonLat)
         timeseries_plot = TimeSeries(
             height='250px',
             width='100%',
@@ -167,16 +147,38 @@ def years(request):
             y_axis_units=varunit,
             series=datarod_ts
         )
-    else:
-        timeseries_plot = None
-    # Context variables
-    context = {
-        'plot_button': plot_button,
-        'timeseries_plot': timeseries_plot,
-        'select_years': select_years
-    }
 
-    return render(request, 'data_rods_explorer/nav_years.html', context)
+        context = {'timeseries_plot': timeseries_plot}
+
+        return render(request, 'data_rods_explorer/plot.html', context)
+
+    else:
+        # Load page parameters
+        years_list = create_years_list(1979)
+        select_years = SelectInput(display_text='',
+                                   name='years',
+                                   multiple=True,
+                                   original=False,
+                                   options=years_list,
+                                   attributes="onchange=oc_years();"
+                                   )
+
+        plot_button = Button(display_text='Plot',
+                             name='years',
+                             style='',
+                             icon='',
+                             href='',
+                             submit=False,
+                             disabled=False,
+                             attributes='onclick=createPlot(this.name);',
+                             classes='')
+        # Context variables
+        context = {
+            'plot_button': plot_button,
+            'select_years': select_years
+        }
+
+        return render(request, 'data_rods_explorer/nav_years.html', context)
 
 
 def create_select_model(modelname):
@@ -319,9 +321,9 @@ def create_years_list(first_year=1979):
     """
     years_list = []
     last_year = datetime.now().year
-    for yyyy in range(first_year, last_year + 1):
+    for yyyy in range(first_year, last_year):
         years_list.append((str(yyyy), str(yyyy)))
-    return years_list
+    return sorted(years_list, key=lambda year: year[0], reverse=True)
 
 
 def create_tfw_file(path, lonW, latS, lonE, latN, h=256, w=512):
