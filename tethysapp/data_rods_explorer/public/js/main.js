@@ -215,10 +215,23 @@ function createPlot(name) {
                 var y2Units = opts.attr('data-y2units');
                 two_axis_plot(series, y1Units, y2Units);
             }
-
         }, error: function () {
+            var message;
+            if ($('#pointLonLat').val() === "-9999") {
+                message = 'Query location not defined. Please click on map at desired query location.';
+            } else {
+                message = 'Request out of spatial or temporal bounds';
+            }
             $('#plot-loading').addClass('hidden');
-            console.error('Nice try... :(');
+            $('.flash-messages').html(
+                '<div class="alert alert-danger alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert">' +
+                '<span aria-hidden="true">&times;</span>' +
+                '<span class="sr-only">Close</span>' +
+                '</button>' +
+                message +
+                '</div>'
+            );
         }
     });
     // document.forms['parametersForm'].submit();
@@ -492,3 +505,9 @@ var getCookie = function (name) {
     }
     return cookieValue;
 };
+
+function openDataRodsUrls(datarods_urls) {
+    datarods_urls.forEach(function (url) {
+        window.open(url);
+    });
+}

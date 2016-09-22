@@ -25,6 +25,13 @@
     opacity: 0.5;
     height: 250px;
 }
+
+#plot-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
 /*
 .exit-button.extra-button {
 	padding-right: 0px;

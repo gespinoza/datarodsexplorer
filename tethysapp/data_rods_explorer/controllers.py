@@ -22,6 +22,11 @@ def home(request):
     post = request.POST
     context = initialize_model_map_context(get, post)
 
+    context['messages'] = [{
+        'category': 'info',
+        'text': 'Click on the map to define data query location.'
+    }]
+
     return render(request, 'data_rods_explorer/app_base_dre.html', context)
 
 
@@ -56,7 +61,7 @@ def plot(request):
         varname = WMS_VARS[post['model']][post['variable']][1]
         varunit = WMS_VARS[post['model']][post['variable']][2]
         pointLonLat = post['pointLonLat']
-        datarod_ts = getDataRod_plot(post, pointLonLat)
+        datarod_ts, datarods_urls = getDataRod_plot(post, pointLonLat)
         timeseries_plot = TimeSeries(
             height='250px',
             width='100%',
@@ -65,11 +70,14 @@ def plot(request):
             y_axis_title=varname,
             y_axis_units=varunit,
             series=[{
-                'name': pointLonLat,
+                'name': '%s (Lon,Lat)' % pointLonLat,
                 'data': datarod_ts
             }]
         )
-        context = {'timeseries_plot': timeseries_plot}
+        context = {
+            'timeseries_plot': timeseries_plot,
+            'datarods_urls': datarods_urls
+        }
 
         return render(request, 'data_rods_explorer/plot.html', context)
 
@@ -95,11 +103,16 @@ def plot2(request):
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
         pointLonLat = post['pointLonLat']
-        datarod_ts = getDataRod_plot2(post, pointLonLat)
+        datarod_ts, datarods_urls = getDataRod_plot2(post, pointLonLat)
         timeseries_plot = {'y1_axis_units': WMS_VARS[post['model']][post['variable']][2],
                            'y2_axis_units': WMS_VARS[post['model2']][post['variable2']][2],
                            'series': datarod_ts}
-        context = {'timeseries_plot': timeseries_plot, 'plot2': True}
+
+        context = {
+            'timeseries_plot': timeseries_plot,
+            'plot2': True,
+            'datarods_urls': datarods_urls
+        }
 
         return render(request, 'data_rods_explorer/plot.html', context)
 
@@ -137,7 +150,7 @@ def years(request):
         varname = WMS_VARS[post['model']][post['variable']][1]
         varunit = WMS_VARS[post['model']][post['variable']][2]
         pointLonLat = post['pointLonLat']
-        datarod_ts = getDataRod_years(post, pointLonLat)
+        datarod_ts, datarods_urls = getDataRod_years(post, pointLonLat)
         timeseries_plot = TimeSeries(
             height='250px',
             width='100%',
@@ -148,7 +161,10 @@ def years(request):
             series=datarod_ts
         )
 
-        context = {'timeseries_plot': timeseries_plot}
+        context = {
+            'timeseries_plot': timeseries_plot,
+            'datarods_urls': datarods_urls
+        }
 
         return render(request, 'data_rods_explorer/plot.html', context)
 
@@ -518,12 +534,13 @@ def getDataRod_plot(req_get, pointLonLat):
                                  req_get['startDate'], req_get['endDate'])
     dr_ts = access_datarods_server(dr_link, model, False)
 
-    return dr_ts
+    return dr_ts, [dr_link]
 
 
 def getDataRod_plot2(req_get, pointLonLat):
     startDate = req_get['startDate']
     endDate = req_get['endDate']
+    datarods_urls = []
 
     # 1st variable
     model1 = req_get['model']
@@ -540,6 +557,8 @@ def getDataRod_plot2(req_get, pointLonLat):
 
     dr_link1 = superstring1.format(variable1, pointLonLat.replace(',',',%20'),
                                    startDate, endDate)
+
+    datarods_urls.append(dr_link1)
     data1 = access_datarods_server(dr_link1, model1, False)
 
     # 2nd variable
@@ -557,6 +576,7 @@ def getDataRod_plot2(req_get, pointLonLat):
 
     dr_link2 = superstring2.format(variable2, pointLonLat.replace(',',',%20'),
                                    startDate, endDate)
+    datarods_urls.append(dr_link2)
     data2 = access_datarods_server(dr_link2, model2, False)
     # Create list
     dr_ts = [{'name': WMS_VARS[model1][variable1][1] + ' (' + WMS_VARS[model1][variable1][2] + ')',
@@ -565,7 +585,8 @@ def getDataRod_plot2(req_get, pointLonLat):
              {'name': WMS_VARS[model2][variable2][1] + ' (' + WMS_VARS[model2][variable2][2] + ')',
               'data': data2,
               'code': str(variable2) + ' (' + WMS_VARS[model2][variable2][2] + ')'}]
-    return dr_ts
+
+    return dr_ts, datarods_urls
 
 
 def getDataRod_years(req_get, pointLonLat):
@@ -581,6 +602,7 @@ def getDataRod_years(req_get, pointLonLat):
         superstring = DATARODS_TSB[model]
 
     dr_ts = []
+    dr_links = []
     for year in req_get['years'].split(','):
         if '-' in year:
             yearRange = year.split('-')
@@ -591,6 +613,7 @@ def getDataRod_years(req_get, pointLonLat):
                 data = access_datarods_server(dr_link, model, True)
                 dr_ts.append({'name': yyyy,
                               'data': data})
+                dr_links.append(dr_link)
         else:
             dr_link = superstring.format(variable, pointLonLat.replace(',',',%20'),
                                          '{0}-01-01T00'.format(year),
@@ -599,7 +622,9 @@ def getDataRod_years(req_get, pointLonLat):
             data = access_datarods_server(dr_link, model, True)
             dr_ts.append({'name': year,
                           'data': data})
-    return dr_ts
+            dr_links.append(dr_link)
+
+    return dr_ts, dr_links
 
 
 def initialize_model_map_context(get, post):

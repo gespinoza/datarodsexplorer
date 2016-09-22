@@ -1,4 +1,5 @@
 {% load tethys_gizmos %}
+<button type="button" class="btn btn-primary btn-med" onclick="openDataRodsUrls({{ datarods_urls }})">View Raw Data</button>
 {% if plot2 %}
     <div id='plot2container' style="height: 250px; width: 100%"></div>
     {% gizmo plot_view timeseries_plot %}
@@ -6,8 +7,7 @@
          data-series="{{ timeseries_plot.series }}"
          data-y1units="{{ timeseries_plot.y1_axis_units }}"
          data-y2units="{{ timeseries_plot.y2_axis_units }}"
-         class="hidden">
-    </div>
+         class="hidden"></div>
 {% else %}
     {% gizmo plot_view timeseries_plot %}
 {% endif %}
