@@ -12,7 +12,7 @@ function two_axis_plot(series, y_axis_1, y_axis_2) {
 
     var array2Length = datarods_ts[1]['data'].length;
 
-    for (var j = 0; i < array2Length; j++) {
+    for (var j = 0; j < array2Length; j++) {
         var time2 = new Date(datarods_ts[1]['data'][j][0]);
         datarods_ts[1]['data'][j][0] = time2.setMonth(time2.getMonth() - 1);
     }

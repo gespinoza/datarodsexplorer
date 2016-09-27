@@ -1,5 +1,21 @@
 {% load tethys_gizmos %}
-<button type="button" class="btn btn-primary btn-med" onclick="openDataRodsUrls({{ datarods_urls }})">View Raw Data</button>
+<div class="dropdown">
+    <button class="btn dropdown-toggle" type="button" id="dropdown-viewData" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        View Full Data...
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdown-export">
+        <li class="option-viewData" id="optn-viewDataAscii" onclick="openDataRodsUrls({{ datarods_urls_dict.asc2 }})">
+            ASCII
+        </li>
+        <li class="option-viewData" id="optn-viewDataPlot" onclick="openDataRodsUrls({{ datarods_urls_dict.plot }})">
+            Plot
+        </li>
+{#        <li class="option-viewData" id="optn-viewDataWaterml" onclick="openDataRodsUrls({{ datarods_urls_dict.waterml }})">#}
+{#            WaterML#}
+{#        </li>#}
+    </ul>
+</div>
 {% if plot2 %}
     <div id='plot2container' style="height: 250px; width: 100%"></div>
     {% gizmo plot_view timeseries_plot %}

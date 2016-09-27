@@ -32,6 +32,21 @@
     justify-content: center;
     align-items: center;
 }
+
+.option-viewData {
+    background: #5971A8;
+    padding: 2px;
+    margin: 1px;
+    text-align: center;
+    color: white;
+}
+
+.option-viewData:hover {
+    background: white;
+    color: black;
+    cursor: pointer;
+    border: 1px solid black;
+}
 /*
 .exit-button.extra-button {
 	padding-right: 0px;
