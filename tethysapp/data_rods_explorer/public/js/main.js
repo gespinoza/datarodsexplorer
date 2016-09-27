@@ -102,13 +102,13 @@ $(function() {
     var map = TETHYS_MAP_VIEW.getMap();
     map.on('singleclick', function(evt) {
         var pointSource = map.getLayers().item(1).getSource();
-        if (pointSource.getFeatures().length > 1) {
+
+        while (pointSource.getFeatures().length > 1) {
             pointSource.removeFeature(pointSource.getFeatures()[0]);
         }
+
         var coords = evt.coordinate;
-        //var coords = map.getEventCoordinate(evt);
         var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
-        //window.alert(lonlat);
         document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
     });
     map.getLayers().item(1).setZIndex(10000);
@@ -178,7 +178,6 @@ function load_map() {
 }
 
 function createPlot(name) {
-    $('#plot-loading').removeClass('hidden');
     load_map_post_parameters();
     document.getElementById('retrieveMap').value = "no";
     document.getElementById('prevPlot').value = "yes";
@@ -188,53 +187,47 @@ function createPlot(name) {
     Object.keys(urlParams).forEach(function (param) {
         data[param] = urlParams[param];
     });
-    $(formParams).each(function(index, obj) {
+    $(formParams).each(function (index, obj) {
         data[obj.name] = obj.value;
     });
+    var pointLonLat = $('#pointLonLat').val();
 
-    $.ajax({
-        url: '/apps/data-rods-explorer/' + name + '/',
-        type: 'POST',
-        dataType: 'html',
-        data: data,
-        beforeSend: function (xhr, settings) {
-            if (!checkCsrfSafe(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-            }
-        },
-        success: function (responseHTML) {
-            $('#plot-container').html(responseHTML);
-            var plotType = $('.highcharts-plot').attr('data-type');
-            initHighChartsPlot($('.highcharts-plot'), plotType);
-            $('#plot-loading').addClass('hidden');
+    if (pointLonLat === "-9999") {
+        displayFlashMessage('warning', 'Query location not defined. Please click on map at desired query location.');
+    } else if (pointIsOutOfBounds(pointLonLat, data['model'], data['model2'])){
+        displayFlashMessage('warning', 'Query location outside of model extents. Please choose a new location.');
+    } else {
+        $('#plot-loading').removeClass('hidden');
+        $.ajax({
+            url: '/apps/data-rods-explorer/' + name + '/',
+            type: 'POST',
+            dataType: 'html',
+            data: data,
+            beforeSend: function (xhr, settings) {
+                if (!checkCsrfSafe(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+                }
+            },
+            success: function (responseHTML) {
+                $('#plot-container').html(responseHTML);
+                var plotType = $('.highcharts-plot').attr('data-type');
+                initHighChartsPlot($('.highcharts-plot'), plotType);
+                $('#plot-loading').addClass('hidden');
 
-            if (name === 'plot2') {
-                var opts = $('#plot2-options');
-                var series = opts.attr('data-series');
-                var y1Units = opts.attr('data-y1units');
-                var y2Units = opts.attr('data-y2units');
-                two_axis_plot(series, y1Units, y2Units);
-            }
-        }, error: function () {
-            var message;
-            if ($('#pointLonLat').val() === "-9999") {
-                message = 'Query location not defined. Please click on map at desired query location.';
-            } else {
+                if (name === 'plot2') {
+                    var opts = $('#plot2-options');
+                    var series = opts.attr('data-series');
+                    var y1Units = opts.attr('data-y1units');
+                    var y2Units = opts.attr('data-y2units');
+                    two_axis_plot(series, y1Units, y2Units);
+                }
+            }, error: function () {
                 message = 'Request out of spatial or temporal bounds';
+                $('#plot-loading').addClass('hidden');
+                displayFlashMessage('danger', message);
             }
-            $('#plot-loading').addClass('hidden');
-            $('.flash-messages').html(
-                '<div class="alert alert-danger alert-dismissible" role="alert">' +
-                '<button type="button" class="close" data-dismiss="alert">' +
-                '<span aria-hidden="true">&times;</span>' +
-                '<span class="sr-only">Close</span>' +
-                '</button>' +
-                message +
-                '</div>'
-            );
-        }
-    });
-    // document.forms['parametersForm'].submit();
+        });
+    }
 }
 
 function showMapLoading() {
@@ -510,4 +503,47 @@ function openDataRodsUrls(datarods_urls) {
     datarods_urls.forEach(function (url) {
         window.open(url);
     });
+}
+
+function displayFlashMessage(type, message) {
+    $('.flash-messages').html(
+        '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+        '<button type="button" class="close" data-dismiss="alert">' +
+        '<span aria-hidden="true">&times;</span>' +
+        '<span class="sr-only">Close</span>' +
+        '</button>' +
+        message +
+        '</div>'
+    );
+    $('#app-content-wrapper').scrollTop(0);
+}
+
+function pointIsOutOfBounds(pointLonLat, model1, model2) {
+    var lonlat = pointLonLat.split(',');
+    var model1Extents, model2Extents;
+    var minX, maxX, minY, maxY;
+
+    if (model1) {
+        model1Extents = MODEL_FENCES[model1.toUpperCase()].extents;
+        minX = parseFloat(model1Extents.minX);
+        maxX = parseFloat(model1Extents.maxX);
+        minY = parseFloat(model1Extents.minY);
+        maxY = parseFloat(model1Extents.maxY);
+        if (lonlat[0] < minX || lonlat[0] > maxX || lonlat[1] < minY || lonlat[1] > maxY) {
+            return true;
+        }
+    }
+
+    if (model2 && model2 !== model1) {
+        model2Extents = MODEL_FENCES[model2.toUpperCase()].extents;
+        minX = parseFloat(model2Extents.minX);
+        maxX = parseFloat(model2Extents.maxX);
+        minY = parseFloat(model2Extents.minY);
+        maxY = parseFloat(model2Extents.maxY);
+        if (lonlat[0] < minX || lonlat[0] > maxX || lonlat[1] < minY || lonlat[1] > maxY) {
+            return true;
+        }
+    }
+
+    return false;
 }
