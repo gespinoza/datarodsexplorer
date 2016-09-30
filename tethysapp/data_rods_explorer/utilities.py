@@ -2,7 +2,6 @@ import os
 from tethys_apps.base.persistent_store import get_persistent_store_engine as gpse
 import inspect
 from datetime import datetime, timedelta
-from model_objects import MODEL_FENCES, MODEL_OPTIONS, WMS_VARS, VAR_DICT
 
 
 def get_persistent_store_engine(persistent_store_name):
@@ -16,7 +15,7 @@ def get_persistent_store_engine(persistent_store_name):
     return gpse(app_name, persistent_store_name)
 
 
-def get_fences():
+def parse_fences_from_file():
     """
     Get date, time and spatial extent fences. Modelname will default to first one listed in input file.
     Begin dates will be actual model begin date + 1, and end dates will be actual model end date -1, to avoid chance
@@ -25,23 +24,25 @@ def get_fences():
     fencefile = inspect.getfile(inspect.currentframe()).replace('utilities.py',
                                                                 'public/data/dates_and_spatial_range.txt')
 
+    model_fences = {}
+
     with open(fencefile, mode='r') as f:
         f.readline()  # skip column headings line
         for line in f.readlines():
             if not (line == '' or 'Model name' in line):      # end condition
                 line = line.strip()
                 linevals = line.split('|')
-                start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1))\
+                start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1)) \
                     .strftime('%m/%d/%Y')
                 # begin_time = linevals[1].split(' ')[1]
-                end_date = (datetime.strptime(linevals[2].split(' ')[0], '%m/%d/%Y') - timedelta(days=1))\
+                end_date = (datetime.strptime(linevals[2].split(' ')[0], '%m/%d/%Y') - timedelta(days=1)) \
                     .strftime('%m/%d/%Y')
                 # end_time = linevals[2].split(' ')[1]
                 nbound = linevals[3].split(', ')[0]
                 ebound = linevals[3].split(', ')[1]
                 sbound = linevals[3].split(', ')[2]
                 wbound = linevals[3].split(', ')[3]
-                MODEL_FENCES[linevals[0]] = {
+                model_fences[linevals[0]] = {
                     'start_date': start_date,
                     'end_date': end_date,
                     'extents': {
@@ -52,7 +53,7 @@ def get_fences():
                     }
                 }
 
-    return MODEL_FENCES
+    return model_fences
 
 
 def generate_datarods_urls_dict(asc2_urls):
@@ -70,10 +71,14 @@ def generate_datarods_urls_dict(asc2_urls):
     }
 
 
-def load_model_database():
+def parse_model_database_from_file():
     db_file = inspect.getfile(inspect.currentframe()).replace('utilities.py',
                                                               'public/data/model_database.txt')
     new_model_switch = False
+    model_options = []
+    var_dict = {}
+    wms_vars = {}
+    datarods_tsb = {}
     with open(db_file, mode='r') as f:
         f.readline()  # skip column headings line
         for line in f.readlines():
@@ -86,22 +91,25 @@ def load_model_database():
                 model_vals = linevals[0].split('~')
                 model_name = model_vals[0]
                 model_key = model_vals[1]
-                MODEL_OPTIONS.append((model_name, model_key))
+                datarods_tsb[model_key] = model_vals[2]
+                model_options.append((model_name, model_key))
                 new_model_switch = False
                 continue
             else:
                 model_key = linevals[0]
 
-                if model_key not in WMS_VARS:
-                    WMS_VARS[model_key] = {}
+                if model_key not in wms_vars:
+                    wms_vars[model_key] = {}
 
-                WMS_VARS[model_key][linevals[1]] = [linevals[2], linevals[3], linevals[4]]
+                wms_vars[model_key][linevals[1]] = [linevals[2], linevals[3], linevals[4]]
 
-                if model_key not in VAR_DICT:
-                    VAR_DICT[model_key] = []
+                if model_key not in var_dict:
+                    var_dict[model_key] = []
 
-                VAR_DICT[model_key].append({
+                var_dict[model_key].append({
                     "text": "%s %s" % (linevals[3], linevals[4]),
                     "value": linevals[1],
                     "layerName": linevals[5]
                 })
+
+    return model_options, var_dict, wms_vars, datarods_tsb

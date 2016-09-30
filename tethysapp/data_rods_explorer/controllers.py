@@ -8,8 +8,8 @@ import zipfile
 from tempfile import NamedTemporaryFile
 import urllib2
 from math import copysign
+from utilities import parse_fences_from_file, generate_datarods_urls_dict, parse_model_database_from_file
 from model_objects import *
-from utilities import get_fences, generate_datarods_urls_dict, load_model_database
 from json import dumps
 
 
@@ -17,8 +17,13 @@ def home(request):
     """
     Controller for the app 'home' page.
     """
-    load_model_database()
-    get_fences()
+    model_options, var_dict, wms_vars, datarods_tsb = parse_model_database_from_file()
+    set_model_options(model_options)
+    set_var_dict(var_dict)
+    set_wms_vars(wms_vars)
+    set_datarods_tsb(datarods_tsb)
+    set_model_fences(parse_fences_from_file())
+
     get = request.GET
     post = request.POST
     context = initialize_model_map_context(get, post)
@@ -27,7 +32,7 @@ def home(request):
         'category': 'info',
         'text': 'Click on the map to define data query location.'
     }]
-    context['VAR_DICT'] = dumps(VAR_DICT)
+    context['VAR_DICT'] = dumps(get_var_dict())
 
     return render(request, 'data_rods_explorer/app_base_dre.html', context)
 
@@ -45,7 +50,7 @@ def map_view(request):
 
     context = {
         'load_layer': load_layer,
-        'geoserver_url': GEOSERVER_URL
+        'geoserver_url': get_geoserver_url()
     }
 
     return JsonResponse(context)
@@ -60,8 +65,8 @@ def plot(request):
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
-        varname = WMS_VARS[post['model']][post['variable']][1]
-        varunit = WMS_VARS[post['model']][post['variable']][2]
+        varname = get_wms_vars()()[post['model']][post['variable']][1]
+        varunit = get_wms_vars()()[post['model']][post['variable']][2]
         pointLonLat = post['pointLonLat']
         datarod_ts, datarods_urls_dict = getDataRod_plot(post, pointLonLat)
         timeseries_plot = TimeSeries(
@@ -106,8 +111,8 @@ def plot2(request):
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
         pointLonLat = post['pointLonLat']
         datarod_ts, datarods_urls_dict = getDataRod_plot2(post, pointLonLat)
-        timeseries_plot = {'y1_axis_units': WMS_VARS[post['model']][post['variable']][2],
-                           'y2_axis_units': WMS_VARS[post['model2']][post['variable2']][2],
+        timeseries_plot = {'y1_axis_units': get_wms_vars()()[post['model']][post['variable']][2],
+                           'y2_axis_units': get_wms_vars()()[post['model2']][post['variable2']][2],
                            'series': datarod_ts}
 
         context = {
@@ -125,7 +130,7 @@ def plot2(request):
                                     name='model2',
                                     multiple=False,
                                     original=True,
-                                    options=MODEL_OPTIONS,
+                                    options=get_model_options(),
                                     attributes="onchange=oc_model2();"
                                     )
         # Context variables
@@ -148,8 +153,8 @@ def years(request):
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
-        varname = WMS_VARS[post['model']][post['variable']][1]
-        varunit = WMS_VARS[post['model']][post['variable']][2]
+        varname = get_wms_vars()[post['model']][post['variable']][1]
+        varunit = get_wms_vars()[post['model']][post['variable']][2]
         pointLonLat = post['pointLonLat']
         datarod_ts, datarods_urls_dict = getDataRod_years(post, pointLonLat)
         timeseries_plot = TimeSeries(
@@ -203,7 +208,7 @@ def create_select_model(modelname):
     Function that creates the 'model selection' element
     """
     selected_model = None
-    for model in MODEL_OPTIONS:
+    for model in get_model_options():
         if model[1] == modelname.lower():
             selected_model = model[0]
     select_model = SelectInput(display_text='',
@@ -211,7 +216,7 @@ def create_select_model(modelname):
                                multiple=False,
                                initial=[selected_model if selected_model else None],
                                original=True,
-                               options=MODEL_OPTIONS,
+                               options=get_model_options(),
                                attributes="onchange=oc_model();"
                                )
     return select_model
@@ -262,10 +267,10 @@ def map_date_ctrls(model):
                              name='plot_date',
                              autoclose=True,
                              format='mm/dd/yyyy',
-                             start_date=MODEL_FENCES[model]['start_date'],
-                             end_date=MODEL_FENCES[model]['end_date'],
+                             start_date=get_model_fences()[model]['start_date'],
+                             end_date=get_model_fences()[model]['end_date'],
                              start_view=0,
-                             attributes='onchange=oc_map_dt(); class=datepicker-model1',  #value=02/01/2015 'value="{0}"'.format(datetime.strftime(datetime.now() - timedelta(days=7), '%m/%d/%Y')),
+                             attributes='onchange=oc_map_dt();',
                              classes=''
                              )
 
@@ -299,23 +304,25 @@ def plot_ctrls(model, controller):
     differentiator = 1 if controller == 'plot' else 2
 
     start_date = DatePicker(display_text=False,
-                            name='startDate',
+                            name='startDate%s' % differentiator,
                             autoclose=True,
                             format='mm/dd/yyyy',
-                            start_date=MODEL_FENCES[model]['start_date'],
-                            end_date=MODEL_FENCES[model]['end_date'],
+                            start_date=get_model_fences()[model]['start_date'],
+                            end_date=get_model_fences()[model]['end_date'],
                             start_view=0,
-                            attributes='onchange=oc_sten_dt(); class=datepicker-model%s' % differentiator
+                            classes='startDate',
+                            attributes='onchange=oc_sten_dt("startDate%s");' % differentiator
                             )
 
     end_date = DatePicker(display_text=False,
-                          name='endDate',
+                          name='endDate%s' % differentiator,
                           autoclose=True,
                           format='mm/dd/yyyy',
-                          start_date=MODEL_FENCES[model]['start_date'],
-                          end_date=MODEL_FENCES[model]['end_date'],
+                          start_date=get_model_fences()[model]['start_date'],
+                          end_date=get_model_fences()[model]['end_date'],
                           start_view=0,
-                          attributes='onchange=oc_sten_dt(); class=datepicker-model%s' % differentiator
+                          classes='endDate',
+                          attributes='onchange=oc_sten_dt("endDate%s");' % differentiator
                           )
 
     plot_button = Button(display_text='Plot',
@@ -390,14 +397,14 @@ def get_raster_zip(latlonbox, time_st, model, variable):
     tiff_path = tiff_file.name
     file_name = tiff_file.name[:-4]
     store_name = os.path.basename(file_name)
-    store_id = WORKSPACE + ':' + store_name
+    store_id = get_workspace() + ':' + store_name
     tfw_path = file_name + '.tfw'
     prj_path = file_name + '.prj'
     zip_path = file_name + '.zip'
 
     # Create tiff file
-    url_image = urllib2.urlopen(DATARODS_PNG.format(lonW, latS, lonE, latN,
-                                                    time_st, WMS_VARS[model][variable][0]
+    url_image = urllib2.urlopen(get_datarods_png().format(lonW, latS, lonE, latN,
+                                                    time_st, get_wms_vars()[model][variable][0]
                                                     ))
     tiff_file.write(url_image.read())
     tiff_file.close()
@@ -469,7 +476,7 @@ def load_tiff_ly(req_post, req_get):
         # Add raster to map
         title = '{0} {1}'.format(variable, plot_time)
         geoserver_layer = MVLayer(source='ImageWMS',
-                                  options={'url': GEOSERVER_URL,
+                                  options={'url': get_geoserver_url(),
                                            'params': {'LAYERS': store_id},
                                            'serverType': 'geoserver'},
                                   legend_title=title,
@@ -527,14 +534,14 @@ def getDataRod_plot(req_get, pointLonLat):
             case = 'forcing'
         else:
             case = 'noah'
-        superstring = DATARODS_TSB['nldas'][case]
+        superstring = get_datarods_tsb()['nldas'][case]
     else:
-        superstring = DATARODS_TSB[model]
+        superstring = get_datarods_tsb()[model]
 
     dr_link = superstring.format(variable, pointLonLat.replace(',',',%20'),
                                  req_get['startDate'], req_get['endDate'])
     dr_ts = access_datarods_server(dr_link, model, False)
-    
+
     datarods_urls_dict = generate_datarods_urls_dict([dr_link])
 
     return dr_ts, datarods_urls_dict
@@ -553,9 +560,9 @@ def getDataRod_plot2(req_get, pointLonLat):
             case1 = 'forcing'
         else:
             case1 = 'noah'
-        superstring1 = DATARODS_TSB['nldas'][case1]
+        superstring1 = get_datarods_tsb()['nldas'][case1]
     else:
-        superstring1 = DATARODS_TSB[model1]
+        superstring1 = get_datarods_tsb()[model1]
 
     dr_link1 = superstring1.format(variable1, pointLonLat.replace(',',',%20'),
                                    startDate, endDate)
@@ -571,20 +578,20 @@ def getDataRod_plot2(req_get, pointLonLat):
             case2 = 'forcing'
         else:
             case2 = 'noah'
-        superstring2 = DATARODS_TSB['nldas'][case2]
+        superstring2 = get_datarods_tsb()['nldas'][case2]
     else:
-        superstring2 = DATARODS_TSB[model2]
+        superstring2 = get_datarods_tsb()[model2]
 
     dr_link2 = superstring2.format(variable2, pointLonLat.replace(',',',%20'),
                                    startDate, endDate)
     data2 = access_datarods_server(dr_link2, model2, False)
     # Create list
-    dr_ts = [{'name': WMS_VARS[model1][variable1][1] + ' (' + WMS_VARS[model1][variable1][2] + ')',
+    dr_ts = [{'name': get_wms_vars()[model1][variable1][1] + ' (' + get_wms_vars()[model1][variable1][2] + ')',
               'data': data1,
-              'code': str(variable1) + ' (' + WMS_VARS[model1][variable1][2] + ')'},
-             {'name': WMS_VARS[model2][variable2][1] + ' (' + WMS_VARS[model2][variable2][2] + ')',
+              'code': str(variable1) + ' (' + get_wms_vars()[model1][variable1][2] + ')'},
+             {'name': get_wms_vars()[model2][variable2][1] + ' (' + get_wms_vars()[model2][variable2][2] + ')',
               'data': data2,
-              'code': str(variable2) + ' (' + WMS_VARS[model2][variable2][2] + ')'}]
+              'code': str(variable2) + ' (' + get_wms_vars()[model2][variable2][2] + ')'}]
 
     datarods_urls_dict = generate_datarods_urls_dict([dr_link1, dr_link2])
     return dr_ts, datarods_urls_dict
@@ -598,9 +605,9 @@ def getDataRod_years(req_get, pointLonLat):
             case = 'forcing'
         else:
             case = 'noah'
-        superstring = DATARODS_TSB['nldas'][case]
+        superstring = get_datarods_tsb()['nldas'][case]
     else:
-        superstring = DATARODS_TSB[model]
+        superstring = get_datarods_tsb()[model]
 
     dr_ts = []
     dr_links = []
@@ -655,7 +662,7 @@ def initialize_model_map_context(get, post):
 
     context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
                'select_date': select_date, 'select_hour': select_hour, 'map_layers': map_layers,
-               'load_layer': load_layer, 'MODEL_FENCES': dumps(MODEL_FENCES)
+               'load_layer': load_layer, 'MODEL_FENCES': dumps(get_model_fences())
                }
 
     return context

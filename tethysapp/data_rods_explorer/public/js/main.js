@@ -20,6 +20,15 @@ function current_date(day_offset, hh) {
     return date_st;
 }
 
+function get_date_of_days_before(date, days_before) {
+    var newDate = new Date();
+    var modDate = date.split('T')[0];
+
+    newDate.setDate((new Date(modDate)).getDate() - days_before);
+
+    return newDate.toISOString().split('T')[0] + 'T23';
+}
+
 function load_variable_options(mod12, var12, data) {
     var GET = data ? data : getUrlVars();
     if (GET[mod12]) {

@@ -70,7 +70,9 @@ function oc_map_dt() {
     history.pushState("", "", href);
 }
 
-function oc_sten_dt() {
+function oc_sten_dt(datePickerID) {
+    var differentiator = datePickerID[datePickerID.length - 1];
+    $('.' + datePickerID.slice(0, -1)).val($('#' + datePickerID).val());  // Always have startDates and endDates match
     var GET = getUrlVars();
     var href = window.location.href.split('?')[0];
     var model = GET['model'];
@@ -82,8 +84,10 @@ function oc_sten_dt() {
         var varia2 = GET['variable2'];
         href = href + '&model2=' + model2 + '&variable2=' + varia2;
     }
-    var startDate = date_to_rods(document.getElementById('startDate').value) + 'T00'; //First hour
-    var endDate = date_to_rods(document.getElementById('endDate').value) + 'T23'; //Last hour
+    var $startDate = $('#startDate' + differentiator);
+    var $endDate = $('#endDate' + differentiator);
+    var startDate = date_to_rods($startDate.val()) + 'T00'; //First hour
+    var endDate = date_to_rods($endDate.val()) + 'T23'; //Last hour
     href = href  + '&startDate=' + startDate + '&endDate=' + endDate;
     history.pushState("", "", href);
 }
