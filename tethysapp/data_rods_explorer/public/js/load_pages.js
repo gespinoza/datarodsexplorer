@@ -10,34 +10,37 @@ function onClickLink(link, href, page) {
 
 function page_and_parameters_html(href, page) {
     var GET = getUrlVars();
-    var href = href + '?';
-    for (var key in GET) {
+    href = href + '?';
+
+    Object.keys(GET).forEach(function (key) {
         href = href + '&' + key + '=' + GET[key];
-    }
+    });
+
     page_and_parameters(href, page);
 }
 
 function page_and_parameters(href, page) {
     var GET = getUrlVars();
     var data = {};
+    var model, varia, plotDate, plotTime, endDate, startDate, model2, varia2, years;
 
     if (GET['model']) {
-        var model = GET['model'];
+        model = GET['model'];
     } else {
-        var model = document.getElementById('model').value;
+        model = document.getElementById('model').value;
     }
     data['model'] = model;
     if (GET['variable']) {
-        var varia = GET['variable'];
+        varia = GET['variable'];
     } else {
-        var varia = VAR_DICT[model][0].value;
+        varia = VAR_DICT[model][0].value;
     }
     data['variable'] = varia;
     if (GET['plotTime']) {
-        var plotDate = GET['plotTime'];
+        plotDate = GET['plotTime'];
     } else {
-        var plotTime = date_to_normal(current_date(140));
-        var plotDate = date_to_rods(plotTime['date']) + 'T' + plotTime['hour'];
+        plotTime = date_to_normal(current_date(140));
+        plotDate = date_to_rods(plotTime['date']) + 'T' + plotTime['hour'];
     }
     data['plotTime'] = plotDate;
 
@@ -46,7 +49,7 @@ function page_and_parameters(href, page) {
         if (GET['endDate']) {
             endDate = GET['endDate'];
         } else {
-            var endDate = current_date(133, '23');
+            endDate = current_date(133, '23');
         }
 
         data['endDate'] = endDate;
@@ -54,24 +57,24 @@ function page_and_parameters(href, page) {
         if (GET['startDate']) {
             startDate =  GET['startDate'];
         } else {
-            var startDate = current_date(140, '0');
+            startDate = current_date(140, '0');
         }
 
         data['startDate'] = startDate;
 
     } else if (page == 'plot2') {
         if (GET['model2']) {
-            var model2 = GET['model2'];
+            model2 = GET['model2'];
         } else {
-            var model2 = 'nldas'; //1st element
+            model2 = 'nldas'; //1st element
         }
 
         data['model2'] = model2;
 
         if (model === model2 && varia == VAR_DICT[model][0].value) {
-            var varia2 = VAR_DICT[model2][1].value;
+            varia2 = VAR_DICT[model2][1].value;
         } else {
-            var varia2 = VAR_DICT[model2][0].value;
+            varia2 = VAR_DICT[model2][0].value;
         }
 
         data['variable2'] = varia2;
@@ -79,7 +82,7 @@ function page_and_parameters(href, page) {
         if (GET['endDate']) {
             endDate = GET['endDate'];
         } else {
-            var endDate = current_date(133, '23');
+            endDate = current_date(133, '23');
         }
 
         data['endDate'] = endDate;
@@ -87,14 +90,14 @@ function page_and_parameters(href, page) {
         if (GET['startDate']) {
             startDate =  GET['startDate'];
         } else {
-            var startDate = current_date(140, '0');
+            startDate = current_date(140, '0');
         }
 
         data['startDate'] = startDate;
 
     } else if (page == 'years') {
-        var endDate = current_date(140, '23');
-        var years = endDate.substr(0, 4);
+        endDate = current_date(140, '23');
+        years = endDate.substr(0, 4);
 
         data['years'] = years;
     }
@@ -129,33 +132,36 @@ function load_default_home() {
     var counter = 0;
     var GET = getUrlVars();
     var href = window.location.href.split('?')[0];
+    var model, varia, plotTime, plotDate;
 
     if (GET['model']) {
-        var model = GET['model'];
+        model = GET['model'];
     } else {
-        var model = document.getElementById('model').value;
+        model = document.getElementById('model').value;
         counter = counter + 1;
     }
+
     if (GET['variable']) {
-        var varia = GET['variable'];
+        varia = GET['variable'];
     } else {
-        var varia = VAR_DICT[model][0].value;
+        varia = VAR_DICT[model][0].value;
         counter = counter + 1;
     }
+
     if (GET['plotTime']) {
-        var plotTime = date_to_normal(GET['plotTime']);
+        plotTime = date_to_normal(GET['plotTime']);
     } else {
-        var plotTime = {};
-        plotTime['date'] = MODEL_FENCES[model.toUpperCase()].end_date;
+        plotTime = {};
+        plotTime['date'] = MODEL_FENCES[model]['end_date'];
         plotTime['hour'] = '00';
         document.getElementById('plot_date').value = plotTime['date'];
         document.getElementById('plot_hour').value = plotTime['hour'];
-        $('#plot_date').data('start_date', MODEL_FENCES[model.toUpperCase()].start_date);
+        $('#plot_date').data('start_date', MODEL_FENCES[model]['start_date']);
         counter = counter + 1;
     }
 
     if (counter > 0) {
-        var plotDate = date_to_rods(plotTime['date']);
+        plotDate = date_to_rods(plotTime['date']);
         plotDate = plotDate + 'T' + plotTime['hour'];
         href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
         window.location = href;
@@ -166,34 +172,21 @@ function load_default_home() {
         document.getElementById('plot_hour').value = plotTime['hour'];
     }
 
-    load_extents_layers(model.toUpperCase())
+    load_extents_layers(model)
 }
 
 function load_default_plot(data) {
     var counter = 0;
     var GET = data ? data : getUrlVars();
     var href = window.location.href;
-    var model, varia, plotTime, startDate, endDate;
-    if (GET['model']) {
-        var model = GET['model'];
-    } else {
-        counter = counter + 1;
-    }
-    if (GET['variable']) {
-        varia = GET['variable'];
-    } else {
-        counter = counter + 1;
-    }
-    if (GET['plotTime']) {
-        plotTime = date_to_normal(GET['plotTime']);
-    } else {
-        counter = counter + 1;
-    }
+    var startDate, endDate;
+
     if (GET['startDate']) {
         startDate = date_to_normal(GET['startDate']);
     } else {
         counter = counter + 1;
     }
+
     if (GET['endDate']) {
         endDate = date_to_normal(GET['endDate']);
     } else {
@@ -203,10 +196,6 @@ function load_default_plot(data) {
     if (counter > 0) {
         page_and_parameters(href, 'plot');
     } else {
-        // document.getElementById('model').value = model;
-        // document.getElementById('variable').value = varia;
-        // document.getElementById('plot_date').value = plotTime['date'];
-        document.getElementById('plot_hour').value = plotTime['hour'];
         document.getElementById('startDate').value = startDate['date'];
         document.getElementById('endDate').value = endDate['date'];
     }
@@ -216,38 +205,28 @@ function load_default_plot2(data) {
     var counter = 0;
     var GET = data ? data : getUrlVars();
     var href = window.location.href; //.split('?')[0]
-    if (GET['model']) {
-        var model = GET['model'];
-    } else {
-        counter = counter + 1;
-    }
-    if (GET['variable']) {
-        var varia = GET['variable'];
-    } else {
-        counter = counter + 1;
-    }
+    var model2, varia2, startDate, endDate;
+
     if (GET['model2']) {
-        var model2 = GET['model2'];
+        model2 = GET['model2'];
     } else {
         counter = counter + 1;
     }
+
     if (GET['variable2']) {
-        var varia2 = GET['variable2'];
+        varia2 = GET['variable2'];
     } else {
         counter = counter + 1;
     }
-    if (GET['plotTime']) {
-        var plotTime = date_to_normal(GET['plotTime']);
-    } else {
-        counter = counter + 1;
-    }
+
     if (GET['startDate']) {
-        var startDate = date_to_normal(GET['startDate']);
+        startDate = date_to_normal(GET['startDate']);
     } else {
         counter = counter + 1;
     }
+
     if (GET['endDate']) {
-        var endDate = date_to_normal(GET['endDate']);
+        endDate = date_to_normal(GET['endDate']);
     } else {
         counter = counter + 1;
     }
@@ -255,12 +234,8 @@ function load_default_plot2(data) {
     if (counter > 0) {
         page_and_parameters(href, 'plot2');
     } else {
-        document.getElementById('model').value = model;
-        document.getElementById('variable').value = varia;
         document.getElementById('model2').value = model2;
         document.getElementById('variable2').value = varia2;
-        document.getElementById('plot_date').value = plotTime['date'];
-        document.getElementById('plot_hour').value = plotTime['hour'];
         document.getElementById('startDate').value = startDate['date'];
         document.getElementById('endDate').value = endDate['date'];
     }
@@ -301,7 +276,9 @@ function load_default_years(data) {
         //from here the code is new
         var years_list = years.split(',');
         var years_array = [];
-        for (var i = 0; i < years_list.length; i++) {
+        var i;
+
+        for (i = 0; i < years_list.length; i++) {
             if (years_list[i].indexOf('-') === -1) {
                 years_array = years_array.concat(years_list[i])
             } else {
@@ -312,12 +289,15 @@ function load_default_years(data) {
                 }
             }
         }
+
         var years_options = document.getElementById('years');
-        for (var i = 0; i < years_options.length; i++) {
+
+        for (i = 0; i < years_options.length; i++) {
             if (years_array.indexOf(years_options[i].value) != -1) {
                 years_options[i].selected = true;
             }
         }
+
         $('#years').trigger('change');
     }
 }

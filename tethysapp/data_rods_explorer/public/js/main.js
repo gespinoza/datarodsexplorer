@@ -524,7 +524,7 @@ function pointIsOutOfBounds(pointLonLat, model1, model2) {
     var minX, maxX, minY, maxY;
 
     if (model1) {
-        model1Extents = MODEL_FENCES[model1.toUpperCase()].extents;
+        model1Extents = MODEL_FENCES[model1].extents;
         minX = parseFloat(model1Extents.minX);
         maxX = parseFloat(model1Extents.maxX);
         minY = parseFloat(model1Extents.minY);
@@ -535,7 +535,7 @@ function pointIsOutOfBounds(pointLonLat, model1, model2) {
     }
 
     if (model2 && model2 !== model1) {
-        model2Extents = MODEL_FENCES[model2.toUpperCase()].extents;
+        model2Extents = MODEL_FENCES[model2].extents;
         minX = parseFloat(model2Extents.minX);
         maxX = parseFloat(model2Extents.maxX);
         minY = parseFloat(model2Extents.minY);

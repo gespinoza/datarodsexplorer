@@ -3,7 +3,7 @@ function oc_model() {
     var href = window.location.href.split('?')[0];
     var model = document.getElementById('model').value;
     var varia = VAR_DICT[model][0].value; //1st element
-    updateFences('model1', model.toUpperCase());
+    updateFences('model1', model);
     var plotDate = GET['plotTime'];
     href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
     if (GET['model2'] && GET['variable2']) {
@@ -98,7 +98,7 @@ function oc_model2() {
     var endDate = GET['endDate'];//date_to_rods(document.getElementById('endDate').value) + 'T23'; //Last hour
     var model2 = document.getElementById('model2').value;
     var varia2 = VAR_DICT[model2][0].value; //1st element
-    updateFences('model2', model2.toUpperCase());
+    updateFences('model2', model2);
     href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
     history.pushState("", "", href);
     load_variable_options('model2', 'variable2');
@@ -127,12 +127,13 @@ function oc_years() {
     //From here the code is new
     var yearsDoc = document.getElementById('years').selectedOptions;
     var yearsObj = [];
-    for (var i=0; i<yearsDoc.length; i++) {
+    var i;
+    for (i = 0; i<yearsDoc.length; i++) {
         yearsObj = yearsObj.concat(yearsDoc[i].value);
     }
     yearsObj = getRanges(yearsObj);
     var years = "";
-    for (var i=0; i<yearsObj.length; i++) {
+    for (i = 0; i<yearsObj.length; i++) {
         years = years + yearsObj[i] + ',';
     }
     years = years.substr(0, years.length - 1);
