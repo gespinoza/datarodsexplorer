@@ -2,7 +2,7 @@ import os
 from tethys_apps.base.persistent_store import get_persistent_store_engine as gpse
 import inspect
 from datetime import datetime, timedelta
-from model_objects import MODEL_FENCES
+from model_objects import MODEL_FENCES, MODEL_OPTIONS, WMS_VARS, VAR_DICT
 
 
 def get_persistent_store_engine(persistent_store_name):
@@ -31,9 +31,11 @@ def get_fences():
             if not (line == '' or 'Model name' in line):      # end condition
                 line = line.strip()
                 linevals = line.split('|')
-                start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y')+timedelta(days=1)).strftime('%m/%d/%Y')
+                start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1))\
+                    .strftime('%m/%d/%Y')
                 # begin_time = linevals[1].split(' ')[1]
-                end_date = (datetime.strptime(linevals[2].split(' ')[0], '%m/%d/%Y')-timedelta(days=1)).strftime('%m/%d/%Y')
+                end_date = (datetime.strptime(linevals[2].split(' ')[0], '%m/%d/%Y') - timedelta(days=1))\
+                    .strftime('%m/%d/%Y')
                 # end_time = linevals[2].split(' ')[1]
                 nbound = linevals[3].split(', ')[0]
                 ebound = linevals[3].split(', ')[1]
@@ -66,3 +68,40 @@ def generate_datarods_urls_dict(asc2_urls):
         'plot': plot_urls,
         'waterml': waterml_urls
     }
+
+
+def load_model_database():
+    db_file = inspect.getfile(inspect.currentframe()).replace('utilities.py',
+                                                              'public/data/model_database.txt')
+    new_model_switch = False
+    with open(db_file, mode='r') as f:
+        f.readline()  # skip column headings line
+        for line in f.readlines():
+            if line == '\n':
+                new_model_switch = True
+                continue
+            line = line.strip()
+            linevals = line.split('|')
+            if new_model_switch:
+                model_vals = linevals[0].split('~')
+                model_name = model_vals[0]
+                model_key = model_vals[1]
+                MODEL_OPTIONS.append((model_name, model_key))
+                new_model_switch = False
+                continue
+            else:
+                model_key = linevals[0]
+
+                if model_key not in WMS_VARS:
+                    WMS_VARS[model_key] = {}
+
+                WMS_VARS[model_key][linevals[1]] = [linevals[2], linevals[3], linevals[4]]
+
+                if model_key not in VAR_DICT:
+                    VAR_DICT[model_key] = []
+
+                VAR_DICT[model_key].append({
+                    "text": "%s %s" % (linevals[3], linevals[4]),
+                    "value": linevals[1],
+                    "layerName": linevals[5]
+                })

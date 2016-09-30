@@ -251,7 +251,9 @@ Example:
     <script src="{% static 'data_rods_explorer/js/model_objects.js' %}" type="text/javascript"></script>
     <script src="{% static 'data_rods_explorer/js/main.js' %}" type="text/javascript"></script>
     <script>
-        load_default_home("{{ MODEL_FENCES }}");
+        setVarDict("{{ VAR_DICT }}");
+        setModelFences("{{ MODEL_FENCES }}");
+        load_default_home();
         load_variable_options('model', 'variable');
     </script>
     {% if load_layer %}

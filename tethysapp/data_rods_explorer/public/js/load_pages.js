@@ -125,9 +125,7 @@ function page_and_parameters(href, page) {
     })
 }
 
-function load_default_home(modelFencesEncoded) {
-    var modelFencesStr = modelFencesEncoded.replace(/&quot;/g, '"');
-    MODEL_FENCES = JSON.parse(modelFencesStr);
+function load_default_home() {
     var counter = 0;
     var GET = getUrlVars();
     var href = window.location.href.split('?')[0];

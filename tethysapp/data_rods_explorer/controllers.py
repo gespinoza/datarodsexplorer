@@ -9,7 +9,7 @@ from tempfile import NamedTemporaryFile
 import urllib2
 from math import copysign
 from model_objects import *
-from utilities import get_fences, generate_datarods_urls_dict
+from utilities import get_fences, generate_datarods_urls_dict, load_model_database
 from json import dumps
 
 
@@ -17,6 +17,7 @@ def home(request):
     """
     Controller for the app 'home' page.
     """
+    load_model_database()
     get_fences()
     get = request.GET
     post = request.POST
@@ -26,6 +27,7 @@ def home(request):
         'category': 'info',
         'text': 'Click on the map to define data query location.'
     }]
+    context['VAR_DICT'] = dumps(VAR_DICT)
 
     return render(request, 'data_rods_explorer/app_base_dre.html', context)
 
@@ -143,7 +145,6 @@ def years(request):
     """
     post = request.POST
     get = request.GET
-    # context = initialize_model_map_context(get, post)
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):

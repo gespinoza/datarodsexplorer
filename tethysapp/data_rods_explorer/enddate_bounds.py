@@ -129,7 +129,7 @@ grace_bounds = get_bounds(grace_2)
 # Print results
 columnheadings = "Model name | Begin time | End time | N , E , S , W bounds\n"
 nldas_fences = "NLDAS|%s|%s|%s\n" % (nldas_begintime, nldas_endtime, nldas_bounds)
-nldasf_fences = "NLDASf|%s|%s|%s\n" % (nldasf_begintime, nldasf_endtime, nldasf_bounds)
+nldasf_fences = "NLDASF|%s|%s|%s\n" % (nldasf_begintime, nldasf_endtime, nldasf_bounds)
 gldas_fences = "GLDAS|%s|%s|%s\n" % (gldas_begintime, gldas_endtime, gldas_bounds)
 gldas2_fences = "GLDAS2|%s|%s|%s\n" % (gldas2_begintime, gldas2_endtime, gldas2_bounds)
 trmm_fences = "TRMM|%s|%s|%s\n" % (trmm_begintime, trmm_endtime, trmm_bounds)
