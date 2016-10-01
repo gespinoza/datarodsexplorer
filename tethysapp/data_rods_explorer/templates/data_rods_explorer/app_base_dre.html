@@ -125,28 +125,20 @@
                 {% block flash %}
                     {% if messages %}
                         <div class="flash-messages">
-                            {% comment "flash_messages explanation" %}
-            Use the flash messages block to display temporary feedback to the user. Pass
-            a list of dictionaries called "flash_messages". Each dictionary should have the
-            keys "category" and "text". The category can be any of: "success", "info",
-            "warning", and "danger". The category is used to style the message. The text is
-            the text of the message to be displayed. The alerts that will be displayed are
-            dismissible. To create custom alerts, override the "flash" block.
-            {% endcomment %}
-
                             {% for message in messages %}
                                 <div class="alert {% if message.category %}alert-{{ message.category }}{% endif %} alert-dismissible" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert">
-                                        <span aria-hidden="true">&times;</span>
-                                        <span class="sr-only">Close</span>
-                                    </button>
+                                    <b><span class="glyphicon glyphicon-{{ message.category }}-sign" aria-hidden="true"></span>
+{#                                    <button type="button" class="close" data-dismiss="alert">#}
+{#                                        <span aria-hidden="true">&times;</span>#}
+{#                                        <span class="sr-only">Close</span>#}
+{#                                    </button>#}
                                     {{ message.text }}
-                                </div>
+                                </b></div>
                             {% endfor %}
                         </div>
                     {% endif %}
                 {% endblock %}
-                {# Off canvas navigation menu #}
+
                 {% block app_navigation_override %}
 
                     <div id="app-navigation">
@@ -164,7 +156,7 @@
                                         {% gizmo date_picker select_date %}
                                         {% gizmo select_input select_hour%}
 
-                                        <form id="parametersForm" name="parametersForm" onclick="load_map()"><!--onsubmit='load_map();' action='map' method='post'-->
+                                        <form id="parametersForm" name="parametersForm" onclick="load_map()">
                                             {% csrf_token %}
                                             <input name="lonW" id="lonW" value=-107 hidden>
                                             <input name="latS" id="latS" value=24 hidden>
@@ -178,7 +170,6 @@
                                             <input name="prevPlot" id="prevPlot" value="no" hidden>
                                             <input name="pointLonLat" id="pointLonLat" value=-9999 hidden>
                                             <button name="plot_btn" type="button" class="btn btn-default">Display map</button>
-                                            <!--<input name="plot_btn" type="submit" value="Display Map" class="btn btn-default">-->
                                         </form>
                                     </div>
 
@@ -224,17 +215,6 @@
         {% endblock %}
     </div>
 {% endblock %}
-
-{% comment "scripts explanation" %}
-Use this block for adding scripts. Call with block.super to include the default
-scripts.
-
-Example:
-{% block scripts %}
-{{ block.super }}
-<script type="text/javascript" src="{% static 'custom/js/bar.css' %}"></script>
-{% endblock %}
-{% endcomment %}
 
 {% block scripts %}
     <script src="{% static 'tethys_apps/vendor/cookies.js' %}" type="text/javascript"></script>

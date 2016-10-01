@@ -54,7 +54,7 @@ function page_and_parameters(href, page) {
         if (GET['endDate']) {
             endDate = GET['endDate'];
         } else {
-            endDate = get_date_of_days_before(plotDate, 7);
+            endDate = plotDate;
         }
 
         data['endDate'] = endDate;
@@ -62,7 +62,7 @@ function page_and_parameters(href, page) {
         if (GET['startDate']) {
             startDate =  GET['startDate'];
         } else {
-            startDate = plotDate;
+            startDate = get_date_of_days_before(plotDate, 7);
         }
 
         data['startDate'] = startDate;
@@ -71,7 +71,7 @@ function page_and_parameters(href, page) {
             if (GET['model2']) {
                 model2 = GET['model2'];
             } else {
-                model2 = 'NLDAS'; //1st element
+                model2 = 'NLDASF'; //1st element
             }
 
             data['model2'] = model2;
@@ -154,7 +154,8 @@ function load_default_home() {
         plotDate = date_to_rods(plotTime['date']);
         plotDate = plotDate + 'T' + plotTime['hour'];
         href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
-        window.location = href;
+        window.history.pushState({}, 'None', href);
+        load_default_home()
     } else {
         document.getElementById('model').value = model;
         document.getElementById('variable').value = varia;
@@ -189,6 +190,7 @@ function load_default_plot(data) {
         document.getElementById('startDate1').value = startDate['date'];
         document.getElementById('endDate1').value = endDate['date'];
     }
+    disablePlotButtonIfNeeded();
 }
 
 function load_default_plot2(data) {
@@ -229,6 +231,7 @@ function load_default_plot2(data) {
         document.getElementById('startDate2').value = startDate['date'];
         document.getElementById('endDate2').value = endDate['date'];
     }
+    disablePlotButtonIfNeeded();
 }
 
 function load_default_years(data) {

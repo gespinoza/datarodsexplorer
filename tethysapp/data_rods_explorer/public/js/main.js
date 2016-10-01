@@ -21,10 +21,10 @@ function current_date(day_offset, hh) {
 }
 
 function get_date_of_days_before(date, days_before) {
-    var newDate = new Date();
     var modDate = date.split('T')[0];
+    var newDate = new Date(modDate);
 
-    newDate.setDate((new Date(modDate)).getDate() - days_before);
+    newDate.setDate(newDate.getDate() - days_before);
 
     return newDate.toISOString().split('T')[0] + 'T23';
 }
@@ -119,6 +119,13 @@ $(function() {
         var coords = evt.coordinate;
         var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
         document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
+        $('.flash-messages').html('');
+        if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
+            displayFlashMessage('warning', 'Query location outside of model extents. Please choose a new location.');
+            $('a[name*=plot]').addClass('disabled');
+        } else {
+            $('a[name*=plot]').removeClass('disabled');
+        }
     });
     map.getLayers().item(1).setZIndex(10000);
 });
@@ -183,7 +190,6 @@ function load_map() {
             console.error('Nice try... :(');
         }
     });
-    // document.forms['parametersForm'].submit();
 }
 
 function createPlot(name) {
@@ -203,7 +209,7 @@ function createPlot(name) {
 
     if (pointLonLat === "-9999") {
         displayFlashMessage('warning', 'Query location not defined. Please click on map at desired query location.');
-    } else if (pointIsOutOfBounds(pointLonLat, data['model'], data['model2'])){
+    } else if (pointIsOutOfBounds(pointLonLat, data['model'], data['model2'])) {
         displayFlashMessage('warning', 'Query location outside of model extents. Please choose a new location.');
     } else {
         $('#plot-loading').removeClass('hidden');
@@ -231,9 +237,8 @@ function createPlot(name) {
                     two_axis_plot(series, y1Units, y2Units);
                 }
             }, error: function () {
-                message = 'Request out of spatial or temporal bounds';
                 $('#plot-loading').addClass('hidden');
-                displayFlashMessage('danger', message);
+                displayFlashMessage('danger', 'Request out of spatial or temporal bounds');
             }
         });
     }
@@ -517,18 +522,21 @@ function openDataRodsUrls(datarods_urls) {
 function displayFlashMessage(type, message) {
     $('.flash-messages').html(
         '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+        '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +
         '<button type="button" class="close" data-dismiss="alert">' +
         '<span aria-hidden="true">&times;</span>' +
         '<span class="sr-only">Close</span>' +
         '</button>' +
         message +
-        '</div>'
+        '</b></div>'
     );
     $('#app-content-wrapper').scrollTop(0);
 }
 
 function pointIsOutOfBounds(pointLonLat, model1, model2) {
-    var lonlat = pointLonLat.split(',');
+    if (typeof pointLonLat === 'string') {
+        pointLonLat = pointLonLat.split(',');
+    }
     var model1Extents, model2Extents;
     var minX, maxX, minY, maxY;
 
@@ -538,7 +546,7 @@ function pointIsOutOfBounds(pointLonLat, model1, model2) {
         maxX = parseFloat(model1Extents.maxX);
         minY = parseFloat(model1Extents.minY);
         maxY = parseFloat(model1Extents.maxY);
-        if (lonlat[0] < minX || lonlat[0] > maxX || lonlat[1] < minY || lonlat[1] > maxY) {
+        if (pointLonLat[0] < minX || pointLonLat[0] > maxX || pointLonLat[1] < minY || pointLonLat[1] > maxY) {
             return true;
         }
     }
@@ -549,10 +557,17 @@ function pointIsOutOfBounds(pointLonLat, model1, model2) {
         maxX = parseFloat(model2Extents.maxX);
         minY = parseFloat(model2Extents.minY);
         maxY = parseFloat(model2Extents.maxY);
-        if (lonlat[0] < minX || lonlat[0] > maxX || lonlat[1] < minY || lonlat[1] > maxY) {
+        if (pointLonLat[0] < minX || pointLonLat[0] > maxX || pointLonLat[1] < minY || pointLonLat[1] > maxY) {
             return true;
         }
     }
 
     return false;
+}
+
+function disablePlotButtonIfNeeded() {
+    var lonlat = document.getElementById('pointLonLat').value;
+    if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
+        $('a[name*=plot]').addClass('disabled');
+    }
 }

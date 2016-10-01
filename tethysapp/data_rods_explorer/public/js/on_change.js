@@ -90,6 +90,10 @@ function oc_sten_dt(datePickerID) {
     var endDate = date_to_rods($endDate.val()) + 'T23'; //Last hour
     href = href  + '&startDate=' + startDate + '&endDate=' + endDate;
     history.pushState("", "", href);
+
+    if (datePickerID.indexOf('endDate') !== -1) {
+        $startDate.datepicker('setEndDate', $('#' + datePickerID).val());
+    }
 }
 
 function oc_model2() {
