@@ -523,10 +523,10 @@ function displayFlashMessage(type, message) {
     $('.flash-messages').html(
         '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
         '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +
-        '<button type="button" class="close" data-dismiss="alert">' +
-        '<span aria-hidden="true">&times;</span>' +
-        '<span class="sr-only">Close</span>' +
-        '</button>' +
+        // '<button type="button" class="close" data-dismiss="alert">' +
+        // '<span aria-hidden="true">&times;</span>' +
+        // '<span class="sr-only">Close</span>' +
+        // '</button>' +
         message +
         '</b></div>'
     );
