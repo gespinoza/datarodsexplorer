@@ -161,9 +161,8 @@ function load_default_home() {
         document.getElementById('variable').value = varia;
         document.getElementById('plot_date').value = plotTime['date'];
         document.getElementById('plot_hour').value = plotTime['hour'];
+        load_extents_layers(model)
     }
-
-    load_extents_layers(model)
 }
 
 function load_default_plot(data) {

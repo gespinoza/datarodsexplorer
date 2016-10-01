@@ -1,7 +1,7 @@
 WORKSPACE = 'data_rods_explorer'
-# GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
+GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
 ### Uncomment the following line for local development
-GEOSERVER_URL = 'http://127.0.0.1:8181/geoserver/wms'
+# GEOSERVER_URL = 'http://127.0.0.1:8181/geoserver/wms'
 MODEL_OPTIONS = []
 MODEL_FENCES = {}
 VAR_DICT = {}
