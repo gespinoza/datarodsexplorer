@@ -73,7 +73,7 @@ def generate_datarods_urls_dict(asc2_urls):
 
 def parse_model_database_from_file():
     db_file = inspect.getfile(inspect.currentframe()).replace('utilities.py',
-                                                              'public/data/model_database.txt')
+                                                              'public/data/model_config.txt')
     new_model_switch = False
     model_options = []
     var_dict = {}

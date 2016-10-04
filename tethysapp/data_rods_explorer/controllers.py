@@ -1,7 +1,8 @@
+# coding=utf-8
 from django.shortcuts import render
 from django.http import JsonResponse
-from tethys_apps.sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button, MVLayer, TimeSeries
-from tethys_apps.sdk import get_spatial_dataset_engine
+from tethys_sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button, MVLayer, TimeSeries
+from tethys_sdk.services import get_spatial_dataset_engine
 import os
 from datetime import datetime
 import zipfile
@@ -65,26 +66,32 @@ def plot(request):
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
-        varname = get_wms_vars()[post['model']][post['variable']][1]
-        varunit = get_wms_vars()[post['model']][post['variable']][2]
-        point_lon_lat = post['pointLonLat']
-        datarod_ts, datarods_urls_dict = get_data_rod_plot(post, point_lon_lat)
-        timeseries_plot = TimeSeries(
-            height='250px',
-            width='100%',
-            engine='highcharts',
-            title=False,
-            y_axis_title=varname,
-            y_axis_units=varunit,
-            series=[{
-                'name': '%s (Lon,Lat)' % point_lon_lat,
-                'data': datarod_ts
-            }]
-        )
-        context = {
-            'timeseries_plot': timeseries_plot,
-            'datarods_urls_dict': datarods_urls_dict
-        }
+        try:
+            varname = get_wms_vars()[post['model']][post['variable']][1]
+            varunit = get_wms_vars()[post['model']][post['variable']][2]
+            point_lon_lat = post['pointLonLat']
+            datarod_ts, datarods_urls_dict = get_data_rod_plot(post, point_lon_lat)
+            timeseries_plot = TimeSeries(
+                height='250px',
+                width='100%',
+                engine='highcharts',
+                title=False,
+                y_axis_title=varname,
+                y_axis_units=varunit,
+                series=[{
+                    'name': '%s (Lon,Lat)' % point_lon_lat,
+                    'data': datarod_ts
+                }]
+            )
+            context = {
+                'timeseries_plot': timeseries_plot,
+                'datarods_urls_dict': datarods_urls_dict
+            }
+        except Exception as e:
+            if e.error == 999:
+                context = {
+                    'error': e.message
+                }
 
         return render(request, 'data_rods_explorer/plot.html', context)
 
@@ -244,7 +251,7 @@ def create_map(layers_ls, req_post):
         center=center,
         zoom=zoom,
         maxZoom=10,
-        minZoom=3
+        minZoom=1
     )
     # Define map view options
     map_view_options = MapView(
@@ -486,16 +493,30 @@ def load_tiff_ly(req_post, req_get):
 def access_datarods_server(link):
     data = []
     s_file = urllib2.urlopen(link)
+    s_lines = []
+    found_data = False
+    data_flag = 'Date&Time'
 
-    while 'Date&Time' not in s_file.readline():
-        continue
+    for line in s_file.readlines():
+        if data_flag in line:
+            found_data = True
+            continue
+        if found_data:
+            s_lines.append(line)
 
-    s_lines = s_file.readlines()
     s_file.close()
+
+    try:
+        if len(s_lines) < 1:
+            raise Exception
+    except Exception as e:
+        e.error = 999
+        e.message = 'NASA Data Service Error: Missing "%s” tag to end metadata. ' \
+                    'See access_datarods_server method in controllers.py for check.' % data_flag
+        raise e
 
     for row in s_lines:
         row_ls = row.strip().replace(' ', '-', 1).split()
-        print (row_ls)
         try:
             timevalpair = [parser.parse(row_ls[0]), float(row_ls[1])]
         except Exception as e:
@@ -513,10 +534,6 @@ def get_data_rod_plot(req_get, point_lon_lat):
 
     dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
                                  req_get['startDate'], req_get['endDate'])
-
-    for i in range(0, 20):
-        print req_get['endDate']
-        print dr_link
 
     dr_ts = access_datarods_server(dr_link)
 

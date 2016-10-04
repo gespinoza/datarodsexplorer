@@ -1,7 +1,13 @@
+from socket import gethostname
+
+if 'apps.hydroshare' in gethostname():
+    GEOSERVER_URL = 'http://apps.hydroshare.org:8181/geoserver/wms'
+elif 'appsdev.hydroshare' in gethostname():
+    GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
+else:
+    GEOSERVER_URL = 'http://127.0.0.1:8181/geoserver/wms'
+
 WORKSPACE = 'data_rods_explorer'
-# GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
-### Uncomment the following line for local development
-GEOSERVER_URL = 'http://127.0.0.1:8181/geoserver/wms'
 MODEL_OPTIONS = []
 MODEL_FENCES = {}
 VAR_DICT = {}

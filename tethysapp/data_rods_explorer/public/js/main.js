@@ -145,11 +145,12 @@ function load_map_post_parameters() {
     document.getElementById('zoom').value = zoom;
     document.getElementById('centerX').value = center[0];
     document.getElementById('centerY').value = center[1];
+    return extent
 }
 
 function load_map() {
     document.getElementById('loadMap').value = "no";
-    load_map_post_parameters();
+    var extent = load_map_post_parameters();
     document.getElementById('retrieveMap').value = "yes";
     var data = $('#parametersForm').serialize();
     data += '&plotTime=' + getUrlVars()['plotTime'];
@@ -181,6 +182,9 @@ function load_map() {
                     });
                     map.addLayer(newLayer);
                     newLayer['tethys_legend_title'] = variaLyrName;
+                    newLayer['tethys_legend_extent'] = extent;
+                    newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
+
                     update_legend();
                     document.getElementById('loadMap').value = response['load_layer'];
                 }
@@ -224,17 +228,22 @@ function createPlot(name) {
                 }
             },
             success: function (responseHTML) {
-                $('#plot-container').html(responseHTML);
-                var plotType = $('.highcharts-plot').attr('data-type');
-                initHighChartsPlot($('.highcharts-plot'), plotType);
-                $('#plot-loading').addClass('hidden');
+                if (responseHTML.indexOf('Error999') !== -1) {
+                    $('#plot-loading').addClass('hidden');
+                    displayFlashMessage('warning', $(responseHTML).text());
+                } else {
+                    $('#plot-container').html(responseHTML);
+                    var plotType = $('.highcharts-plot').attr('data-type');
+                    initHighChartsPlot($('.highcharts-plot'), plotType);
+                    $('#plot-loading').addClass('hidden');
 
-                if (name === 'plot2') {
-                    var opts = $('#plot2-options');
-                    var series = opts.attr('data-series');
-                    var y1Units = opts.attr('data-y1units');
-                    var y2Units = opts.attr('data-y2units');
-                    two_axis_plot(series, y1Units, y2Units);
+                    if (name === 'plot2') {
+                        var opts = $('#plot2-options');
+                        var series = opts.attr('data-series');
+                        var y1Units = opts.attr('data-y1units');
+                        var y2Units = opts.attr('data-y2units');
+                        two_axis_plot(series, y1Units, y2Units);
+                    }
                 }
             }, error: function () {
                 $('#plot-loading').addClass('hidden');
@@ -318,8 +327,8 @@ function addLegendItem(layer) {
         extent = layer.tethys_legend_extent;
 
         if (is_defined(extent)) {
-            var lat_lon_extent = ol.proj.transformExtent(extent, layer.tethys_legend_extent_projection, DEFAULT_PROJECTION);
-            m_map.getView().fit(lat_lon_extent, m_map.getSize());
+            var lat_lon_extent = ol.proj.transformExtent(extent, layer.tethys_legend_extent_projection, "EPSG:3857");
+            TETHYS_MAP_VIEW.getMap().getView().fit(lat_lon_extent, TETHYS_MAP_VIEW.getMap().getSize());
         }
     });
 }
@@ -353,7 +362,7 @@ function updateFences(differentiator, model) {
         $('#startDate' + differentiator).val(get_date_of_days_before($('#endDate' + differentiator).val(), 7).toLocaleDateString());
     }
 
-    var extents = MODEL_FENCES[model].extents;
+    var extents = validateExtents(MODEL_FENCES[model].extents);
     var minX = parseFloat(extents.minX);
     var maxX = parseFloat(extents.maxX);
     var minY = parseFloat(extents.minY);
@@ -382,10 +391,12 @@ function updateFences(differentiator, model) {
         }]
     };
 
-    var layer = differentiator === 'model1' ? MODEL1_LAYER : MODEL2_LAYER;
+    var layer = differentiator === '1' ? MODEL1_LAYER : MODEL2_LAYER;
 
     layer.getSource().clear();
     layer.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojsonObject));
+    layer['tethys_legend_extent'] = [minX, minY, maxX, maxY];
+    layer['tethys_legend_extent_projection'] = 'EPSG:4326';
 }
 
 var update_legend = function() {
@@ -586,4 +597,16 @@ function getValidDate(date, model) {
     }
 
     return validDate.split('T')[0] + 'T23';
+}
+
+function validateExtents(extents) {
+
+    if (extents.minY === '-90.0') {
+        extents.minY = '-85.0';
+    }
+    if (extents.maxY == '90.0') {
+        extents.maxY = '85.0';
+    }
+
+    return extents;
 }

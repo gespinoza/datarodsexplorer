@@ -44,7 +44,7 @@ GLDAS2|SOILM100_200cm||100-200 cm layer 4 soil moisture content|kg/m^2|GLDAS2:10
 TRMM (retrieval)~TRMM~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.007:{0}itation&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 TRMM|precip|TRMM_3B42_daily_precipitation_V7|Precipitation|mm/hr|TRMM:Precip
 
-GRACE soil moisture~GRACE~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}_inst&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+GRACE soil moisture~GRACE~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GRACE|sfsm_inst|GRACEDADM_CLSM025NA_7D_1_0_sfsm_inst|Surface soil moisture percentile|%|GRACE:SurfSoilMoist%
 GRACE|rtzsm_inst|GRACEDADM_CLSM025NA_7D_1_0_rtzsm_inst|Root zone soil moisture percentile|%|GRACE:RootZoneSoilMoist%
 GRACE|gws_inst|GRACEDADM_CLSM025NA_7D_1_0_gws_inst|Groundwater percentile|%|GRACE:GroundWater%

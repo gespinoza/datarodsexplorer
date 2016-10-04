@@ -305,7 +305,7 @@ function addVarsToURL(vars) {
 
 function load_extents_layers(model) {
     $(function () {
-        var extents = MODEL_FENCES[model].extents;
+        var extents = validateExtents(MODEL_FENCES[model].extents);
         var minX = parseFloat(extents.minX);
         var maxX = parseFloat(extents.maxX);
         var minY = parseFloat(extents.minY);
@@ -358,20 +358,30 @@ function load_extents_layers(model) {
             features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
         });
 
+        var olExtents = [minX, minY, maxX, maxY];
+        var olProjection = 'EPSG:4326';
+
         MODEL1_LAYER = new ol.layer.Vector({
             source: source1,
             style: getStyle(1),
-            name: 'model1_extents'
+            name: 'model1_extents',
+            extent: olExtents
         });
         MODEL2_LAYER = new ol.layer.Vector({
             source: source2,
             style: getStyle(2),
-            name: 'model2_extents'
+            name: 'model2_extents',
+            extent: olExtents
         });
         map.addLayer(MODEL1_LAYER);
         map.addLayer(MODEL2_LAYER);
         MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
         MODEL2_LAYER['tethys_legend_title'] = 'Model 2 Extents';
+        MODEL1_LAYER['tethys_legend_extent'] = olExtents;
+        MODEL2_LAYER['tethys_legend_extent'] = olExtents;
+        MODEL1_LAYER['tethys_legend_extent_projection'] = olProjection;
+        MODEL2_LAYER['tethys_legend_extent_projection'] = olProjection;
+
         update_legend();
     });
 }
