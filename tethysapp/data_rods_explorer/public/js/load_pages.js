@@ -54,7 +54,7 @@ function page_and_parameters(href, page) {
         if (GET['endDate']) {
             endDate = GET['endDate'];
         } else {
-            endDate = plotDate;
+            endDate = getValidDate(plotDate, model);
         }
 
         data['endDate'] = endDate;
@@ -62,7 +62,7 @@ function page_and_parameters(href, page) {
         if (GET['startDate']) {
             startDate =  GET['startDate'];
         } else {
-            startDate = get_date_of_days_before(plotDate, 7);
+            startDate = get_date_of_days_before(endDate, 7).toISOString().split('T')[0] + 'T00';
         }
 
         data['startDate'] = startDate;

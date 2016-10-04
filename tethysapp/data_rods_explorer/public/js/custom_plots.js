@@ -1,6 +1,7 @@
 function two_axis_plot(series, y_axis_1, y_axis_2) {
     series = series.replace(/&#39;/g, "'");
     series = series.replace(/datetime.datetime/g, "Date.UTC");
+    series = series.replace(/, tzinfo=tzlocal\(\)/g, "");
     var datarods_ts = eval(series);
 
     var array1Length = datarods_ts[0]['data'].length;

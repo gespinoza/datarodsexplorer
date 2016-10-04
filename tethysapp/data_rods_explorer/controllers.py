@@ -11,6 +11,7 @@ from math import copysign
 from utilities import parse_fences_from_file, generate_datarods_urls_dict, parse_model_database_from_file
 from model_objects import *
 from json import dumps
+from dateutil import parser
 
 
 def home(request):
@@ -44,7 +45,6 @@ def map_view(request):
     map_layers = load_tiff_ly(post, get)
     if map_layers:
         load_layer = map_layers[0]['options']['params']['LAYERS']
-        print load_layer
     else:
         load_layer = ''
 
@@ -67,8 +67,8 @@ def plot(request):
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
         varname = get_wms_vars()[post['model']][post['variable']][1]
         varunit = get_wms_vars()[post['model']][post['variable']][2]
-        pointLonLat = post['pointLonLat']
-        datarod_ts, datarods_urls_dict = getDataRod_plot(post, pointLonLat)
+        point_lon_lat = post['pointLonLat']
+        datarod_ts, datarods_urls_dict = get_data_rod_plot(post, point_lon_lat)
         timeseries_plot = TimeSeries(
             height='250px',
             width='100%',
@@ -77,7 +77,7 @@ def plot(request):
             y_axis_title=varname,
             y_axis_units=varunit,
             series=[{
-                'name': '%s (Lon,Lat)' % pointLonLat,
+                'name': '%s (Lon,Lat)' % point_lon_lat,
                 'data': datarod_ts
             }]
         )
@@ -109,8 +109,8 @@ def plot2(request):
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
-        pointLonLat = post['pointLonLat']
-        datarod_ts, datarods_urls_dict = getDataRod_plot2(post, pointLonLat)
+        point_lon_lat = post['pointLonLat']
+        datarod_ts, datarods_urls_dict = get_data_rod_plot2(post, point_lon_lat)
         timeseries_plot = {'y1_axis_units': get_wms_vars()[post['model']][post['variable']][2],
                            'y2_axis_units': get_wms_vars()[post['model2']][post['variable2']][2],
                            'series': datarod_ts}
@@ -149,14 +149,13 @@ def years(request):
     Controller for the 'years' page.
     """
     post = request.POST
-    get = request.GET
 
     # Plot
     if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
         varname = get_wms_vars()[post['model']][post['variable']][1]
         varunit = get_wms_vars()[post['model']][post['variable']][2]
-        pointLonLat = post['pointLonLat']
-        datarod_ts, datarods_urls_dict = getDataRod_years(post, pointLonLat)
+        point_lon_lat = post['pointLonLat']
+        datarod_ts, datarods_urls_dict = get_data_rod_years(post, point_lon_lat)
         timeseries_plot = TimeSeries(
             height='250px',
             width='100%',
@@ -208,9 +207,12 @@ def create_select_model(modelname):
     Function that creates the 'model selection' element
     """
     selected_model = None
-    for model in get_model_options():
-        if model[1] == modelname.lower():
-            selected_model = model[0]
+
+    if modelname:
+        for model in get_model_options():
+            if model[1] == modelname.lower():
+                selected_model = model[0]
+
     select_model = SelectInput(display_text='',
                                name='model',
                                multiple=False,
@@ -296,10 +298,6 @@ def plot_ctrls(model, controller):
     """
     Function that creates and return the "start_date", "end_hour", and "plot_button" elements
     """
-    # start_date = (datetime.strptime(start_date_raw.split('T')[0], '%Y-%m-%d')-timedelta(days=1)).strftime('%m/%d/%Y')
-    # end_date = (datetime.strptime(end_date_raw.split('T')[0], '%Y-%m-%d') - timedelta(days=1)).strftime('%m/%d/%Y')
-
-    # read ascii file with output date ranges and spatial extents for all models
 
     differentiator = 1 if controller == 'plot' else 2
 
@@ -425,6 +423,8 @@ def load_tiff_ly(req_post, req_get):
     """
     map_layers = []
     add_map = False
+    store_id = None
+
     if req_get and req_get.get('plotTime'):
         plot_time = req_get['plotTime']
     elif req_post and req_post.get('plotTime'):
@@ -457,11 +457,8 @@ def load_tiff_ly(req_post, req_get):
         # Geoserver parameters
         geo_eng = get_spatial_dataset_engine(name='default')
         # Data rods parameters
-        latlonbox = [req_post['lonW'], req_post['latS'],req_post['lonE'], req_post['latN']]
+        latlonbox = [req_post['lonW'], req_post['latS'], req_post['lonE'], req_post['latN']]
         time_st = plot_time + ':00:00Z/' + plot_time + ':00:30Z'
-        # time_dt = datetime.strptime(plotTime, '%Y-%m-%dT%H')
-        # time_st = datetime.strptime(time_dt, '%Y-%m-%dT%H:00:00Z/%Y-%m-%dT%H:00:00Z')
-        # Get image from url and zip it including the .prj file
         zip_file, store_name, store_id = get_raster_zip(latlonbox, time_st, model, variable)
         # Create raster in geoserver
         response = geo_eng.create_coverage_resource(store_id=store_id,
@@ -472,7 +469,7 @@ def load_tiff_ly(req_post, req_get):
         if response['success']:
             add_map = True
 
-    if add_map == True:
+    if add_map:
         # Add raster to map
         title = '{0} {1}'.format(variable, plot_time)
         geoserver_layer = MVLayer(source='ImageWMS',
@@ -486,108 +483,70 @@ def load_tiff_ly(req_post, req_get):
     return map_layers
 
 
-def access_datarods_server(link, model, years):
-    raw_input(link)
+def access_datarods_server(link):
     data = []
-    sFile = urllib2.urlopen(link)
+    s_file = urllib2.urlopen(link)
 
-    if model.lower() in ['nldas', 'nldasf', 'gldas']:
-        sLines = sFile.readlines()[40:-1]
-        sFile.close()
+    while 'Date&Time' not in s_file.readline():
+        continue
 
-        if years:
-            for row in sLines[:-1]:
-                row_st = row.strip()
-                data.append([datetime.strptime('2000' + row_st[4:14], '%Y-%m-%d %HZ'),
-                             float(row_st[14:])
-                             ])
-        else:
-            for row in sLines:
-                row_st = row.strip()
-                data.append([datetime.strptime(row_st[:14], '%Y-%m-%d %HZ'),
-                             float(row_st[14:])
-                             ])
-    elif model.lower() in ['trmm', 'grace', 'gldas2']:
-        sLines = sFile.readlines()[13:]
-        sFile.close()
+    s_lines = s_file.readlines()
+    s_file.close()
 
-        if years:
-            for row in sLines:
-                row_ls = row.split('\t')
-                data.append([datetime.strptime('2000' + row_ls[0][4:], '%Y-%m-%dT%H:%M:%S'),
-                             float(row_ls[1])
-                             ])
-        else:
-            for row in sLines:
-                row_ls = row.split('\t')
-                data.append([datetime.strptime(row_ls[0], '%Y-%m-%dT%H:%M:%S'),
-                             float(row_ls[1])
-                             ])
+    for row in s_lines:
+        row_ls = row.strip().replace(' ', '-', 1).split()
+        print (row_ls)
+        try:
+            timevalpair = [parser.parse(row_ls[0]), float(row_ls[1])]
+        except Exception as e:
+            print str(e)
+            continue
+        data.append(timevalpair)
+
     return data
 
 
-def getDataRod_plot(req_get, pointLonLat):
+def get_data_rod_plot(req_get, point_lon_lat):
     model = req_get['model']
     variable = req_get['variable']
-    # if model == 'nldas':
-    #     if variable in ["APCPsfc", "DLWRFsfc", "DSWRFsfc", "PEVAPsfc", "SPFH2m", "TMP2m", "UGRD10m", "VGRD10m"]:
-    #         case = 'forcing'
-    #     else:
-    #         case = 'noah'
-    #     superstring = get_datarods_tsb()['nldas'][case]
-    # else:
-    #     superstring = get_datarods_tsb()[model]
     superstring = get_datarods_tsb()[model]
 
-    dr_link = superstring.format(variable, pointLonLat.replace(',',',%20'),
+    dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
                                  req_get['startDate'], req_get['endDate'])
-    dr_ts = access_datarods_server(dr_link, model, False)
+
+    for i in range(0, 20):
+        print req_get['endDate']
+        print dr_link
+
+    dr_ts = access_datarods_server(dr_link)
 
     datarods_urls_dict = generate_datarods_urls_dict([dr_link])
 
     return dr_ts, datarods_urls_dict
 
 
-def getDataRod_plot2(req_get, pointLonLat):
+def get_data_rod_plot2(req_get, point_lon_lat):
     startDate = req_get['startDate']
     endDate = req_get['endDate']
 
     # 1st variable
     model1 = req_get['model']
     variable1 = req_get['variable']
-
-    # if model1 == 'nldas':
-    #     if variable1 in ["APCPsfc", "DLWRFsfc", "DSWRFsfc", "PEVAPsfc", "SPFH2m", "TMP2m", "UGRD10m", "VGRD10m"]:
-    #         case1 = 'forcing'
-    #     else:
-    #         case1 = 'noah'
-    #     superstring1 = get_datarods_tsb()['nldas'][case1]
-    # else:
-    #     superstring1 = get_datarods_tsb()[model1]
     superstring1 = get_datarods_tsb()[model1]
 
-    dr_link1 = superstring1.format(variable1, pointLonLat.replace(',',',%20'),
+    dr_link1 = superstring1.format(variable1, point_lon_lat.replace(',', ',%20'),
                                    startDate, endDate)
 
-    data1 = access_datarods_server(dr_link1, model1, False)
+    data1 = access_datarods_server(dr_link1)
 
     # 2nd variable
     model2 = req_get['model2']
     variable2 = req_get['variable2']
-
-    # if model2 == 'nldas':
-    #     if variable2 in ["APCPsfc", "DLWRFsfc", "DSWRFsfc", "PEVAPsfc", "SPFH2m", "TMP2m", "UGRD10m", "VGRD10m"]:
-    #         case2 = 'forcing'
-    #     else:
-    #         case2 = 'noah'
-    #     superstring2 = get_datarods_tsb()['nldas'][case2]
-    # else:
-    #     superstring2 = get_datarods_tsb()[model2]
     superstring2 = get_datarods_tsb()[model2]
 
-    dr_link2 = superstring2.format(variable2, pointLonLat.replace(',',',%20'),
+    dr_link2 = superstring2.format(variable2, point_lon_lat.replace(',', ',%20'),
                                    startDate, endDate)
-    data2 = access_datarods_server(dr_link2, model2, False)
+    data2 = access_datarods_server(dr_link2)
     # Create list
     dr_ts = [{'name': get_wms_vars()[model1][variable1][1] + ' (' + get_wms_vars()[model1][variable1][2] + ')',
               'data': data1,
@@ -600,17 +559,9 @@ def getDataRod_plot2(req_get, pointLonLat):
     return dr_ts, datarods_urls_dict
 
 
-def getDataRod_years(req_get, pointLonLat):
+def get_data_rod_years(req_get, point_lon_lat):
     variable = req_get['variable']
     model = req_get['model']
-    # if model == 'nldas':
-    #     if variable in ["APCPsfc", "DLWRFsfc", "DSWRFsfc", "PEVAPsfc", "SPFH2m", "TMP2m", "UGRD10m", "VGRD10m"]:
-    #         case = 'forcing'
-    #     else:
-    #         case = 'noah'
-    #     superstring = get_datarods_tsb()['nldas'][case]
-    # else:
-    #     superstring = get_datarods_tsb()[model]
     superstring = get_datarods_tsb()[model]
 
     dr_ts = []
@@ -619,19 +570,19 @@ def getDataRod_years(req_get, pointLonLat):
         if '-' in year:
             yearRange = year.split('-')
             for yyyy in range(int(yearRange[0]), int(yearRange[1]) + 1):
-                dr_link = superstring.format(variable, pointLonLat.replace(',',',%20'),
+                dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
                                              '{0}-01-01T00'.format(yyyy),
                                              '{0}-12-31T23'.format(yyyy))
-                data = access_datarods_server(dr_link, model, True)
+                data = access_datarods_server(dr_link)
                 dr_ts.append({'name': yyyy,
                               'data': data})
                 dr_links.append(dr_link)
         else:
-            dr_link = superstring.format(variable, pointLonLat.replace(',',',%20'),
+            dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
                                          '{0}-01-01T00'.format(year),
                                          '{0}-12-31T23'.format(year))
 
-            data = access_datarods_server(dr_link, model, True)
+            data = access_datarods_server(dr_link)
             dr_ts.append({'name': year,
                           'data': data})
             dr_links.append(dr_link)
@@ -649,7 +600,7 @@ def initialize_model_map_context(get, post):
     elif post and post.get('model'):
         model = post['model']
     else:
-        model = 'NLDASF'
+        model = get_model_options()[0][1]
 
     select_model = create_select_model(model)
     select_date, select_hour = map_date_ctrls(model)
@@ -670,24 +621,3 @@ def initialize_model_map_context(get, post):
                }
 
     return context
-
-
-'''
-                    [{'name': 'Winter 2007-2008',
-                     'data': [
-                        [datetime(2008, 12, 2), 0.8],
-                        [datetime(2008, 12, 9), 0.6],
-                        [datetime(2008, 12, 16), 0.6],
-                        [datetime(2008, 12, 28), 0.67],
-                        [datetime(2009, 1, 1), 0.81]
-                        ]},
-                    {'name': 'Winter 2010-2011',
-                     'data': [
-                        [datetime(2008, 12, 2), 10.8],
-                        [datetime(2008, 12, 9), 10.6],
-                        [datetime(2008, 12, 16), 10.6],
-                        [datetime(2008, 12, 28), 10.67],
-                        [datetime(2009, 1, 1), 10.81]
-                        ]}
-                    ]
-'''

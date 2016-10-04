@@ -26,7 +26,7 @@ function get_date_of_days_before(date, days_before) {
 
     newDate.setDate(newDate.getDate() - days_before);
 
-    return newDate.toISOString().split('T')[0] + 'T23';
+    return newDate;
 }
 
 function load_variable_options(mod12, var12, data) {
@@ -331,11 +331,15 @@ function is_defined(variable) {
 function updateFences(differentiator, model) {
     var newEndDate = MODEL_FENCES[model].end_date;
     var newStartDate = MODEL_FENCES[model].start_date;
-    var divId = differentiator === 'model1' ? 'plot' : 'plot2';
+    var divId = differentiator === '1' ? 'plot' : 'plot2';
     var datePickers = $('#nav-' + divId).find('[data-provide=datepicker]');
-    datePickers = differentiator === 'model1' ? datePickers.add($('#plot_date')) : datePickers;
+    datePickers = (differentiator === '1')
+        ? datePickers.add($('#plot_date'))
+        : datePickers;
 
     datePickers.each(function (idx, elem) {
+        $(elem).datepicker('setStartDate', newStartDate);
+        $(elem).datepicker('setEndDate', newEndDate);
         if (Date.parse($(elem).val()) > Date.parse(newEndDate)) {
             $(elem).val(newEndDate);
         } else if (Date.parse($(elem).val()) < Date.parse(newStartDate)) {
@@ -343,12 +347,10 @@ function updateFences(differentiator, model) {
         } else {
             $(elem).val(newEndDate);
         }
-        $(elem).datepicker('setStartDate', newStartDate);
-        $(elem).datepicker('setEndDate', newEndDate);
     });
 
-    if (differentiator === 'model1') {
-        $('plot_date')
+    if ($('#startDate' + differentiator).length > 0) {
+        $('#startDate' + differentiator).val(get_date_of_days_before($('#endDate' + differentiator).val(), 7).toLocaleDateString());
     }
 
     var extents = MODEL_FENCES[model].extents;
@@ -570,4 +572,18 @@ function disablePlotButtonIfNeeded() {
     if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
         $('a[name*=plot]').addClass('disabled');
     }
+}
+
+function getValidDate(date, model) {
+    var validDate;
+    var key = 'end_date';
+    var modelDate = new Date(MODEL_FENCES[model][key]);
+
+    if (modelDate < new Date(date.split('T')[0])) {
+        validDate = modelDate.toISOString();
+    } else {
+        validDate = date;
+    }
+
+    return validDate.split('T')[0] + 'T23';
 }
