@@ -81,6 +81,7 @@ def parse_model_database_from_file():
     datarods_tsb = {}
     with open(db_file, mode='r') as f:
         f.readline()  # skip column headings line
+        f.readline()
         for line in f.readlines():
             if line == '\n':
                 new_model_switch = True
@@ -91,7 +92,7 @@ def parse_model_database_from_file():
                 model_vals = linevals[0].split('~')
                 model_name = model_vals[0]
                 model_key = model_vals[1]
-                datarods_tsb[model_key] = model_vals[2]
+                datarods_tsb[model_key] = model_vals[4]
                 model_options.append((model_name, model_key))
                 new_model_switch = False
                 continue

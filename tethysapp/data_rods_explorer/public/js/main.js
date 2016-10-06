@@ -232,6 +232,7 @@ function createPlot(name) {
                     $('#plot-loading').addClass('hidden');
                     displayFlashMessage('warning', $(responseHTML).text());
                 } else {
+                    $('.flash-messages').html('');
                     $('#plot-container').html(responseHTML);
                     var plotType = $('.highcharts-plot').attr('data-type');
                     initHighChartsPlot($('.highcharts-plot'), plotType);

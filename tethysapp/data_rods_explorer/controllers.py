@@ -492,27 +492,43 @@ def load_tiff_ly(req_post, req_get):
 
 def access_datarods_server(link):
     data = []
-    s_file = urllib2.urlopen(link)
-    s_lines = []
+    error_found = True
+    time = 22
     found_data = False
-    data_flag = 'Date&Time'
+    data_flag_text = 'Date&Time'
+    error_flag_text = 'ERROR:'
+    error_message = None
 
-    for line in s_file.readlines():
-        if data_flag in line:
-            found_data = True
-            continue
-        if found_data:
-            s_lines.append(line)
+    while error_found and time >= 0:
+        s_file = urllib2.urlopen(link)
+        s_lines = []
 
-    s_file.close()
+        for line in s_file.readlines():
+            if data_flag_text in line:
+                found_data = True
+                error_found = False
+                continue
+
+            if not found_data and error_flag_text in line:
+                error_message = line
+                link = link[:-2] + "%02d" % time
+                time -= 1
+                break
+
+            if found_data:
+                s_lines.append(line)
+
+        s_file.close()
 
     try:
         if len(s_lines) < 1:
             raise Exception
     except Exception as e:
         e.error = 999
-        e.message = 'NASA Data Service Error: Missing "%s” tag to end metadata. ' \
-                    'See access_datarods_server method in controllers.py for check.' % data_flag
+        message = error_message if error_message else 'NASA Data Service Error: Missing "%s” tag to end metadata. ' \
+                                                      'See access_datarods_server method in controllers.py for check.' \
+                                                      % data_flag_text
+        e.message = message
         raise e
 
     for row in s_lines:
