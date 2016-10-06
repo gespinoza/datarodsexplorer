@@ -110,6 +110,7 @@ function page_and_parameters(href, page) {
                 $('#years').select2();
                 load_default_years(data);
             }
+            disablePlotButtonIfNeeded();
             addVarsToURL(data);
         },
         error: function () {
@@ -189,7 +190,6 @@ function load_default_plot(data) {
         document.getElementById('startDate1').value = startDate['date'];
         document.getElementById('endDate1').value = endDate['date'];
     }
-    disablePlotButtonIfNeeded();
 }
 
 function load_default_plot2(data) {
@@ -230,7 +230,6 @@ function load_default_plot2(data) {
         document.getElementById('startDate2').value = startDate['date'];
         document.getElementById('endDate2').value = endDate['date'];
     }
-    disablePlotButtonIfNeeded();
 }
 
 function load_default_years(data) {

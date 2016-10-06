@@ -122,9 +122,9 @@ $(function() {
         $('.flash-messages').html('');
         if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
             displayFlashMessage('warning', 'Query location outside of model extents. Please choose a new location.');
-            $('a[name*=plot]').addClass('disabled');
+            $('a[name*=plot]').add('a[name=years]').addClass('disabled');
         } else {
-            $('a[name*=plot]').removeClass('disabled');
+            $('a[name*=plot]').add('a[name=years]').removeClass('disabled');
         }
     });
     map.getLayers().item(1).setZIndex(10000);
@@ -582,7 +582,7 @@ function pointIsOutOfBounds(pointLonLat, model1, model2) {
 function disablePlotButtonIfNeeded() {
     var lonlat = document.getElementById('pointLonLat').value;
     if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
-        $('a[name*=plot]').addClass('disabled');
+        $('a[name*=plot]').add('a[name=years]').addClass('disabled');
     }
 }
 

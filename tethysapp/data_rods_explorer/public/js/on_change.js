@@ -4,7 +4,7 @@ function oc_model() {
     var model = document.getElementById('model').value;
     var varia = VAR_DICT[model][0].value; //1st element
     updateFences('1', model);
-    var plotDate = new Date($('#plot_date').val()).toISOString().split('T')[0] + 'T' + $('#plot_hour').val();
+    var plotDate = GET['plotTime'];
     href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
     if (GET['model2'] && GET['variable2']) {
         var model2 = GET['model2'];
@@ -12,7 +12,7 @@ function oc_model() {
         href = href + '&model2=' + model2 + '&variable2=' + varia2;
     }
     if (GET['startDate'] && GET['endDate']) {
-        var endDate = plotDate.split('T')[0] + 'T23';
+        var endDate = date_to_rods($('#endDate1').val()) + 'T23';
         var startDate = get_date_of_days_before(endDate, 7).toISOString().split('T')[0] + 'T00';
         href = href + '&startDate=' + startDate + '&endDate=' + endDate;
     }
@@ -101,11 +101,11 @@ function oc_model2() {
     var href = window.location.href.split('?')[0];
     var model = GET['model']; //document.getElementById('model').value;
     var varia = GET['variable']; //document.getElementById('variable').value;
-    var plotDate = new Date($('#plot_date').val()).toISOString().split('T') + 'T' + $('#plot_hour').val();
+    var plotDate = GET['plotTime'];
     var model2 = document.getElementById('model2').value;
     var varia2 = VAR_DICT[model2][0].value; //1st element
     updateFences('2', model2);
-    var endDate = plotDate.split('T')[0] + 'T23';
+    var endDate = date_to_rods($('#endDate2').val()) + 'T23';
     var startDate = get_date_of_days_before(endDate, 7).toISOString().split('T')[0] + 'T00';
     href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
     history.pushState("", "", href);
