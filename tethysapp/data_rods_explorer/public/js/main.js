@@ -210,6 +210,9 @@ function createPlot(name) {
         data[obj.name] = obj.value;
     });
     var pointLonLat = $('#pointLonLat').val();
+    if (name === 'years') {
+        data['overlap_years'] = $('#plot-overlapped').is(':checked');
+    }
 
     if (pointLonLat === "-9999") {
         displayFlashMessage('warning', 'Query location not defined. Please click on map at desired query location.');

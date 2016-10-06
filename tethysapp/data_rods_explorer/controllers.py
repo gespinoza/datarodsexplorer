@@ -12,7 +12,7 @@ from math import copysign
 from utilities import parse_fences_from_file, generate_datarods_urls_dict, parse_model_database_from_file
 from model_objects import *
 from json import dumps
-from dateutil import parser
+from dateutil import parser as dateparser
 
 
 def home(request):
@@ -490,7 +490,7 @@ def load_tiff_ly(req_post, req_get):
     return map_layers
 
 
-def access_datarods_server(link):
+def access_datarods_server(link, overlap_years=False):
     data = []
     error_found = True
     time = 22
@@ -498,6 +498,7 @@ def access_datarods_server(link):
     data_flag_text = 'Date&Time'
     error_flag_text = 'ERROR:'
     error_message = None
+    overlap_years = True if 'true' in overlap_years else False
 
     while error_found and time >= 0:
         s_file = urllib2.urlopen(link)
@@ -534,11 +535,13 @@ def access_datarods_server(link):
     for row in s_lines:
         row_ls = row.strip().replace(' ', '-', 1).split()
         try:
-            timevalpair = [parser.parse(row_ls[0]), float(row_ls[1])]
+            date = '2000' + row_ls[0][4:] if overlap_years else row_ls[0]
+            val = row_ls[1]
+            date_val_pair = [dateparser.parse(date), float(val)]
         except Exception as e:
             print str(e)
             continue
-        data.append(timevalpair)
+        data.append(date_val_pair)
 
     return data
 
@@ -592,21 +595,21 @@ def get_data_rod_plot2(req_get, point_lon_lat):
     return dr_ts, datarods_urls_dict
 
 
-def get_data_rod_years(req_get, point_lon_lat):
-    variable = req_get['variable']
-    model = req_get['model']
+def get_data_rod_years(req_post, point_lon_lat):
+    variable = req_post['variable']
+    model = req_post['model']
     superstring = get_datarods_tsb()[model]
 
     dr_ts = []
     dr_links = []
-    for year in req_get['years'].split(','):
+    for year in req_post['years'].split(','):
         if '-' in year:
             yearRange = year.split('-')
             for yyyy in range(int(yearRange[0]), int(yearRange[1]) + 1):
                 dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
                                              '{0}-01-01T00'.format(yyyy),
                                              '{0}-12-31T23'.format(yyyy))
-                data = access_datarods_server(dr_link)
+                data = access_datarods_server(dr_link, req_post['overlap_years'])
                 dr_ts.append({'name': yyyy,
                               'data': data})
                 dr_links.append(dr_link)
@@ -615,7 +618,7 @@ def get_data_rod_years(req_get, point_lon_lat):
                                          '{0}-01-01T00'.format(year),
                                          '{0}-12-31T23'.format(year))
 
-            data = access_datarods_server(dr_link)
+            data = access_datarods_server(dr_link, req_post['overlap_years'])
             dr_ts.append({'name': year,
                           'data': data})
             dr_links.append(dr_link)
