@@ -221,7 +221,7 @@ def create_select_model(modelname):
                 selected_model = model[0]
 
     select_model = SelectInput(display_text='',
-                               name='model',
+                               name='model1',
                                multiple=False,
                                initial=[selected_model if selected_model else None],
                                original=True,

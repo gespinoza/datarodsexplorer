@@ -1,4 +1,4 @@
-function two_axis_plot(series, y_axis_1, y_axis_2) {
+function two_axis_plot(series) {
     series = series.replace(/&#39;/g, "'");
     series = series.replace(/datetime.datetime/g, "Date.UTC");
     series = series.replace(/, tzinfo=tzlocal\(\)/g, "");
@@ -31,8 +31,7 @@ function two_axis_plot(series, y_axis_1, y_axis_2) {
         xAxis: {
             type: 'datetime',
             dateTimeLabelFormats: { // don't display the dummy year
-                month: '%e. %b',
-                year: '%b'
+                month: '%e. %b'
             }
         },
         yAxis: [{
@@ -65,11 +64,11 @@ function two_axis_plot(series, y_axis_1, y_axis_2) {
         },
         series: [{
             name: datarods_ts[0].name,
-            data: datarods_ts[0].data.sort(),
+            data: datarods_ts[0].data,
             yAxis: 0
         }, {
             name: datarods_ts[1].name,
-            data: datarods_ts[1].data.sort(),
+            data: datarods_ts[1].data,
             yAxis: 1
         }]
     });

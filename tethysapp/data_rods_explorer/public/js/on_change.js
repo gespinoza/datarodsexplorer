@@ -1,94 +1,59 @@
 function oc_model() {
+    var href;
     var GET = getUrlVars();
-    var href = window.location.href.split('?')[0];
-    var model = document.getElementById('model').value;
-    var varia = VAR_DICT[model][0].value; //1st element
-    updateFences('1', model);
-    var plotDate = GET['plotTime'];
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
-    if (GET['model2'] && GET['variable2']) {
-        var model2 = GET['model2'];
-        var varia2 = GET['variable2'];
-        href = href + '&model2=' + model2 + '&variable2=' + varia2;
-    }
-    if (GET['startDate'] && GET['endDate']) {
-        var endDate = date_to_rods($('#endDate1').val()) + 'T23';
-        var startDate = get_date_of_days_before(endDate, 7).toISOString().split('T')[0] + 'T00';
-        href = href + '&startDate=' + startDate + '&endDate=' + endDate;
-    }
-    if (GET['years']) {
-        var years = GET['years'];
-        href = href + '&years=' + years;
-    }
+    var model = $('#model1').val();
+
+    // All datepickers (plotTime, startDate, endDate), the model and variable are affected by this change event. Everything else stays the same.
+    updateFences('1', model); // The "1" refers to "Model 1". Thus Model 1's fences will be updated.
+    GET['model'] = model;
+    GET['variable'] = VAR_DICT[model][0].value; //1st element
+    GET['plotTime'] = dateHourPickerToRodsDate($('#plot_date').val(), $('#plot_hour').val());
+
+    GET['endDate'] = dateHourPickerToRodsDate($('#endDate1').val(), '23');
+    GET['startDate'] = dateHourPickerToRodsDate($('#startDate1').val(), '00');
+
+    href = constructHref(GET);
     history.pushState("", "", href);
     load_variable_options('model', 'variable');
 }
 
 function oc_variable() {
+    var href;
     var GET = getUrlVars();
-    var href = window.location.href.split('?')[0];
-    var model = GET['model'];
-    var varia = document.getElementById('variable').value;
-    var plotDate = GET['plotTime'];
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
-    if (GET['model2'] && GET['variable2']) {
-        var model2 = GET['model2'];
-        var varia2 = GET['variable2'];
-        href = href + '&model2=' + model2 + '&variable2=' + varia2;
-    }
-    if (GET['startDate'] && GET['endDate']) {
-        var startDate = GET['startDate'];
-        var endDate = GET['endDate'];
-        href = href + '&startDate=' + startDate + '&endDate=' + endDate;
-    }
-    if (GET['years']) {
-        var years = GET['years'];
-        href = href + '&years=' + years;
-    }
+
+    // Only the variable is affected by this change event. Everything else stays the same.
+    GET['variable'] = $('#variable').val();
+
+    href = constructHref(GET);
     history.pushState("", "", href);
 }
 
 function oc_map_dt() {
+    var href;
     var GET = getUrlVars();
-    var href = window.location.href.split('?')[0];
-    var model = GET['model'];
-    var varia = GET['variable'];
-    var plot_date = date_to_rods(document.getElementById('plot_date').value);
-    var plot_hour = document.getElementById('plot_hour').value;
-    var plotDate = plot_date + 'T' + plot_hour;
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
-    if (GET['model2'] && GET['variable2']) {
-        var model2 = GET['model2'];
-        var varia2 = GET['variable2'];
-        href = href + '&model2=' + model2 + '&variable2=' + varia2;
-    }
-    if (GET['startDate'] && GET['endDate']) {
-        var startDate = GET['startDate'];
-        var endDate = GET['endDate'];
-        href = href + '&startDate=' + startDate + '&endDate=' + endDate;
-    }
+
+    // Only the plotTime is affected by this change event. Everything else stays the same.
+    GET['plotTime'] = dateHourPickerToRodsDate($('#plot_date').val(), $('#plot_hour').val());
+
+    href = constructHref(GET);
     history.pushState("", "", href);
 }
 
 function oc_sten_dt(datePickerID) {
-    var differentiator = datePickerID[datePickerID.length - 1];
-    $('.' + datePickerID.slice(0, -1)).val($('#' + datePickerID).val());  // Always have startDates and endDates match
+    var href;
     var GET = getUrlVars();
-    var href = window.location.href.split('?')[0];
-    var model = GET['model'];
-    var plotDate = GET['plotTime'];
-    var varia = GET['variable'];
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
-    if (GET['model2'] && GET['variable2']) {
-        var model2 = GET['model2'];
-        var varia2 = GET['variable2'];
-        href = href + '&model2=' + model2 + '&variable2=' + varia2;
-    }
+    var differentiator = datePickerID[datePickerID.length - 1];
     var $startDate = $('#startDate' + differentiator);
     var $endDate = $('#endDate' + differentiator);
-    var startDate = date_to_rods($startDate.val()) + 'T00'; //First hour
-    var endDate = date_to_rods($endDate.val()) + 'T23'; //Last hour
-    href = href  + '&startDate=' + startDate + '&endDate=' + endDate;
+
+    // Always have both startDates (model 1 and 2) and both endDates (model 1 and 2) match
+    $('.' + datePickerID.slice(0, -1)).val($('#' + datePickerID).val());
+
+
+    GET['startDate'] = dateHourPickerToRodsDate($startDate.val(), '00'); //First hour
+    GET['endDate'] = dateHourPickerToRodsDate($endDate.val(), '23'); //Last hour
+
+    href = constructHref(GET);
     history.pushState("", "", href);
 
     if (datePickerID.indexOf('endDate') !== -1) {
@@ -97,55 +62,43 @@ function oc_sten_dt(datePickerID) {
 }
 
 function oc_model2() {
+    var href;
     var GET = getUrlVars();
-    var href = window.location.href.split('?')[0];
-    var model = GET['model']; //document.getElementById('model').value;
-    var varia = GET['variable']; //document.getElementById('variable').value;
-    var plotDate = GET['plotTime'];
-    var model2 = document.getElementById('model2').value;
-    var varia2 = VAR_DICT[model2][0].value; //1st element
+    var model2 = $('#model2').val();
+
     updateFences('2', model2);
-    var endDate = date_to_rods($('#endDate2').val()) + 'T23';
-    var startDate = get_date_of_days_before(endDate, 7).toISOString().split('T')[0] + 'T00';
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
+    GET['model2'] = model2;
+    GET['variable2'] = VAR_DICT[model2][0].value; //1st element
+    var endDate = dateHourPickerToRodsDate($('#endDate2').val()) + 'T23';
+    var startDate = getRodsDateOfDaysBeforeRodsDate(endDate, 7).toISOString().split('T')[0] + 'T00';
+
+    href = constructHref(GET);
     history.pushState("", "", href);
     load_variable_options('model2', 'variable2');
 }
 
 function oc_variable2() {
+    var href;
     var GET = getUrlVars();
-    var href = window.location.href.split('?')[0];
-    var model = GET['model']; //document.getElementById('model').value;
-    var varia = GET['variable']; //document.getElementById('variable').value;
-    var plotDate = GET['plotTime'];
-    var startDate = GET['startDate'];//date_to_rods(document.getElementById('startDate').value) + 'T00'; //First hour
-    var endDate = GET['endDate'];//date_to_rods(document.getElementById('endDate').value) + 'T23'; //Last hour
-    var model2 = GET['model2'];
-    var varia2 = document.getElementById('variable2').value;
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
+
+    // Only variable2 is affected by this change event. Everything else stays the same.
+    GET['variable2'] = $('#variable2').val();
+
+    href = constructHref(GET);
     history.pushState("", "", href);
 }
 
 function oc_years() {
+    var href;
     var GET = getUrlVars();
-    var href = window.location.href.split('?')[0];
-    var model = GET['model']; //document.getElementById('model').value;
-    var varia = GET['variable']; //document.getElementById('variable').value;
-    var plotDate = GET['plotTime'];
-    //From here the code is new
-    var yearsDoc = document.getElementById('years').selectedOptions;
-    var yearsObj = [];
-    var i;
-    for (i = 0; i<yearsDoc.length; i++) {
-        yearsObj = yearsObj.concat(yearsDoc[i].value);
-    }
-    yearsObj = getRanges(yearsObj);
-    var years = "";
-    for (i = 0; i<yearsObj.length; i++) {
-        years = years + yearsObj[i] + ',';
-    }
-    years = years.substr(0, years.length - 1);
 
-    href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate + '&years=' + years;
+    //From here the code is new
+    var yearsList = $('#years').val();
+
+    if (yearsList && yearsList.length > 0) {
+        GET['years'] = yearsList.join(',');
+    }
+
+    href = constructHref(GET);
     history.pushState("", "", href)
 }
