@@ -32,7 +32,8 @@ def home(request):
 
     context['messages'] = [{
         'category': 'info',
-        'text': 'Click on the map to define data query location.'
+        'text': 'Click on the map to define data query location.',
+        'id': 'click-map'
     }]
     context['VAR_DICT'] = dumps(get_var_dict())
 

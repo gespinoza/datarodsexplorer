@@ -126,7 +126,7 @@
                     {% if messages %}
                         <div class="flash-messages">
                             {% for message in messages %}
-                                <div class="alert {% if message.category %}alert-{{ message.category }}{% endif %} alert-dismissible" role="alert">
+                                <div id="{{ message.id }}" class="alert {% if message.category %}alert-{{ message.category }}{% endif %} alert-dismissible" role="alert">
                                     <b><span class="glyphicon glyphicon-{{ message.category }}-sign" aria-hidden="true"></span>
 {#                                    <button type="button" class="close" data-dismiss="alert">#}
 {#                                        <span aria-hidden="true">&times;</span>#}
@@ -156,7 +156,7 @@
                                         {% gizmo date_picker select_date %}
                                         {% gizmo select_input select_hour%}
 
-                                        <form id="parametersForm" name="parametersForm" onclick="load_map()">
+                                        <form id="parametersForm" name="parametersForm">
                                             {% csrf_token %}
                                             <input name="lonW" id="lonW" value=-107 hidden>
                                             <input name="latS" id="latS" value=24 hidden>
@@ -169,7 +169,7 @@
                                             <input name="loadMap" id="loadMap" value="no" hidden>
                                             <input name="prevPlot" id="prevPlot" value="no" hidden>
                                             <input name="pointLonLat" id="pointLonLat" value=-9999 hidden>
-                                            <button name="plot_btn" type="button" class="btn btn-default">Display map</button>
+                                            <button id="btnDisplayMap" type="button" class="btn btn-default" onclick="load_map()">Display map</button>
                                         </form>
                                     </div>
 

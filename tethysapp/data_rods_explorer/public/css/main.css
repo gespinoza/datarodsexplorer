@@ -46,22 +46,7 @@
     cursor: pointer;
     border: 1px solid black;
 }
-/*
-.exit-button.extra-button {
-	padding-right: 0px;
-}
 
-.inrow {
-	display: inline;
+.alert {
+    margin-bottom: 0;
 }
-
-#container > * {
-	display: inline;
-}
-
-.form-control {
-	padding: 6px 12px; 
-	background-color: red;
-	opacity: 0.4;
-}
-*/

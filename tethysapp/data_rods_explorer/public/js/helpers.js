@@ -131,12 +131,16 @@ function load_map() {
     var variaIndex = $('#variable').find(':selected').index();
     var variaLyrName = VAR_DICT[getUrlVars()['model']][variaIndex].layerName;
     showMapLoading();
+
+    $('#btnDisplayMap').prop('disabled', true);
+
     $.ajax({
         url: '/apps/data-rods-explorer/map/',
         type: 'POST',
         dataType: 'json',
         data: data,
         success: function (response) {
+            $('#btnDisplayMap').prop('disabled', false);
             hideMapLoading();
             if (response.hasOwnProperty('load_layer')) {
                 if (response['load_layer'] !== undefined) {
@@ -162,6 +166,7 @@ function load_map() {
                 }
             }
         }, error: function () {
+            $('#btnDisplayMap').prop('disabled', false);
             hideMapLoading();
             console.error('Nice try... :(');
         }
@@ -191,6 +196,8 @@ function createPlot(name) {
     } else if (pointIsOutOfBounds(pointLonLat, data['model'], data['model2'])) {
         displayFlashMessage('point-out-extents', 'warning', 'Query location outside of model extents. Please choose a new location.');
     } else {
+        removeFlashMessage('no-query-location');
+        removeFlashMessage('point-out-extents');
         $('#plot-loading').removeClass('hidden');
         $.ajax({
             url: '/apps/data-rods-explorer/' + name + '/',
@@ -452,7 +459,7 @@ function openDataRodsUrls(datarods_urls) {
 }
 
 function displayFlashMessage(id, type, message) {
-    $('.flash-messages').html(
+    $('.flash-messages').append(
         '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible" role="alert">' +
         '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +
         // '<button type="button" class="close" data-dismiss="alert">' +
@@ -574,12 +581,12 @@ function updateTemporalFences(modelNum) {
     var earliestDateForModel1 = MODEL_FENCES[model1].start_date;
     var latestDateForModel1 = MODEL_FENCES[model1].end_date;
     var model2BoundsModified = false;
-
-    var $endDate = $('#endDate' + modelNum);
-    var $startDate = $('#startDate' + modelNum);
+    var $endDate, $startDate, $plotDate;
 
     if (modelNum === '1') {
-        var $plotDate = $('#plot_date');
+        $endDate = $('#endDate1');
+        $startDate = $('#startDate1');
+        $plotDate = $('#plot_date');
 
         var $datePickers = $endDate.add($plotDate);
 
@@ -606,6 +613,8 @@ function updateTemporalFences(modelNum) {
     }
 
     if (model2 !== undefined) {
+        $endDate = $('#endDate2');
+        $startDate = $('#startDate2');
         var earliestDateForModel2 = MODEL_FENCES[model2].start_date;
         var latestDateForModel2 = MODEL_FENCES[model2].end_date;
         var lowerDateBound = returnLaterDateHourPickerDate(earliestDateForModel2, earliestDateForModel1);
