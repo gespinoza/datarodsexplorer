@@ -20,7 +20,7 @@ function current_date(day_offset, hh) {
     return date_st;
 }
 
-function getRodsDateOfDaysBeforeRodsDate(date, days_before) {
+function getPrevRodsDate(date, days_before) {
     var modDate = date.split('T')[0];
     var newDate = new Date(modDate);
 
@@ -29,18 +29,18 @@ function getRodsDateOfDaysBeforeRodsDate(date, days_before) {
     return newDate.toISOString().split('T')[0] + 'T00';
 }
 
-function getDatePickerDateOfDaysBeforeDatePickerDate(datePickerDate) {
+function getPrevDateHourPickerDate(datePickerDate) {
     var rodsDate = dateHourPickerToRodsDate(datePickerDate);
-    var rodsDateEarlier = getRodsDateOfDaysBeforeRodsDate(rodsDate, 7);
+    var rodsDateEarlier = getPrevRodsDate(rodsDate, 7);
 
-    return rodsDateToDateHourPickerDateDict(rodsDateEarlier)['date'];
+    return rodsDateToDateHourPickerDict(rodsDateEarlier)['date'];
 }
 
-function load_variable_options(mod12, var12, data) {
+function loadVariableOptions(mod12, var12, data) {
     var GET = data ? data : getUrlVars();
     if (GET[mod12]) {
         var model12 = GET[mod12];
-        clear_previous_options(var12);
+        clearPrevOptions(var12);
         var vecOption = VAR_DICT[model12];
         var selectElement = document.getElementById(var12);
         for(var i = 0, l = vecOption.length; i < l; i++) {
@@ -48,13 +48,13 @@ function load_variable_options(mod12, var12, data) {
             selectElement.options.add(new Option(vec.text, vec.value, vec.selected));
         }
         if (GET['model'] === GET['model2'] && var12 === 'variable2') {
-            remove_variable2_options(GET['variable']);
+            removeVariable2Options(GET['variable']);
         }
         selectElement.selectedIndex = 0;
     }
 }
 
-function remove_variable2_options(varia) {
+function removeVariable2Options(varia) {
     var selectElement = document.getElementById('variable2');
     for (var i=0; i<selectElement.length; i++) {
         if (varia==selectElement.options[i].value) {
@@ -63,7 +63,7 @@ function remove_variable2_options(varia) {
     }
 }
 
-function clear_previous_options(var12) {
+function clearPrevOptions(var12) {
     var selectElement = document.getElementById(var12);
     while(selectElement.options.length>0) {
         selectElement.remove(0);
@@ -92,8 +92,8 @@ function dateHourPickerToRodsDate(date, hour) {
     return ymd + hour;
 }
 
-function rodsDateToDateHourPickerDateDict(st) {
-    var dd = st.replace('T','-').split('-');
+function rodsDateToDateHourPickerDict(rodsDate) {
+    var dd = rodsDate.replace('T','-').split('-');
     var mdy = dd[1] + '/' + dd[2] + '/' + dd[0];
     var hh = dd[3];
     var datehour_dict = new Object();
@@ -187,9 +187,9 @@ function createPlot(name) {
     }
 
     if (pointLonLat === "-9999") {
-        displayFlashMessage('warning', 'Query location not defined. Please click on map at desired query location.');
+        displayFlashMessage('no-query-location', 'warning', 'Query location not defined. Please click on map at desired query location.');
     } else if (pointIsOutOfBounds(pointLonLat, data['model'], data['model2'])) {
-        displayFlashMessage('warning', 'Query location outside of model extents. Please choose a new location.');
+        displayFlashMessage('point-out-extents', 'warning', 'Query location outside of model extents. Please choose a new location.');
     } else {
         $('#plot-loading').removeClass('hidden');
         $.ajax({
@@ -205,9 +205,9 @@ function createPlot(name) {
             success: function (responseHTML) {
                 if (responseHTML.indexOf('Error999') !== -1) {
                     $('#plot-loading').addClass('hidden');
-                    displayFlashMessage('warning', $(responseHTML).text());
+                    displayFlashMessage('error999', 'warning', $(responseHTML).text());
                 } else {
-                    $('.flash-messages').html('');
+                    removeFlashMessage('error999');
                     $('#plot-container').html(responseHTML);
                     var plotType = $('.highcharts-plot').attr('data-type');
                     initHighChartsPlot($('.highcharts-plot'), plotType);
@@ -223,7 +223,7 @@ function createPlot(name) {
                 }
             }, error: function () {
                 $('#plot-loading').addClass('hidden');
-                displayFlashMessage('danger', 'Request out of spatial or temporal bounds');
+                displayFlashMessage('out-of-bouds', 'danger', 'Request out of spatial or temporal bounds');
             }
         });
     }
@@ -451,9 +451,9 @@ function openDataRodsUrls(datarods_urls) {
     });
 }
 
-function displayFlashMessage(type, message) {
+function displayFlashMessage(id, type, message) {
     $('.flash-messages').html(
-        '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+        '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible" role="alert">' +
         '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +
         // '<button type="button" class="close" data-dismiss="alert">' +
         // '<span aria-hidden="true">&times;</span>' +
@@ -463,6 +463,10 @@ function displayFlashMessage(type, message) {
         '</b></div>'
     );
     $('#app-content-wrapper').scrollTop(0);
+}
+
+function removeFlashMessage(id) {
+    $('.flash-messages').find('#' + id).remove();
 }
 
 function pointIsOutOfBounds(pointLonLat, model1, model2) {
@@ -540,7 +544,7 @@ function constructHref(params) {
     return href.slice(0, -1);
 }
 
-function returnEarlierDate(date1, date2) {
+function returnEarlierDateHourPickerDate(date1, date2) {
     var earlierDate;
     date1 = new Date(date1);
     date2 = new Date(date2);
@@ -549,10 +553,10 @@ function returnEarlierDate(date1, date2) {
     } else {
         earlierDate = date2;
     }
-    return dateHourPickerToRodsDate(earlierDate.toLocaleDateString())
+    return earlierDate.toLocaleDateString()
 }
 
-function returnLaterDate(date1, date2) {
+function returnLaterDateHourPickerDate(date1, date2) {
     var laterDate;
     date1 = new Date(date1);
     date2 = new Date(date2);
@@ -561,7 +565,7 @@ function returnLaterDate(date1, date2) {
     } else {
         laterDate = date2;
     }
-    return dateHourPickerToRodsDate(laterDate.toLocaleDateString())
+    return laterDate.toLocaleDateString()
 }
 
 function updateTemporalFences(modelNum) {
@@ -588,14 +592,15 @@ function updateTemporalFences(modelNum) {
                 $(elem).val(earliestDateForModel1);
             }
         });
+        if ($startDate.length > 0) {
+            $startDate.datepicker('setStartDate', earliestDateForModel1);
+            $startDate.datepicker('setEndDate', $endDate.val());
 
-        $startDate.datepicker('setStartDate', earliestDateForModel1);
-        $startDate.datepicker('setEndDate', $endDate.val());
-
-        if (Date.parse($startDate.val()) > Date.parse(latestDateForModel1)) {
-            $startDate.val(getDatePickerDateOfDaysBeforeDatePickerDate(latestDateForModel1));
-        } else if (Date.parse($endDate.val()) < Date.parse(earliestDateForModel1)) {
-            $startDate.val(earliestDateForModel1);
+            if (Date.parse($startDate.val()) > Date.parse(latestDateForModel1)) {
+                $startDate.val(getPrevDateHourPickerDate(latestDateForModel1));
+            } else if (Date.parse($endDate.val()) < Date.parse(earliestDateForModel1)) {
+                $startDate.val(earliestDateForModel1);
+            }
         }
 
     }
@@ -603,8 +608,8 @@ function updateTemporalFences(modelNum) {
     if (model2 !== undefined) {
         var earliestDateForModel2 = MODEL_FENCES[model2].start_date;
         var latestDateForModel2 = MODEL_FENCES[model2].end_date;
-        var lowerDateBound = returnLaterDate(earliestDateForModel2, earliestDateForModel1);
-        var upperDateBound = returnEarlierDate(latestDateForModel2, latestDateForModel1);
+        var lowerDateBound = returnLaterDateHourPickerDate(earliestDateForModel2, earliestDateForModel1);
+        var upperDateBound = returnEarlierDateHourPickerDate(latestDateForModel2, latestDateForModel1);
 
         if (Date.parse(earliestDateForModel2) !== Date.parse(lowerDateBound)) {
             model2BoundsModified = true
@@ -627,13 +632,15 @@ function updateTemporalFences(modelNum) {
         $startDate.datepicker('setEndDate', $endDate.val());
 
         if (Date.parse($startDate.val()) > Date.parse(upperDateBound)) {
-            $startDate.val(getDatePickerDateOfDaysBeforeDatePickerDate(upperDateBound));
+            $startDate.val(getPrevDateHourPickerDate(upperDateBound));
         } else if (Date.parse($endDate.val()) < Date.parse(lowerDateBound)) {
             $startDate.val(lowerDateBound);
         }
 
         if (model2BoundsModified) {
-            displayFlashMessage('info', 'Note: Model 2 date bounds were adjusted to mutually valid dates for the two models.')
+            displayFlashMessage('bounds-adjusted', 'info', 'Note: Model 2 date bounds were adjusted to mutually valid dates for the two models.')
+        } else {
+            removeFlashMessage('bounds-adjusted');
         }
     }
 }

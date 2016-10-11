@@ -9,12 +9,17 @@ function oc_model() {
     GET['variable'] = VAR_DICT[model][0].value; //1st element
     GET['plotTime'] = dateHourPickerToRodsDate($('#plot_date').val(), $('#plot_hour').val());
 
-    GET['endDate'] = dateHourPickerToRodsDate($('#endDate1').val(), '23');
-    GET['startDate'] = dateHourPickerToRodsDate($('#startDate1').val(), '00');
+    if ($('#endDate1').length > 0) {
+        GET['endDate'] = dateHourPickerToRodsDate($('#endDate1').val(), '23');
+    }
+
+    if ($('#startDate1').length > 0) {
+        GET['startDate'] = dateHourPickerToRodsDate($('#startDate1').val(), '00');
+    }
 
     href = constructHref(GET);
     history.pushState("", "", href);
-    load_variable_options('model', 'variable');
+    loadVariableOptions('model', 'variable');
 }
 
 function oc_variable() {
@@ -69,12 +74,15 @@ function oc_model2() {
     updateFences('2', model2);
     GET['model2'] = model2;
     GET['variable2'] = VAR_DICT[model2][0].value; //1st element
-    var endDate = dateHourPickerToRodsDate($('#endDate2').val()) + 'T23';
-    var startDate = getRodsDateOfDaysBeforeRodsDate(endDate, 7).toISOString().split('T')[0] + 'T00';
+    var endDate = dateHourPickerToRodsDate($('#endDate2').val(), 'T23');
+    var startDate = dateHourPickerToRodsDate($('#startDate2').val(), 'T00');
+
+    GET['endDate'] = endDate;
+    GET['startDate'] = startDate;
 
     href = constructHref(GET);
     history.pushState("", "", href);
-    load_variable_options('model2', 'variable2');
+    loadVariableOptions('model2', 'variable2');
 }
 
 function oc_variable2() {

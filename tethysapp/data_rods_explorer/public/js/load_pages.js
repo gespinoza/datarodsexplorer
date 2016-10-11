@@ -3,12 +3,12 @@ function onClickLink(link, href, navItem) {
         $('#nav-' + navItem).html('');
         $(link).removeClass('open');
     } else {
-        load_nav_options_and_parameters(href, navItem);
+        loadNavOptionsAndParams(href, navItem);
         $(link).addClass('open');
     }
 }
 
-function load_nav_options_and_parameters(href, navItem) {
+function loadNavOptionsAndParams(href, navItem) {
     var GET = getUrlVars();
     var data = {};
     var model, varia, plotDate, plotTime, endDate, startDate, model2, varia2, years;
@@ -28,7 +28,7 @@ function load_nav_options_and_parameters(href, navItem) {
     if (GET['plotTime']) {
         plotDate = GET['plotTime'];
     } else {
-        plotTime = rodsDateToDateHourPickerDateDict(current_date(140));
+        plotTime = rodsDateToDateHourPickerDict(current_date(140));
         plotDate = dateHourPickerToRodsDate(plotTime['date']) + 'T' + plotTime['hour'];
     }
 
@@ -51,7 +51,7 @@ function load_nav_options_and_parameters(href, navItem) {
         if (GET['startDate']) {
             startDate =  GET['startDate'];
         } else {
-            startDate = getRodsDateOfDaysBeforeRodsDate(endDate, 7);
+            startDate = getPrevRodsDate(endDate, 7);
         }
 
         data['startDate'] = startDate;
@@ -89,15 +89,15 @@ function load_nav_options_and_parameters(href, navItem) {
         success: function (htmlResponse) {
             if (navItem == 'plot') {
                 $('#nav-plot').html(htmlResponse);
-                load_default_plot(data);
+                loadDefaultsForPlotNav(data);
             } else if (navItem == 'plot2') {
                 $('#nav-plot2').html(htmlResponse);
-                load_default_plot2(data);
-                load_variable_options('model2', 'variable2', data);
+                loadDefaultsForPlot2Nav(data);
+                loadVariableOptions('model2', 'variable2', data);
             } else if (navItem == 'years') {
                 $('#nav-years').html(htmlResponse);
                 $('#years').select2();
-                load_default_years(data);
+                loadDefaultsForYearsNav(data);
             }
             disablePlotButtonIfNeeded();
             addVarsToURL(data);
@@ -108,7 +108,7 @@ function load_nav_options_and_parameters(href, navItem) {
     })
 }
 
-function load_default_home() {
+function loadDefaultHome() {
     var href;
     var GET = getUrlVars();
     var model, plotTime = {};
@@ -125,7 +125,7 @@ function load_default_home() {
     }
 
     if (GET['plotTime']) {
-        plotTime = rodsDateToDateHourPickerDateDict(GET['plotTime']);
+        plotTime = rodsDateToDateHourPickerDict(GET['plotTime']);
     } else {
         plotTime['date'] = MODEL_FENCES[model]['end_date'];
         plotTime['hour'] = '00';
@@ -140,10 +140,10 @@ function load_default_home() {
     href = constructHref(GET);
     window.history.pushState({}, 'None', href);
 
-    load_extents_layers(model)
+    loadExtentsLayers(model)
 }
 
-function load_default_plot(data) {
+function loadDefaultsForPlotNav(data) {
     var GET = data ? data : getUrlVars();
     var startDate, endDate;
 
@@ -156,14 +156,16 @@ function load_default_plot(data) {
     if (GET['startDate']) {
         startDate =  GET['startDate'];
     } else {
-        startDate = getRodsDateOfDaysBeforeRodsDate(endDate, 7);
+        startDate = getPrevRodsDate(endDate, 7);
     }
 
-    $('#startDate1').val(rodsDateToDateHourPickerDateDict(startDate)['date']);
-    $('#endDate1').val(rodsDateToDateHourPickerDateDict(endDate)['date']);
+    $('#startDate1').val(rodsDateToDateHourPickerDict(startDate)['date']);
+    $('#endDate1').val(rodsDateToDateHourPickerDict(endDate)['date']);
+
+    updateTemporalFences();
 }
 
-function load_default_plot2(data) {
+function loadDefaultsForPlot2Nav(data) {
     var GET = data ? data : getUrlVars();
     var model2, varia2, startDate, endDate;
 
@@ -182,10 +184,10 @@ function load_default_plot2(data) {
     if (GET['startDate']) {
         startDate =  GET['startDate'];
     } else {
-        startDate = getRodsDateOfDaysBeforeRodsDate(endDate, 7);
+        startDate = getPrevRodsDate(endDate, 7);
     }
 
-    if (GET['model'] === model2 && varia == VAR_DICT[model][0].value) {
+    if (GET['model'] === model2 && GET['variable'] == VAR_DICT[GET['model']][0].value) {
         varia2 = VAR_DICT[model2][1].value;
     } else {
         varia2 = VAR_DICT[model2][0].value;
@@ -193,11 +195,13 @@ function load_default_plot2(data) {
 
     $('#model2').val(model2);
     $('#variable2').val(varia2);
-    $('#startDate2').val(startDate['date']);
-    $('#endDate2').val(endDate['date']);
+    $('#startDate2').val(rodsDateToDateHourPickerDict(startDate)['date']);
+    $('#endDate2').val(rodsDateToDateHourPickerDict(endDate)['date']);
+
+    updateTemporalFences();
 }
 
-function load_default_years(data) {
+function loadDefaultsForYearsNav(data) {
     var GET = data ? data : getUrlVars();
     var years;
 
@@ -217,7 +221,7 @@ function addVarsToURL(vars) {
     window.history.pushState({}, 'None', href);
 }
 
-function load_extents_layers(model) {
+function loadExtentsLayers(model) {
     $(function () {
         var extents = validateExtents(MODEL_FENCES[model].extents);
         var minX = parseFloat(extents.minX);

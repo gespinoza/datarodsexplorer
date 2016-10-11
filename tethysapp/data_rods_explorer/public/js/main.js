@@ -10,7 +10,10 @@ $(function() {
         var coords = evt.coordinate;
         var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
         document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
-        $('.flash-messages').html('');
+        removeFlashMessage('no-query-location');
+        removeFlashMessage('point-out-extents');
+        removeFlashMessage('error999');
+        removeFlashMessage('out-of-bouds');
         if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
             displayFlashMessage('warning', 'Query location outside of model extents. Please choose a new location.');
             $('a[name*=plot]').add('a[name=years]').addClass('disabled');
