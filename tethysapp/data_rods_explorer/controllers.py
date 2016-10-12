@@ -410,8 +410,7 @@ def get_raster_zip(latlonbox, time_st, model, variable):
 
     # Create tiff file
     url_image = urllib2.urlopen(get_datarods_png().format(lonW, latS, lonE, latN,
-                                                          time_st, get_wms_vars()[model][variable][0]
-                                                          ))
+                                                          time_st, get_wms_vars()[model][variable][0]))
     tiff_file.write(url_image.read())
     tiff_file.close()
     # Create prj file

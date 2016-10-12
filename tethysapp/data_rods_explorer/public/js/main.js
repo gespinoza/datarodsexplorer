@@ -20,4 +20,9 @@ $(function() {
         }
     });
     map.getLayers().item(1).setZIndex(10000);
+
+    $('#resetPage').on('click', function () {
+        var location = window.location;
+        location.href = location.origin + location.pathname;
+    });
 });
