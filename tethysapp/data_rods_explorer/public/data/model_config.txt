@@ -24,7 +24,7 @@ NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10 cm soil temperature|K|NL
 
 GLDAS-Noah (LSM)~GLDAS~GLDAS_NOAH025_3H~001~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GLDAS|Evap|GLDAS_NOAH025_3H_001_evap|Total Evapotranspiration|kg/m^2/s|GLDAS:TotalEvapotrans
-GLDAS|Precip|GLDAS_NOAH025_3H_001_precip|Precipitation rate|kg/m^s/hr|GLDAS:PrecipRate
+GLDAS|precip|GLDAS_NOAH025_3H_001_precip|Precipitation rate|kg/m^s/hr|GLDAS:PrecipRate
 GLDAS|Rainf|GLDAS_NOAH025_3H_001_rainf|Rain rate|kg/m^2/s|GLDAS:RainRate
 GLDAS|Snowf|GLDAS_NOAH025_3H_001_snowf|Snow rate|kg/m^2/s|GLDAS:SnowRate
 GLDAS|Qs|GLDAS_NOAH025_3H_001_qs|Surface Runoff|kg/m^2/s|GLDAS:SurfRunoff
