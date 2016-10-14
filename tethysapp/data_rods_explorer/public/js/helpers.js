@@ -477,6 +477,9 @@ function removeFlashMessage(id) {
 }
 
 function pointIsOutOfBounds(pointLonLat, model1, model2) {
+    if (pointLonLat === "-9999") {
+        return true;
+    }
     if (typeof pointLonLat === 'string') {
         pointLonLat = pointLonLat.split(',');
     }

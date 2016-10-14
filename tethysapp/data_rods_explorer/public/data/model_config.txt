@@ -1,5 +1,5 @@
 Model_Display_Name~Model_Key_Name~Official_Model_Short_Name~Model_Version~Model_Data_Url_Pattern
-Model_Key|Variable_ID|Variable_URL_Layer_Name|Variable_Dropdown_Name|Units|Variable_Layer_Name
+Model_Key|Variable_ID|Get_Map_URL_Layer_Name|Variable_Dropdown_Name|Units|Variable_Layer_Name
 
 NLDAS-Forcing (LSM)~NLDASF~NLDAS_FORA0125_H~002~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 NLDASF|APCPsfc|NLDAS_FORA0125_H_002_apcpsfc|Precipitation hourly total|kg/m^2|NLDASF:PrecipHrlyTotal
@@ -23,19 +23,19 @@ NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200 cm soil moistur
 NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10 cm soil temperature|K|NLDAS:0-10cmSoilTemp
 
 GLDAS-Noah (LSM)~GLDAS~GLDAS_VIC10_3H~001~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-GLDAS|Evap|GLDAS_VIC10_3H_001_evap|Total Evapotranspiration|kg/m^2/s|GLDAS:TotalEvapotrans
-GLDAS|precip|GLDAS_VIC10_3H_001_precip|Precipitation rate|kg/m^s/hr|GLDAS:PrecipRate
-GLDAS|Rainf|GLDAS_VIC10_3H_001_rainf|Rain rate|kg/m^2/s|GLDAS:RainRate
-GLDAS|Snowf|GLDAS_VIC10_3H_001_snowf|Snow rate|kg/m^2/s|GLDAS:SnowRate
-GLDAS|Qs|GLDAS_VIC10_3H_001_qs|Surface Runoff|kg/m^2/s|GLDAS:SurfRunoff
-GLDAS|Qsb|GLDAS_VIC10_3H_001_qsb|Subsurface Runoff|kg/m^2/s|GLDAS:SubsurfRunoff
-GLDAS|SOILM0-100cm|GLDAS_VIC10_3H_001_soilm0_100cm|0-100 cm top 1 meter soil moisture content|kg/m^2|GLDAS:0-100cmTop1MetSoilMoistCont
-GLDAS|SOILM0-10cm|GLDAS_VIC10_3H_001_soilm0_10cm|0-10 cm layer 1 soil moisture content|kg/m^2|GLDAS:0-10cmLyr1SoilMoistCont
-GLDAS|SOILM10-40cm|GLDAS_VIC10_3H_001_soilm10_40cm|10-40 cm layer 2 soil moisture content|kg/m^2|GLDAS:10-40cmLyr2SoilMoistCont
-GLDAS|SOILM40-100cm|GLDAS_VIC10_3H_001_soilm40_100cm|40-100 cm layer 3 soil moisture content|kg/m^2|GLDAS:40-100cmLyr3SoilMoistCont
-GLDAS|Tair|GLDAS_VIC10_3H_001_tair|Near surface air temperature|K|GLDAS:NearSurfAirTemp
-GLDAS|TSOIL0-10cm|GLDAS_VIC10_3H_001_tsoil0_10cm|Average layer 1 soil temperature|K|GLDAS:AvgLyr1SoilTemp
-GLDAS|Wind|GLDAS_VIC10_3H_001_wind|Near surface wind magnitude|m/s|GLDAS:NearSurfWindMag
+GLDAS|Evap||Total Evapotranspiration|kg/m^2/s|GLDAS:TotalEvapotrans
+GLDAS|precip||Precipitation rate|kg/m^s/hr|GLDAS:PrecipRate
+GLDAS|Rainf||Rain rate|kg/m^2/s|GLDAS:RainRate
+GLDAS|Snowf||Snow rate|kg/m^2/s|GLDAS:SnowRate
+GLDAS|Qs||Surface Runoff|kg/m^2/s|GLDAS:SurfRunoff
+GLDAS|Qsb||Subsurface Runoff|kg/m^2/s|GLDAS:SubsurfRunoff
+GLDAS|SOILM0-100cm||0-100 cm top 1 meter soil moisture content|kg/m^2|GLDAS:0-100cmTop1MetSoilMoistCont
+GLDAS|SOILM0-10cm||0-10 cm layer 1 soil moisture content|kg/m^2|GLDAS:0-10cmLyr1SoilMoistCont
+GLDAS|SOILM10-40cm||10-40 cm layer 2 soil moisture content|kg/m^2|GLDAS:10-40cmLyr2SoilMoistCont
+GLDAS|SOILM40-100cm||40-100 cm layer 3 soil moisture content|kg/m^2|GLDAS:40-100cmLyr3SoilMoistCont
+GLDAS|Tair||Near surface air temperature|K|GLDAS:NearSurfAirTemp
+GLDAS|TSOIL0-10cm||Average layer 1 soil temperature|K|GLDAS:AvgLyr1SoilTemp
+GLDAS|Wind||Near surface wind magnitude|m/s|GLDAS:NearSurfWindMag
 
 GLDAS 2-Noah (LSM)~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 GLDAS2|SOILM10_40cm||10-40 cm layer 2 soil moisture content|kg/m^2|GLDAS2:10-40cmLyr2SoilMoistCont
