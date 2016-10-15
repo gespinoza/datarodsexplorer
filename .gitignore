@@ -40,3 +40,4 @@ Thumbs.db
 # PyCharm generated files #
 ###########################
 .idea/
+*.egg-info/
