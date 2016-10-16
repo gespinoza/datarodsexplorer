@@ -121,6 +121,10 @@ function load_map_post_parameters() {
 }
 
 function load_map() {
+    var mapDisplayErrorFlashMessageID = 'map-error';
+    var mapDisplayErrorFlashMessageText = 'A map could not be retrieved for the chosen parameters.';
+
+    removeFlashMessage(mapDisplayErrorFlashMessageID);
     document.getElementById('loadMap').value = "no";
     var extent = load_map_post_parameters();
     document.getElementById('retrieveMap').value = "yes";
@@ -143,7 +147,7 @@ function load_map() {
             $('#btnDisplayMap').prop('disabled', false);
             hideMapLoading();
             if (response.hasOwnProperty('load_layer')) {
-                if (response['load_layer'] !== undefined) {
+                if (response['load_layer']) {
                     var map = TETHYS_MAP_VIEW.getMap();
                     var lyrParams = {
                         'LAYERS': response['load_layer'],
@@ -163,17 +167,37 @@ function load_map() {
 
                     update_legend();
                     document.getElementById('loadMap').value = response['load_layer'];
+                } else {
+                    displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', mapDisplayErrorFlashMessageText);
                 }
+            } else {
+                displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', mapDisplayErrorFlashMessageText);
             }
         }, error: function () {
             $('#btnDisplayMap').prop('disabled', false);
             hideMapLoading();
-            console.error('Nice try... :(');
+            removeFlashMessage(mapDisplayErrorFlashMessageID);
         }
     });
 }
 
 function createPlot(name) {
+    var noQueryPointFlashMessageID = 'no-query-point';
+    var noQueryPointFlashMessageText = 'Query location not defined. Please click on map at desired query location.';
+    var pointOutBoundsFlashMessageID = 'point-out-bounds';
+    var pointOutBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
+    var unexpectedErrorFlashMessageID = 'unforseen';
+    var unexpectedErrorFlashMessageText = 'An unexpected error was encountered. ' +
+        'This is often due to an inconsistency in temporal/spatial extents between the app and NASA. ' +
+        'Try a new location or date bounds.';
+    var error999FlashMessageID = 'error-999';
+    // error999FlashMessageText is generated dynamically in python and passed in below
+
+    removeFlashMessage(unexpectedErrorFlashMessageID);
+    removeFlashMessage(noQueryPointFlashMessageID);
+    removeFlashMessage(pointOutBoundsFlashMessageID);
+    removeFlashMessage(error999FlashMessageID);
+
     load_map_post_parameters();
     document.getElementById('retrieveMap').value = "no";
     document.getElementById('prevPlot').value = "yes";
@@ -192,12 +216,10 @@ function createPlot(name) {
     }
 
     if (pointLonLat === "-9999") {
-        displayFlashMessage('no-query-location', 'warning', 'Query location not defined. Please click on map at desired query location.');
+        displayFlashMessage(noQueryPointFlashMessageID, 'warning', noQueryPointFlashMessageText);
     } else if (pointIsOutOfBounds(pointLonLat, data['model'], data['model2'])) {
-        displayFlashMessage('point-out-extents', 'warning', 'Query location outside of model extents. Please choose a new location.');
+        displayFlashMessage(pointOutBoundsFlashMessageID, 'warning', pointOutBoundsFlashMessageText);
     } else {
-        removeFlashMessage('no-query-location');
-        removeFlashMessage('point-out-extents');
         $('#plot-loading').removeClass('hidden');
         $.ajax({
             url: '/apps/data-rods-explorer/' + name + '/',
@@ -212,9 +234,8 @@ function createPlot(name) {
             success: function (responseHTML) {
                 if (responseHTML.indexOf('Error999') !== -1) {
                     $('#plot-loading').addClass('hidden');
-                    displayFlashMessage('error999', 'warning', $(responseHTML).text());
+                    displayFlashMessage(error999FlashMessageID, 'warning', $(responseHTML).text());
                 } else {
-                    removeFlashMessage('error999');
                     $('#plot-container').html(responseHTML);
                     var plotType = $('.highcharts-plot').attr('data-type');
                     initHighChartsPlot($('.highcharts-plot'), plotType);
@@ -230,7 +251,7 @@ function createPlot(name) {
                 }
             }, error: function () {
                 $('#plot-loading').addClass('hidden');
-                displayFlashMessage('out-of-bouds', 'danger', 'Request out of spatial or temporal bounds');
+                displayFlashMessage(unexpectedErrorFlashMessageID, 'danger', unexpectedErrorFlashMessageText);
             }
         });
     }
@@ -579,6 +600,8 @@ function returnLaterDateHourPickerDate(date1, date2) {
 }
 
 function updateTemporalFences(modelNum) {
+    var boundsAdjustedFlashMessageID = 'bound-adjusted';
+    var boundsAdjustedFlashMessageText = 'Note: Model 2 date bounds were adjusted to mutually valid dates for the two models.'
     var model1 = $('#model1').val();
     var model2 = $('#model2').val();
     var earliestDateForModel1 = MODEL_FENCES[model1].start_date;
@@ -650,9 +673,9 @@ function updateTemporalFences(modelNum) {
         }
 
         if (model2BoundsModified) {
-            displayFlashMessage('bounds-adjusted', 'info', 'Note: Model 2 date bounds were adjusted to mutually valid dates for the two models.')
+            displayFlashMessage(boundsAdjustedFlashMessageID, 'info', boundsAdjustedFlashMessageText)
         } else {
-            removeFlashMessage('bounds-adjusted');
+            removeFlashMessage(boundsAdjustedFlashMessageID);
         }
     }
 }

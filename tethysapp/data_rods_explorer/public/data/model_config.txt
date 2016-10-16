@@ -22,7 +22,7 @@ NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100 cm soil moisture c
 NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200 cm soil moisture content|kg/m^2|NLDAS:100-200cmSoilMoistCont
 NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10 cm soil temperature|K|NLDAS:0-10cmSoilTemp
 
-GLDAS-Noah (LSM)~GLDAS~GLDAS_NOAH025_3H~001~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+GLDAS-Noah (LSM)~GLDAS~GLDAS_VIC10_3H~001~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GLDAS|Evap|GLDAS_NOAH025_3H_001_evap|Total Evapotranspiration|kg/m^2/s|GLDAS:TotalEvapotrans
 GLDAS|precip|GLDAS_NOAH025_3H_001_precip|Precipitation rate|kg/m^s/hr|GLDAS:PrecipRate
 GLDAS|Rainf|GLDAS_NOAH025_3H_001_rainf|Rain rate|kg/m^2/s|GLDAS:RainRate

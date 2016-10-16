@@ -1,7 +1,11 @@
 function oc_model() {
+    var GLDASFlashMessageID = 'GLDAS-get-map-disabled';
+    var GLDASFlashMessageText = 'GLDAS does not support the "Display Map" function, ' +
+        'but data rods data can still be obtained under the "Plot one variable" or "Compare two variables" options.';
     var href;
     var GET = getUrlVars();
     var model = $('#model1').val();
+    var btnDisplayMap = $('#btnDisplayMap');
 
     // All datepickers (plotTime, startDate, endDate), the model and variable are affected by this change event. Everything else stays the same.
     updateFences('1', model); // The "1" refers to "Model 1". Thus Model 1's fences will be updated.
@@ -20,6 +24,13 @@ function oc_model() {
     href = constructHref(GET);
     history.pushState("", "", href);
     loadVariableOptions('model', 'variable');
+    if (model === "GLDAS") {
+        btnDisplayMap.prop('disabled', false);
+        displayFlashMessage(GLDASFlashMessageID, 'info', GLDASFlashMessageText)
+    } else {
+        btnDisplayMap.prop('disabled', false);
+        removeFlashMessage(GLDASFlashMessageID)
+    }
 }
 
 function oc_variable() {

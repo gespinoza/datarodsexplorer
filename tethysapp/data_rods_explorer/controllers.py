@@ -48,7 +48,7 @@ def map_view(request):
     if map_layers:
         load_layer = map_layers[0]['options']['params']['LAYERS']
     else:
-        load_layer = ''
+        load_layer = None
 
     context = {
         'load_layer': load_layer,
@@ -646,7 +646,7 @@ def initialize_model_map_context(get, post):
     if map_layers:
         load_layer = map_layers[0]['options']['params']['LAYERS']
     else:
-        load_layer = ''
+        load_layer = None
 
     # Load map
     MapView, map_view_options = create_map(map_layers, post)

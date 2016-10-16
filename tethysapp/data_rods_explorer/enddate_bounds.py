@@ -1,4 +1,6 @@
 import urllib
+from sys import path
+path.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 will be found
 from bs4 import BeautifulSoup
 import inspect
 
