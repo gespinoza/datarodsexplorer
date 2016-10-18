@@ -37,6 +37,13 @@ def extract_model_data_from_config_file():
 def write_fences_file(model_list):
     fencefile = inspect.getfile(inspect.currentframe()).replace('enddate_bounds.py',
                                                                 'public/data/dates_and_spatial_range.txt')
+
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_NOAH0125_H&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_VIC10_3H&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025_3H&version=2.0&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=TRMM_3B42&version=7&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GRACEDADM_CLSM025NA_7D&version=1.0&page_size=1&sort_key=start_date
     url_pattern = "https://cmr.earthdata.nasa.gov/search/granules?short_name={0}&version={1}&page_size=1&sort_key={2}"
     columnheadings = "Model name | Begin time | End time | N , E , S , W bounds\n"
     model_output_pattern = "{0}|{1}|{2}|{3}\n"
@@ -46,6 +53,7 @@ def write_fences_file(model_list):
 
         for model in model_list:
             middleman_url1 = url_pattern.format(model['short_name'], model['version'], 'start_date')
+            print middleman_url1
             middleman_url2 = url_pattern.format(model['short_name'], model['version'], '-start_date')
             url1 = get_url2(middleman_url1)
             url2 = get_url2(middleman_url2)
