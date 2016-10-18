@@ -89,9 +89,14 @@ def plot(request):
                 'datarods_urls_dict': datarods_urls_dict
             }
         except Exception as e:
-            if e.error == 999:
+            print str(e)
+            if 'error' in e and e.error == 999:
                 context = {
                     'error': e.message
+                }
+            else:
+                context = {
+                    'error': 'An unknown error occured.'
                 }
 
         return render(request, 'data_rods_explorer/plot.html', context)
