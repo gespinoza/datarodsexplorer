@@ -7,7 +7,7 @@ function oc_model() {
     var model = $('#model1').val();
     var btnDisplayMap = $('#btnDisplayMap');
 
-    // All datepickers (plotTime, startDate, endDate), the model and variable are affected by this change event. Everything else stays the same.
+    // All datepickers (plotTime, startDate`, endDate), the model and variable are affected by this change event. Everything else stays the same.
     updateFences('1', model); // The "1" refers to "Model 1". Thus Model 1's fences will be updated.
     GET['model'] = model;
     GET['variable'] = VAR_DICT[model][0].value; //1st element
@@ -25,7 +25,7 @@ function oc_model() {
     history.pushState("", "", href);
     loadVariableOptions('model', 'variable');
     if (model === "GLDAS") {
-        btnDisplayMap.prop('disabled', false);
+        btnDisplayMap.prop('disabled', true);
         displayFlashMessage(GLDASFlashMessageID, 'info', GLDASFlashMessageText)
     } else {
         btnDisplayMap.prop('disabled', false);
