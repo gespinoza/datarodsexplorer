@@ -14,13 +14,13 @@ NLDAS|GFLUXsfc|NLDAS_NOAH0125_H_002_gfluxsfc|Ground heat flux|w/m^2|NLDAS:GrndHe
 NLDAS|LHTFLsfc|NLDAS_NOAH0125_H_002_lhtflsfc|Latent heat flux|w/m^2|NLDAS:LatentHeatFlux
 NLDAS|SHTFLsfc|NLDAS_NOAH0125_H_002_shtflsfc|Sensible heat flux|w/m^2|NLDAS:SensHeatFlux
 NLDAS|SSRUNsfc|NLDAS_NOAH0125_H_002_ssrunsfc|Surface runoff (non-infiltrating)|kg/m^2|NLDAS:SurfRunoff(NonInfilt)
-NLDAS|SOILM0-10cm|NLDAS_NOAH0125_H_002_soilm0_10cm|0-10 cm soil moisture content|kg/m^2|NLDAS:0-10cmSoilMoistCont
-NLDAS|SOILM0-100cm|NLDAS_NOAH0125_H_002_soilm0_100cm|0-100 cm soil moisture content|kg/m^2|NLDAS:0-100cmSoilMoistCont
-NLDAS|SOILM0-200cm|NLDAS_NOAH0125_H_002_soilm0_200cm|0-200 cm soil moisture content|kg/m^2|NLDAS:0-200cmSoilMoistCont
-NLDAS|SOILM10-40cm|NLDAS_NOAH0125_H_002_soilm10_40cm|0-40 cm soil moisture content|kg/m^2|NLDAS:10-40cmSoilMoistCont
-NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100 cm soil moisture content|kg/m^2|NLDAS:40-100cmSoilMoistCont
-NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200 cm soil moisture content|kg/m^2|NLDAS:100-200cmSoilMoistCont
-NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10 cm soil temperature|K|NLDAS:0-10cmSoilTemp
+NLDAS|SOILM0_10cm|NLDAS_NOAH0125_H_002_soilm0_10cm|0-10 cm soil moisture content|kg/m^2|NLDAS:0-10cmSoilMoistCont
+NLDAS|SOILM0_100cm|NLDAS_NOAH0125_H_002_soilm0_100cm|0-100 cm soil moisture content|kg/m^2|NLDAS:0-100cmSoilMoistCont
+NLDAS|SOILM0_200cm|NLDAS_NOAH0125_H_002_soilm0_200cm|0-200 cm soil moisture content|kg/m^2|NLDAS:0-200cmSoilMoistCont
+NLDAS|SOILM10_40cm|NLDAS_NOAH0125_H_002_soilm10_40cm|0-40 cm soil moisture content|kg/m^2|NLDAS:10-40cmSoilMoistCont
+NLDAS|SOILM40_100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100 cm soil moisture content|kg/m^2|NLDAS:40-100cmSoilMoistCont
+NLDAS|SOILM100_200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200 cm soil moisture content|kg/m^2|NLDAS:100-200cmSoilMoistCont
+NLDAS|TSOIL0_10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10 cm soil temperature|K|NLDAS:0-10cmSoilTemp
 
 GLDAS-Noah (LSM)~GLDAS~GLDAS_VIC10_3H~001~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GLDAS|Evap|GLDAS_NOAH025_3H_001_evap|Total Evapotranspiration|kg/m^2/s|GLDAS:TotalEvapotrans
@@ -29,12 +29,12 @@ GLDAS|Rainf|GLDAS_NOAH025_3H_001_rainf|Rain rate|kg/m^2/s|GLDAS:RainRate
 GLDAS|Snowf|GLDAS_NOAH025_3H_001_snowf|Snow rate|kg/m^2/s|GLDAS:SnowRate
 GLDAS|Qs|GLDAS_NOAH025_3H_001_qs|Surface Runoff|kg/m^2/s|GLDAS:SurfRunoff
 GLDAS|Qsb|GLDAS_NOAH025_3H_001_qsb|Subsurface Runoff|kg/m^2/s|GLDAS:SubsurfRunoff
-GLDAS|SOILM0-100cm|GLDAS_NOAH025_3H_001_soilm0_100cm|0-100 cm top 1 meter soil moisture content|kg/m^2|GLDAS:0-100cmTop1MetSoilMoistCont
-GLDAS|SOILM0-10cm|GLDAS_NOAH025_3H_001_soilm0_10cm|0-10 cm layer 1 soil moisture content|kg/m^2|GLDAS:0-10cmLyr1SoilMoistCont
-GLDAS|SOILM10-40cm|GLDAS_NOAH025_3H_001_soilm10_40cm|10-40 cm layer 2 soil moisture content|kg/m^2|GLDAS:10-40cmLyr2SoilMoistCont
-GLDAS|SOILM40-100cm|GLDAS_NOAH025_3H_001_soilm40_100cm|40-100 cm layer 3 soil moisture content|kg/m^2|GLDAS:40-100cmLyr3SoilMoistCont
+GLDAS|SOILM0_100cm|GLDAS_NOAH025_3H_001_soilm0_100cm|0-100 cm top 1 meter soil moisture content|kg/m^2|GLDAS:0-100cmTop1MetSoilMoistCont
+GLDAS|SOILM0_10cm|GLDAS_NOAH025_3H_001_soilm0_10cm|0-10 cm layer 1 soil moisture content|kg/m^2|GLDAS:0-10cmLyr1SoilMoistCont
+GLDAS|SOILM10_40cm|GLDAS_NOAH025_3H_001_soilm10_40cm|10-40 cm layer 2 soil moisture content|kg/m^2|GLDAS:10-40cmLyr2SoilMoistCont
+GLDAS|SOILM40_100cm|GLDAS_NOAH025_3H_001_soilm40_100cm|40-100 cm layer 3 soil moisture content|kg/m^2|GLDAS:40-100cmLyr3SoilMoistCont
 GLDAS|Tair|GLDAS_NOAH025_3H_001_tair|Near surface air temperature|K|GLDAS:NearSurfAirTemp
-GLDAS|TSOIL0-10cm|GLDAS_NOAH025_3H_001_tsoil0_10cm|Average layer 1 soil temperature|K|GLDAS:AvgLyr1SoilTemp
+GLDAS|TSOIL0_10cm|GLDAS_NOAH025_3H_001_tsoil0_10cm|Average layer 1 soil temperature|K|GLDAS:AvgLyr1SoilTemp
 GLDAS|Wind|GLDAS_NOAH025_3H_001_wind|Near surface wind magnitude|m/s|GLDAS:NearSurfWindMag
 
 GLDAS 2-Noah (LSM)~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
