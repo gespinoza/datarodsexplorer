@@ -442,12 +442,27 @@ def load_tiff_ly(post_params):
         time_st = plot_time + ':00:00Z/' + plot_time + ':00:30Z'
         zip_file, store_name, store_id = get_raster_zip(latlonbox, time_st, model, variable)
         # Create raster in geoserver
+        flag_add_layer = False
         response = geo_eng.create_coverage_resource(store_id=store_id,
                                                     coverage_file=zip_file,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
                                                     )
-        if response['success']:
+        if not response['success']:
+            result = geo_eng.create_workspace(workspace_id=get_workspace(),
+                                              uri='tethys_app-%s' % get_workspace())
+            if result['success']:
+                response = geo_eng.create_coverage_resource(store_id=store_id,
+                                                            coverage_file=zip_file,
+                                                            coverage_type='worldimage',
+                                                            overwrite=True,
+                                                            )
+                if response['success']:
+                    flag_add_layer = True
+        else:
+            flag_add_layer = True
+
+        if flag_add_layer:
             # Add raster to map
             title = '{0} {1}'.format(variable, plot_time)
             geoserver_layer = MVLayer(source='ImageWMS',
