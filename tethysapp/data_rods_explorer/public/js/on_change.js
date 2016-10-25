@@ -13,11 +13,11 @@ function oc_model() {
     GET['variable'] = VAR_DICT[model][0].value; //1st element
     GET['plotTime'] = dateHourPickerToRodsDate($('#plot_date').val(), $('#plot_hour').val());
 
-    if ($('#endDate1').length > 0) {
+    if ($('#endDate1').val()) {
         GET['endDate'] = dateHourPickerToRodsDate($('#endDate1').val(), '23');
     }
 
-    if ($('#startDate1').length > 0) {
+    if ($('#startDate1').val()) {
         GET['startDate'] = dateHourPickerToRodsDate($('#startDate1').val(), '00');
     }
 

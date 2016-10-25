@@ -32,8 +32,8 @@ class DataRodsExplorer(TethysAppBase):
                            url='data-rods-explorer/years',
                            controller='data_rods_explorer.controllers.years'),
                     UrlMap(name='map',
-                           url='data-rods-explorer/map',
-                           controller='data_rods_explorer.controllers.map_view')
+                           url='data-rods-explorer/get-map-layer',
+                           controller='data_rods_explorer.controllers.get_map_layer')
         )
 
         return url_maps

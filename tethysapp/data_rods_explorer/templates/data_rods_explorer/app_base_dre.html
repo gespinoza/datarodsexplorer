@@ -114,7 +114,7 @@
                             <a href="javascript:void(0);" onclick="TETHYS_APP_BASE.exit_app('{% url 'app_library' %}');">Exit</a>
                         </div>
                         <div class="exit-button">
-                            <a href="javascript:void(0);"><span class="glyphicon glyphicon-question-sign"></span></a>
+                            <a id="resetPage">Reset</a>
                         </div>
                     {% endblock %}
                 </div>
@@ -165,9 +165,6 @@
                                             <input name="zoom" id="zoom" value=4.25 hidden>
                                             <input name="centerX" id="centerX" value=-96.5 hidden>
                                             <input name="centerY" id="centerY" value=38.5 hidden>
-                                            <input name="retrieveMap" id="retrieveMap" value="no" hidden>
-                                            <input name="loadMap" id="loadMap" value="no" hidden>
-                                            <input name="prevPlot" id="prevPlot" value="no" hidden>
                                             <input name="pointLonLat" id="pointLonLat" value=-9999 hidden>
                                             <button id="btnDisplayMap" type="button" class="btn btn-default" onclick="load_map()">Display map</button>
                                         </form>
@@ -175,14 +172,36 @@
 
                                     <li class="nav-divider"></li>
                                     <li style="padding-top:0px;" class="title">Time series</li>
-                                    <li><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, '{% url 'data_rods_explorer:plot' %}', 'plot');">Plot one variable</a></li>
-                                    <div id="nav-plot" class="nav-item" style="padding-left:30px;padding-bottom:15px;"></div>
-                                    <li><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, '{% url 'data_rods_explorer:plot2' %}', 'plot2');">Compare two variables</a></li>
-                                    <div id="nav-plot2" class="nav-item" style="padding-left:30px;padding-bottom:15px;"></div>
-                                    <li><a class="nav-link" style="padding-bottom:15px;" href="javascript:void(0)" onclick="onClickLink(this, '{% url 'data_rods_explorer:years' %}', 'years');">Year-on-year changes</a></li>
-                                    <div id="nav-years" class="nav-item" style="padding-left:30px;padding-bottom:15px;"></div>
-                                    <br><br>
-                                    <button id="resetPage" type="button" class="btn btn-md">Reset</button>
+                                    <li><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, 'plot');">Plot one variable</a></li>
+                                    <div id="nav-plot" class="nav-item hidden" style="padding-left:30px;padding-bottom:15px;">
+                                        <label style="padding-top:15px;">Start date:</label>
+                                        {% gizmo date_picker start_date1 %}
+                                        <label>End date:</label>
+                                        {% gizmo date_picker end_date1 %}
+                                        {% gizmo button plot_button1 %}
+                                    </div>
+                                    <li><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, 'plot2');">Compare two variables</a></li>
+                                    <div id="nav-plot2" class="nav-item hidden" style="padding-left:30px;padding-bottom:15px;">
+                                        <label style="padding-top:15px;">Select Second Model</label>
+                                        {% gizmo select_input select_model2 %}
+                                        <label for="variable2">Select Second Variable</label>
+                                        <select id="variable2" name='var_case2' class="form-control" style="width:100%;" onchange="oc_variable2(); "></select>
+                                        <label style="padding-top:15px;">Start date:</label>
+                                        {% gizmo date_picker start_date2 %}
+                                        <label>End date:</label>
+                                        {% gizmo date_picker end_date2 %}
+                                        {% gizmo button plot_button2 %}
+                                    </div>
+                                    <li><a class="nav-link" style="padding-bottom:15px;" href="javascript:void(0)" onclick="onClickLink(this, 'years');">Year-on-year changes</a></li>
+                                    <div id="nav-years" class="nav-item hidden" style="padding-left:30px;padding-bottom:15px;">
+                                        <label style="padding-top:15px;">Select years:</label>
+                                        {% gizmo select_input select_years %}
+                                        <fieldset>
+                                            <input id="plot-overlapped" type="checkbox" checked>
+                                            <label for="plot-overlapped">Overlay years</label>
+                                        </fieldset>
+                                        {% gizmo button plot_button3 %}
+                                    </div>
                                 {% endblock %}
                             </ul>
                         {% endblock %}
@@ -239,11 +258,6 @@
         loadDefaultHome();
         loadVariableOptions('model', 'variable');
     </script>
-    {% if load_layer %}
-        <script>
-            document.getElementById('loadMap').value = '{{ load_layer }}';
-        </script>
-    {% endif %}
 {% endblock %}
 </body>
 </html>

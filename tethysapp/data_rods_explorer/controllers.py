@@ -26,34 +26,86 @@ def home(request):
     set_datarods_tsb(datarods_tsb)
     set_model_fences(parse_fences_from_file())
 
-    get = request.GET
-    post = request.POST
-    context = initialize_model_map_context(get, post)
+    model = get_model_options()[0][1]
 
-    context['messages'] = [{
-        'category': 'info',
-        'text': 'Click on the map to define data query location.',
-        'id': 'click-map'
-    }]
-    context['VAR_DICT'] = dumps(get_var_dict())
+    select_model = create_select_model(model)
+    select_date, select_hour = map_date_ctrls(model)
+
+    # Load map
+    map_view, map_view_options = create_map()
+
+    start_date1, end_date1, plot_button1 = plot_ctrls(model, 'plot')
+    start_date2, end_date2, plot_button2 = plot_ctrls(model, 'plot2')
+    select_model2 = SelectInput(display_text='',
+                                name='model2',
+                                multiple=False,
+                                original=True,
+                                options=get_model_options(),
+                                attributes="onchange=oc_model2();"
+                                )
+
+    years_list = create_years_list(1979)
+    select_years = SelectInput(display_text='',
+                               name='years',
+                               multiple=True,
+                               original=False,
+                               options=years_list,
+                               attributes="onchange=oc_years();"
+                               )
+
+    plot_button3 = Button(display_text='Plot',
+                          name='years',
+                          style='',
+                          icon='',
+                          href='',
+                          submit=False,
+                          disabled=False,
+                          attributes='onclick=createPlot(this.name);',
+                          classes='btn-plot')
+
+    # Context variables
+    context = {
+        'select_model': select_model,
+        'MapView': map_view,
+        'map_view_options': map_view_options,
+        'select_date': select_date,
+        'select_hour': select_hour,
+        'MODEL_FENCES': dumps(get_model_fences()),
+        'VAR_DICT': dumps(get_var_dict()),
+        'start_date1': start_date1,
+        'end_date1': end_date1,
+        'plot_button1': plot_button1,
+        'start_date2': start_date2,
+        'end_date2': end_date2,
+        'plot_button2': plot_button2,
+        'select_model2': select_model2,
+        'plot_button3': plot_button3,
+        'select_years': select_years,
+        'messages': [{
+            'category': 'info',
+            'text': 'Click on the map to define data query location.',
+            'id': 'click-map'
+        }]
+    }
 
     return render(request, 'data_rods_explorer/app_base_dre.html', context)
 
 
-def map_view(request):
-    get = request.GET
-    post = request.POST
-    # If 'Display map' is clicked, load layers
-    map_layers = load_tiff_ly(post, get)
-    if map_layers:
-        load_layer = map_layers[0]['options']['params']['LAYERS']
-    else:
-        load_layer = None
+def get_map_layer(request):
+    context = {}
+    if request.is_ajax() and request.method == 'POST':
+        post_params = request.POST
+        # If 'Display map' is clicked, load layers
+        map_layers = load_tiff_ly(post_params)
+        if map_layers:
+            load_layer = map_layers[0]['options']['params']['LAYERS']
+        else:
+            load_layer = None
 
-    context = {
-        'load_layer': load_layer,
-        'geoserver_url': get_geoserver_url()
-    }
+        context = {
+            'load_layer': load_layer,
+            'geoserver_url': get_geoserver_url()
+        }
 
     return JsonResponse(context)
 
@@ -62,11 +114,11 @@ def plot(request):
     """
     Controller for the plot page.
     """
-    get = request.GET
     post = request.POST
+    context = {}
 
     # Plot
-    if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
+    if post and post['pointLonLat'] != '-9999':
         try:
             varname = get_wms_vars()[post['model']][post['variable']][1]
             varunit = get_wms_vars()[post['model']][post['variable']][2]
@@ -99,18 +151,7 @@ def plot(request):
                     'error': 'An unknown error occured.'
                 }
 
-        return render(request, 'data_rods_explorer/plot.html', context)
-
-    else:
-        model = str(get['model'].upper())
-        start_date, end_date, plot_button = plot_ctrls(model, 'plot')
-        context = {
-            'start_date': start_date,
-            'end_date': end_date,
-            'plot_button': plot_button
-        }
-
-    return render(request, 'data_rods_explorer/nav_plot.html', context)
+    return render(request, 'data_rods_explorer/plot.html', context)
 
 
 def plot2(request):
@@ -118,10 +159,9 @@ def plot2(request):
     Controller for the plot2 page.
     """
     post = request.POST
-    get = request.GET
 
     # Plot
-    if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
+    if post and post['pointLonLat'] != '-9999':
         point_lon_lat = post['pointLonLat']
         datarod_ts, datarods_urls_dict = get_data_rod_plot2(post, point_lon_lat)
         timeseries_plot = {'y1_axis_units': get_wms_vars()[post['model']][post['variable']][2],
@@ -136,26 +176,6 @@ def plot2(request):
 
         return render(request, 'data_rods_explorer/plot.html', context)
 
-    else:
-        model = get['model'].upper()
-        start_date, end_date, plot_button = plot_ctrls(model, 'plot2')
-        select_model2 = SelectInput(display_text='',
-                                    name='model2',
-                                    multiple=False,
-                                    original=True,
-                                    options=get_model_options(),
-                                    attributes="onchange=oc_model2();"
-                                    )
-        # Context variables
-        context = {
-            'start_date': start_date,
-            'end_date': end_date,
-            'plot_button': plot_button,
-            'select_model2': select_model2
-        }
-
-    return render(request, 'data_rods_explorer/nav_plot2.html', context)
-
 
 def years(request):
     """
@@ -164,7 +184,7 @@ def years(request):
     post = request.POST
 
     # Plot
-    if (post and post['prevPlot'] == 'yes') or (post and post['pointLonLat'] != '-9999'):
+    if post and post['pointLonLat'] != '-9999':
         varname = get_wms_vars()[post['model']][post['variable']][1]
         varunit = get_wms_vars()[post['model']][post['variable']][2]
         point_lon_lat = post['pointLonLat']
@@ -185,34 +205,6 @@ def years(request):
         }
 
         return render(request, 'data_rods_explorer/plot.html', context)
-
-    else:
-        # Load page parameters
-        years_list = create_years_list(1979)
-        select_years = SelectInput(display_text='',
-                                   name='years',
-                                   multiple=True,
-                                   original=False,
-                                   options=years_list,
-                                   attributes="onchange=oc_years();"
-                                   )
-
-        plot_button = Button(display_text='Plot',
-                             name='years',
-                             style='',
-                             icon='',
-                             href='',
-                             submit=False,
-                             disabled=False,
-                             attributes='onclick=createPlot(this.name);',
-                             classes='')
-        # Context variables
-        context = {
-            'plot_button': plot_button,
-            'select_years': select_years
-        }
-
-        return render(request, 'data_rods_explorer/nav_years.html', context)
 
 
 def create_select_model(modelname):
@@ -237,20 +229,13 @@ def create_select_model(modelname):
     return select_model
 
 
-def create_map(layers_ls, req_post):
+def create_map():
     """
     Function that creates the 'map' element
     """
     # Center and Zoom level
-    if req_post:
-        center = [round(float(req_post['centerX']), 4), round(float(req_post['centerY']), 4)]
-        if req_post['zoom'] != 'undefined':
-            zoom = round(float(req_post['zoom']), 2)
-        else:
-            zoom = 4
-    else:
-        center = [-96.5, 38.5]
-        zoom = 4
+    center = [-96.5, 38.5]
+    zoom = 4
     # Define view options
     view_options = MVView(
         projection='EPSG:4326',
@@ -264,7 +249,6 @@ def create_map(layers_ls, req_post):
         height='500px',
         width='100%',
         controls=['ZoomSlider'],
-        layers=layers_ls,
         view=view_options,
         basemap='OpenStreetMap',
         draw=True,
@@ -344,7 +328,7 @@ def plot_ctrls(model, controller):
                          submit=False,
                          disabled=False,
                          attributes='onclick=createPlot(this.name);',
-                         classes='')
+                         classes='btn-plot')
 
     return [start_date, end_date, plot_button]
 
@@ -428,48 +412,33 @@ def get_raster_zip(latlonbox, time_st, model, variable):
     return [zip_path, store_name, store_id]
 
 
-def load_tiff_ly(req_post, req_get):
+def load_tiff_ly(post_params):
     """
     This function returns the previously loaded map or the new map layer
     if the button on the page was clicked
     """
-    map_layers = []
-    add_map = False
-    store_id = None
+    map_layers = None
 
-    if req_get and req_get.get('plotTime'):
-        plot_time = req_get['plotTime']
-    elif req_post and req_post.get('plotTime'):
-        plot_time = req_post['plotTime']
+    if post_params.get('plotTime'):
+        plot_time = post_params['plotTime']
     else:
         plot_time = None
 
-    if req_get and req_get.get('model'):
-        model = req_get['model']
-    elif req_post and req_post.get('model'):
-        model = req_post['model']
+    if post_params.get('model'):
+        model = post_params['model']
     else:
         model = None
 
-    if req_get and req_get.get('variable'):
-        variable = req_get['variable']
-    elif req_post and req_post.get('variable'):
-        variable = req_post['variable']
+    if post_params.get('variable'):
+        variable = post_params['variable']
     else:
         variable = None
 
-    if req_post and req_post['loadMap'] != 'no':
-        store_id = req_post['loadMap']
-        add_map = True
-    elif req_get and req_get.get('loadMap') and req_get['loadMap'] != 'no':
-        store_id = req_get['loadMap']
-        add_map = True
-
-    elif req_post and req_post['retrieveMap'] == 'yes':
+    if model and variable and plot_time:
         # Geoserver parameters
         geo_eng = get_spatial_dataset_engine(name='default')
         # Data rods parameters
-        latlonbox = [req_post['lonW'], req_post['latS'], req_post['lonE'], req_post['latN']]
+        latlonbox = [post_params['lonW'], post_params['latS'], post_params['lonE'], post_params['latN']]
         time_st = plot_time + ':00:00Z/' + plot_time + ':00:30Z'
         zip_file, store_name, store_id = get_raster_zip(latlonbox, time_st, model, variable)
         # Create raster in geoserver
@@ -479,18 +448,15 @@ def load_tiff_ly(req_post, req_get):
                                                     overwrite=True,
                                                     )
         if response['success']:
-            add_map = True
-
-    if add_map:
-        # Add raster to map
-        title = '{0} {1}'.format(variable, plot_time)
-        geoserver_layer = MVLayer(source='ImageWMS',
-                                  options={'url': get_geoserver_url(),
-                                           'params': {'LAYERS': store_id},
-                                           'serverType': 'geoserver'},
-                                  legend_title=title,
-                                  )
-        map_layers = [geoserver_layer]
+            # Add raster to map
+            title = '{0} {1}'.format(variable, plot_time)
+            geoserver_layer = MVLayer(source='ImageWMS',
+                                      options={'url': get_geoserver_url(),
+                                               'params': {'LAYERS': store_id},
+                                               'serverType': 'geoserver'},
+                                      legend_title=title,
+                                      )
+            map_layers = [geoserver_layer]
 
     return map_layers
 
@@ -631,34 +597,3 @@ def get_data_rod_years(req_post, point_lon_lat):
     datarods_urls_dict = generate_datarods_urls_dict(dr_links)
 
     return dr_ts, datarods_urls_dict
-
-
-def initialize_model_map_context(get, post):
-    # Load model selection, map date and hour, and display map button
-
-    if get and get.get('model'):
-        model = get['model']
-    elif post and post.get('model'):
-        model = post['model']
-    else:
-        model = get_model_options()[0][1]
-
-    select_model = create_select_model(model)
-    select_date, select_hour = map_date_ctrls(model)
-
-    # If 'Display map' is clicked, load layers
-    map_layers = load_tiff_ly(post, get)
-    if map_layers:
-        load_layer = map_layers[0]['options']['params']['LAYERS']
-    else:
-        load_layer = None
-
-    # Load map
-    MapView, map_view_options = create_map(map_layers, post)
-
-    context = {'select_model': select_model, 'MapView': MapView, 'map_view_options': map_view_options,
-               'select_date': select_date, 'select_hour': select_hour, 'map_layers': map_layers,
-               'load_layer': load_layer, 'MODEL_FENCES': dumps(get_model_fences())
-               }
-
-    return context

@@ -123,23 +123,25 @@ function load_map_post_parameters() {
 function load_map() {
     var mapDisplayErrorFlashMessageID = 'map-error';
     var mapDisplayErrorFlashMessageText = 'A map could not be retrieved for the chosen parameters.';
-
-    removeFlashMessage(mapDisplayErrorFlashMessageID);
-    document.getElementById('loadMap').value = "no";
+    var ajaxErrorFlashMessageID = 'ajax-error';
+    var ajaxErrorFlashMessageText = 'An unexpected error occured when retrieving map. The NASA server may be down.';
+    var variaIndex = $('#variable').find(':selected').index();
+    var variaLyrName = VAR_DICT[getUrlVars()['model']][variaIndex].layerName;
     var extent = load_map_post_parameters();
-    document.getElementById('retrieveMap').value = "yes";
     var data = $('#parametersForm').serialize();
+
+    showMapLoading();
+    removeFlashMessage(mapDisplayErrorFlashMessageID);
+    removeFlashMessage(ajaxErrorFlashMessageID);
+
     data += '&plotTime=' + getUrlVars()['plotTime'];
     data += '&variable=' + getUrlVars()['variable'];
     data += '&model=' + getUrlVars()['model'];
-    var variaIndex = $('#variable').find(':selected').index();
-    var variaLyrName = VAR_DICT[getUrlVars()['model']][variaIndex].layerName;
-    showMapLoading();
 
     $('#btnDisplayMap').prop('disabled', true);
 
     $.ajax({
-        url: '/apps/data-rods-explorer/map/',
+        url: '/apps/data-rods-explorer/get-map-layer/',
         type: 'POST',
         dataType: 'json',
         data: data,
@@ -166,7 +168,6 @@ function load_map() {
                     newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
 
                     update_legend();
-                    document.getElementById('loadMap').value = response['load_layer'];
                 } else {
                     displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', mapDisplayErrorFlashMessageText);
                 }
@@ -176,6 +177,7 @@ function load_map() {
         }, error: function () {
             $('#btnDisplayMap').prop('disabled', false);
             hideMapLoading();
+            displayFlashMessage(ajaxErrorFlashMessageID, 'warning', ajaxErrorFlashMessageText);
             removeFlashMessage(mapDisplayErrorFlashMessageID);
         }
     });
@@ -199,8 +201,6 @@ function createPlot(name) {
     removeFlashMessage(error999FlashMessageID);
 
     load_map_post_parameters();
-    document.getElementById('retrieveMap').value = "no";
-    document.getElementById('prevPlot').value = "yes";
     var data = {};
     var formParams = $('#parametersForm').serializeArray();
     var urlParams = getUrlVars();
@@ -247,6 +247,15 @@ function createPlot(name) {
                         var y1Units = opts.attr('data-y1units');
                         var y2Units = opts.attr('data-y2units');
                         two_axis_plot(series, y1Units, y2Units);
+                    } else if (name === 'years') {
+                        if (data['overlap_years']) {
+                            // Change x-axis labels to only show the Month, no years, since years are overlapping
+                            var modText;
+                            $('.highcharts-xaxis-labels').find('text').find('tspan').each(function (i, obj) {
+                                modText = $(obj).text().slice(0, 3);
+                                $(obj).text(modText);
+                            });
+                        }
                     }
                 }
             }, error: function () {
@@ -342,7 +351,7 @@ function is_defined(variable) {
 }
 
 function updateFences(differentiator, model) {
-    updateTemporalFences(differentiator, model);
+    updateTemporalFences(differentiator);
     updateSpatialFences(differentiator, model);
 }
 
@@ -532,12 +541,12 @@ function pointIsOutOfBounds(pointLonLat, model1, model2) {
     return false;
 }
 
-function disablePlotButtonIfNeeded() {
-    var lonlat = document.getElementById('pointLonLat').value;
-    if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
-        $('a[name*=plot]').add('a[name=years]').addClass('disabled');
-    }
-}
+// function disablePlotButtonIfNeeded() {
+//     var lonlat = document.getElementById('pointLonLat').value;
+//     if (pointIsOutOfBounds(lonlat, $('#model').val(), $('#model2').val())) {
+//         $('a[name*=plot]').add('a[name=years]').addClass('disabled');
+//     }
+// }
 
 function getValidRodsDate(date, model) {
     var validDate;
@@ -609,12 +618,16 @@ function updateTemporalFences(modelNum) {
     var model2BoundsModified = false;
     var $endDate, $startDate, $plotDate;
 
-    if (modelNum === '1') {
-        $endDate = $('#endDate1');
-        $startDate = $('#startDate1');
-        $plotDate = $('#plot_date');
+    removeFlashMessage(boundsAdjustedFlashMessageID);
 
-        var $datePickers = $endDate.add($plotDate);
+    if (modelNum === '1') {
+        $plotDate = $('#plot_date');
+        if (!$('#nav-plot').hasClass('hidden')) {
+            $endDate = $('#endDate1');
+            $startDate = $('#startDate1');
+        }
+
+        var $datePickers = $plotDate.add($endDate);
 
         $datePickers.each(function (idx, elem) {
             $(elem).datepicker('setStartDate', earliestDateForModel1);
@@ -625,7 +638,7 @@ function updateTemporalFences(modelNum) {
                 $(elem).val(earliestDateForModel1);
             }
         });
-        if ($startDate.length > 0) {
+        if ($startDate && $startDate.length > 0) {
             $startDate.datepicker('setStartDate', earliestDateForModel1);
             $startDate.datepicker('setEndDate', $endDate.val());
 
@@ -638,7 +651,7 @@ function updateTemporalFences(modelNum) {
 
     }
 
-    if (model2 !== undefined) {
+    if (!$('#nav-plot2').hasClass('hidden')) {
         $endDate = $('#endDate2');
         $startDate = $('#startDate2');
         var earliestDateForModel2 = MODEL_FENCES[model2].start_date;
@@ -674,8 +687,6 @@ function updateTemporalFences(modelNum) {
 
         if (model2BoundsModified) {
             displayFlashMessage(boundsAdjustedFlashMessageID, 'info', boundsAdjustedFlashMessageText)
-        } else {
-            removeFlashMessage(boundsAdjustedFlashMessageID);
         }
     }
 }

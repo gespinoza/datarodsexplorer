@@ -1,17 +1,26 @@
-function onClickLink(link, href, navItem) {
+function onClickLink(link, navItem) {
     if ($(link).hasClass('open')) {
-        $('#nav-' + navItem).html('');
+        $('#nav-' + navItem).addClass('hidden');
         $(link).removeClass('open');
+        if (navItem == 'plot2') {
+            removeFlashMessage('bound-adjusted');
+            TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
+            update_legend();
+        }
     } else {
-        loadNavOptionsAndParams(href, navItem);
+        if (navItem == 'plot2') {
+            TETHYS_MAP_VIEW.getMap().addLayer(MODEL2_LAYER);
+            update_legend();
+        }
+        $('#nav-' + navItem).removeClass('hidden');
+        loadNavOptionsAndParams(navItem);
         $(link).addClass('open');
     }
 }
 
-function loadNavOptionsAndParams(href, navItem) {
+function loadNavOptionsAndParams(navItem) {
     var GET = getUrlVars();
-    var data = {};
-    var model, varia, plotDate, plotTime, endDate, startDate, model2, varia2, years;
+    var data, model, varia, plotDate, plotTime, endDate, startDate, model2, varia2, years;
 
     if (GET['model']) {
         model = GET['model'];
@@ -80,32 +89,15 @@ function loadNavOptionsAndParams(href, navItem) {
             data['years'] = years;
         }
     }
-
-    $.ajax({
-        url: href,
-        type: 'GET',
-        data: data,
-        dataType: 'html',
-        success: function (htmlResponse) {
-            if (navItem == 'plot') {
-                $('#nav-plot').html(htmlResponse);
-                loadDefaultsForPlotNav(data);
-            } else if (navItem == 'plot2') {
-                $('#nav-plot2').html(htmlResponse);
-                loadDefaultsForPlot2Nav(data);
-                loadVariableOptions('model2', 'variable2', data);
-            } else if (navItem == 'years') {
-                $('#nav-years').html(htmlResponse);
-                $('#years').select2();
-                loadDefaultsForYearsNav(data);
-            }
-            disablePlotButtonIfNeeded();
-            addVarsToURL(data);
-        },
-        error: function () {
-            alert("An unexpected error ocurred while accessing " + navItem + " options.");
-        }
-    })
+    if (navItem == 'plot') {
+        loadDefaultsForPlotNav(data);
+    } else if (navItem == 'plot2') {
+        loadDefaultsForPlot2Nav(data);
+        loadVariableOptions('model2', 'variable2', data);
+    } else if (navItem == 'years') {
+        loadDefaultsForYearsNav(data);
+    }
+    addVarsToURL(data);
 }
 
 function loadDefaultHome() {
@@ -291,8 +283,6 @@ function loadExtentsLayers(model) {
             name: 'model2_extents',
             extent: olExtents
         });
-        map.addLayer(MODEL1_LAYER);
-        map.addLayer(MODEL2_LAYER);
         MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
         MODEL2_LAYER['tethys_legend_title'] = 'Model 2 Extents';
         MODEL1_LAYER['tethys_legend_extent'] = olExtents;
@@ -300,6 +290,7 @@ function loadExtentsLayers(model) {
         MODEL1_LAYER['tethys_legend_extent_projection'] = olProjection;
         MODEL2_LAYER['tethys_legend_extent_projection'] = olProjection;
 
+        map.addLayer(MODEL1_LAYER);
         update_legend();
     });
 }
