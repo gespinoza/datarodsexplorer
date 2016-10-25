@@ -15,10 +15,10 @@ $(function() {
         document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
         if (pointIsOutOfBounds(lonlat, $('#model1').val(), $('#model2').val())) {
             displayFlashMessage(outOfBoundsFlashMessageID, 'warning', outOfBoundsFlashMessageText);
-            $('a[name*=plot]').add('a[name=years]').addClass('disabled');
+            $('.btn-plot').addClass('disabled');
         } else {
             removeFlashMessage(outOfBoundsFlashMessageID);
-            $('a[name*=plot]').add('a[name=years]').removeClass('disabled');
+            $('.btn-plot').removeClass('disabled');
         }
     });
     map.getLayers().item(1).setZIndex(10000);
@@ -27,4 +27,7 @@ $(function() {
         var location = window.location;
         location.href = location.origin + location.pathname;
     });
+
+    $('#years').select2();
+    $('.btn-plot').addClass('disabled');
 });

@@ -50,3 +50,6 @@
 .alert {
     margin-bottom: 0;
 }
+#resetPage {
+    cursor: pointer;
+}
