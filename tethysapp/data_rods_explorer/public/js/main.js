@@ -1,6 +1,4 @@
 $(function() {
-    var outOfBoundsFlashMessageID = 'out-of-bounds';
-    var outOfBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
     var map = TETHYS_MAP_VIEW.getMap();
     map.on('singleclick', function(evt) {
         removeFlashMessage('click-map');
@@ -12,14 +10,9 @@ $(function() {
 
         var coords = evt.coordinate;
         var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
+        lonlat = convertLonLatToMainMapExtents(lonlat);
         document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
-        if (pointIsOutOfBounds(lonlat, $('#model1').val(), $('#model2').val())) {
-            displayFlashMessage(outOfBoundsFlashMessageID, 'warning', outOfBoundsFlashMessageText);
-            $('.btn-plot').addClass('disabled');
-        } else {
-            removeFlashMessage(outOfBoundsFlashMessageID);
-            $('.btn-plot').removeClass('disabled');
-        }
+        validateClickPointIsValid()
     });
     map.getLayers().item(1).setZIndex(10000);
 

@@ -2,6 +2,7 @@ var MODEL_FENCES = null;
 var MODEL1_LAYER = null;
 var MODEL2_LAYER = null;
 var VAR_DICT = null;
+var COMPARE_TWO = false;
 
 function setVarDict(varDictEncoded) {
     var varDictStr = varDictEncoded.replace(/&quot;/g, '"');

@@ -527,7 +527,7 @@ function pointIsOutOfBounds(pointLonLat, model1, model2) {
         }
     }
 
-    if (model2 && model2 !== model1) {
+    if (COMPARE_TWO && model2 && model2 !== model1) {
         model2Extents = MODEL_FENCES[model2].extents;
         minX = parseFloat(model2Extents.minX);
         maxX = parseFloat(model2Extents.maxX);
@@ -727,4 +727,40 @@ function updateSpatialFences(differentiator, model) {
     layer.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojsonObject));
     layer['tethys_legend_extent'] = [minX, minY, maxX, maxY];
     layer['tethys_legend_extent_projection'] = 'EPSG:4326';
+}
+
+function convertLonLatToMainMapExtents(lonlat) {
+    /*
+    Openlayers repeats their tiles horizontally (longitude) forever (meaning that you can pan both (either) right or \
+    left to find Asia if starting on the USA. The problem is, that when clicking the map when "outside" of the original
+     map's "bounding box," it will generate a longitude either greater than 180 or less than -180. This function converts
+     any longitude outside of the -180 to 180 bounds back to those bounds.
+    */
+    var lon = lonlat[0];
+
+    if (lon < -180) {
+        while (lon < -180) {
+            lon += 180;
+        }
+    } else if (lon > 180) {
+        while (lon > 180) {
+            lon -= 180;
+        }
+    }
+    lonlat[0] = lon;
+
+    return lonlat;
+}
+
+function validateClickPointIsValid() {
+    var outOfBoundsFlashMessageID = 'out-of-bounds';
+    var outOfBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
+    var lonlat = $('#pointLonLat').val().split(',');
+    if (pointIsOutOfBounds(lonlat, $('#model1').val(), $('#model2').val())) {
+        displayFlashMessage(outOfBoundsFlashMessageID, 'warning', outOfBoundsFlashMessageText);
+        $('.btn-plot').addClass('disabled');
+    } else {
+        removeFlashMessage(outOfBoundsFlashMessageID);
+        $('.btn-plot').removeClass('disabled');
+    }
 }

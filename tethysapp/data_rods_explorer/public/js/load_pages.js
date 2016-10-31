@@ -6,11 +6,14 @@ function onClickLink(link, navItem) {
             removeFlashMessage('bound-adjusted');
             TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
             update_legend();
+            COMPARE_TWO = false
         }
     } else {
         if (navItem == 'plot2') {
             TETHYS_MAP_VIEW.getMap().addLayer(MODEL2_LAYER);
             update_legend();
+            COMPARE_TWO = true;
+            validateClickPointIsValid();
         }
         $('#nav-' + navItem).removeClass('hidden');
         loadNavOptionsAndParams(navItem);
