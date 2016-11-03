@@ -756,14 +756,16 @@ function convertLonLatToMainMapExtents(lonlat) {
 }
 
 function validateClickPointIsValid() {
-    var outOfBoundsFlashMessageID = 'out-of-bounds';
-    var outOfBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
-    var lonlat = $('#pointLonLat').val().split(',');
-    if (pointIsOutOfBounds(lonlat, $('#model1').val(), $('#model2').val())) {
-        displayFlashMessage(outOfBoundsFlashMessageID, 'warning', outOfBoundsFlashMessageText);
-        $('.btn-plot').addClass('disabled');
-    } else {
-        removeFlashMessage(outOfBoundsFlashMessageID);
-        $('.btn-plot').removeClass('disabled');
+    if ($('#pointLonLat').val() !== '-9999') {
+        var outOfBoundsFlashMessageID = 'out-of-bounds';
+        var outOfBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
+        var lonlat = $('#pointLonLat').val().split(',');
+        if (pointIsOutOfBounds(lonlat, $('#model1').val(), $('#model2').val())) {
+            displayFlashMessage(outOfBoundsFlashMessageID, 'warning', outOfBoundsFlashMessageText);
+            $('.btn-plot').addClass('disabled');
+        } else {
+            removeFlashMessage(outOfBoundsFlashMessageID);
+            $('.btn-plot').removeClass('disabled');
+        }
     }
 }

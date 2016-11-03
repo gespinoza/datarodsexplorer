@@ -21,15 +21,13 @@ function onClickLink(link, navItem) {
             TETHYS_MAP_VIEW.getMap().addLayer(MODEL2_LAYER);
             update_legend();
             COMPARE_TWO = true;
-            if ($('#pointLonLat').val() !== '-9999') {
-                validateClickPointIsValid();
-            }
         } else {
             removeFlashMessage('bound-adjusted');
             TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
             update_legend();
             COMPARE_TWO = false;
         }
+        validateClickPointIsValid()
     }
 }
 
