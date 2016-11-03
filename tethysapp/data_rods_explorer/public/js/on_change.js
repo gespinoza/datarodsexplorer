@@ -24,6 +24,8 @@ function oc_model() {
     href = constructHref(GET);
     history.pushState("", "", href);
     loadVariableOptions('model', 'variable');
+    validateClickPointIsValid();
+
     if (model === "GLDAS") {
         btnDisplayMap.prop('disabled', true);
         displayFlashMessage(GLDASFlashMessageID, 'info', GLDASFlashMessageText)
@@ -94,6 +96,7 @@ function oc_model2() {
     href = constructHref(GET);
     history.pushState("", "", href);
     loadVariableOptions('model2', 'variable2');
+    validateClickPointIsValid();
 }
 
 function oc_variable2() {

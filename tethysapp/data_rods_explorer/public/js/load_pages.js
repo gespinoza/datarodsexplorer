@@ -1,23 +1,35 @@
 function onClickLink(link, navItem) {
     if ($(link).hasClass('open')) {
-        $('#nav-' + navItem).addClass('hidden');
         $(link).removeClass('open');
+        $('#nav-' + navItem).addClass('hidden');
+
         if (navItem == 'plot2') {
             removeFlashMessage('bound-adjusted');
             TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
             update_legend();
-            COMPARE_TWO = false
+            COMPARE_TWO = false;
         }
     } else {
+        $('.nav-link').removeClass('open');
+        $(link).addClass('open');
+        $('.nav-item').addClass('hidden');
+        $('#nav-' + navItem).removeClass('hidden');
+
+        loadNavOptionsAndParams(navItem);
+
         if (navItem == 'plot2') {
             TETHYS_MAP_VIEW.getMap().addLayer(MODEL2_LAYER);
             update_legend();
             COMPARE_TWO = true;
-            validateClickPointIsValid();
+            if ($('#pointLonLat').val() !== '-9999') {
+                validateClickPointIsValid();
+            }
+        } else {
+            removeFlashMessage('bound-adjusted');
+            TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
+            update_legend();
+            COMPARE_TWO = false;
         }
-        $('#nav-' + navItem).removeClass('hidden');
-        loadNavOptionsAndParams(navItem);
-        $(link).addClass('open');
     }
 }
 

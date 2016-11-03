@@ -489,6 +489,9 @@ function openDataRodsUrls(datarods_urls) {
 }
 
 function displayFlashMessage(id, type, message) {
+    if ($('#' + id).length !== 0) {
+        return;
+    }
     $('.flash-messages').append(
         '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible" role="alert">' +
         '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +

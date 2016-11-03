@@ -41,3 +41,8 @@ Thumbs.db
 ###########################
 .idea/
 *.egg-info/
+
+# Other files #
+###############
+*dates_and_spatial_range.txt
+
