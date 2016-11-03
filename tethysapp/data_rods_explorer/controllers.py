@@ -9,7 +9,7 @@ import zipfile
 from tempfile import NamedTemporaryFile
 import urllib2
 from math import copysign
-from utilities import parse_fences_from_file, generate_datarods_urls_dict, parse_model_database_from_file
+from utilities import parse_fences_from_file, generate_datarods_urls_dict
 from model_objects import *
 from json import dumps
 from dateutil import parser as dateparser
@@ -72,6 +72,9 @@ def home(request):
         'select_hour': select_hour,
         'MODEL_FENCES': dumps(get_model_fences()),
         'VAR_DICT': dumps(get_var_dict()),
+        'DATARODS_PNG': dumps(get_datarods_png()),
+        'DATARODS_TSB': dumps(get_datarods_tsb()),
+        'WMS_VARS': dumps(get_wms_vars()),
         'start_date1': start_date1,
         'end_date1': end_date1,
         'plot_button1': plot_button1,

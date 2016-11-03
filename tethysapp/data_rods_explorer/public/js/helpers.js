@@ -70,18 +70,14 @@ function clearPrevOptions(var12) {
     }
 }
 
-function getUrlVars(href) {
-    var vars = {};
-    if (href === undefined) {
-        var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-            vars[key] = value;
-        });
-    } else {
-        var parts = href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-            vars[key] = value;
-        });
+function getUrlVars() {
+    var paramString = window.location.href.split('?')[1];
+
+    if (paramString === undefined) {
+        return {};
     }
-    return vars;
+
+    return paramStringToObj(paramString);
 }
 
 function dateHourPickerToRodsDate(date, hour) {
@@ -121,6 +117,7 @@ function load_map_post_parameters() {
 }
 
 function load_map() {
+    var urlVars = getUrlVars();
     var mapDisplayErrorFlashMessageID = 'map-error';
     var mapDisplayErrorFlashMessageText = 'A map could not be retrieved for the chosen parameters.';
     var ajaxErrorFlashMessageID = 'ajax-error';
@@ -134,11 +131,13 @@ function load_map() {
     removeFlashMessage(mapDisplayErrorFlashMessageID);
     removeFlashMessage(ajaxErrorFlashMessageID);
 
-    data += '&plotTime=' + getUrlVars()['plotTime'];
-    data += '&variable=' + getUrlVars()['variable'];
-    data += '&model=' + getUrlVars()['model'];
+    data += '&plotTime=' + urlVars['plotTime'];
+    data += '&variable=' + urlVars['variable'];
+    data += '&model=' + urlVars['model'];
 
     $('#btnDisplayMap').prop('disabled', true);
+
+    displayNasaMapRequestOutput(data);
 
     $.ajax({
         url: '/apps/data-rods-explorer/get-map-layer/',
@@ -183,7 +182,7 @@ function load_map() {
     });
 }
 
-function createPlot(name) {
+function createPlot(plotType) {
     var noQueryPointFlashMessageID = 'no-query-point';
     var noQueryPointFlashMessageText = 'Query location not defined. Please click on map at desired query location.';
     var pointOutBoundsFlashMessageID = 'point-out-bounds';
@@ -211,7 +210,7 @@ function createPlot(name) {
         data[obj.name] = obj.value;
     });
     var pointLonLat = $('#pointLonLat').val();
-    if (name === 'years') {
+    if (plotType === 'years') {
         data['overlap_years'] = $('#plot-overlapped').is(':checked');
     }
 
@@ -221,8 +220,11 @@ function createPlot(name) {
         displayFlashMessage(pointOutBoundsFlashMessageID, 'warning', pointOutBoundsFlashMessageText);
     } else {
         $('#plot-loading').removeClass('hidden');
+
+        displayNasaPlotRequestOutput(plotType, data);
+
         $.ajax({
-            url: '/apps/data-rods-explorer/' + name + '/',
+            url: '/apps/data-rods-explorer/' + plotType + '/',
             type: 'POST',
             dataType: 'html',
             data: data,
@@ -237,17 +239,17 @@ function createPlot(name) {
                     displayFlashMessage(error999FlashMessageID, 'warning', $(responseHTML).text());
                 } else {
                     $('#plot-container').html(responseHTML);
-                    var plotType = $('.highcharts-plot').attr('data-type');
-                    initHighChartsPlot($('.highcharts-plot'), plotType);
+                    var hcPlotType = $('.highcharts-plot').attr('data-type');
+                    initHighChartsPlot($('.highcharts-plot'), hcPlotType);
                     $('#plot-loading').addClass('hidden');
 
-                    if (name === 'plot2') {
+                    if (plotType === 'plot2') {
                         var opts = $('#plot2-options');
                         var series = opts.attr('data-series');
                         var y1Units = opts.attr('data-y1units');
                         var y2Units = opts.attr('data-y2units');
                         two_axis_plot(series, y1Units, y2Units);
-                    } else if (name === 'years') {
+                    } else if (plotType === 'years') {
                         if (data['overlap_years']) {
                             // Change x-axis labels to only show the Month, no years, since years are overlapping
                             var modText;
@@ -734,11 +736,11 @@ function updateSpatialFences(differentiator, model) {
 
 function convertLonLatToMainMapExtents(lonlat) {
     /*
-    Openlayers repeats their tiles horizontally (longitude) forever (meaning that you can pan both (either) right or \
-    left to find Asia if starting on the USA. The problem is, that when clicking the map when "outside" of the original
+     Openlayers repeats their tiles horizontally (longitude) forever (meaning that you can pan both (either) right or \
+     left to find Asia if starting on the USA. The problem is, that when clicking the map when "outside" of the original
      map's "bounding box," it will generate a longitude either greater than 180 or less than -180. This function converts
      any longitude outside of the -180 to 180 bounds back to those bounds.
-    */
+     */
     var lon = lonlat[0];
 
     if (lon < -180) {
@@ -768,4 +770,76 @@ function validateClickPointIsValid() {
             $('.btn-plot').removeClass('disabled');
         }
     }
+}
+
+function paramStringToObj(string) {
+    return JSON.parse('{"' + decodeURI(string).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+}
+
+function displayNasaPlotRequestOutput(plotType, data) {
+    var nasaRequest;
+    var model, variable, pointLonLat, startDate, endDate, years, year;
+
+    if (typeof data === 'string') {
+        data = paramStringToObj(data);
+    }
+
+    if (plotType.indexOf('plot') !== -1) {
+        if (plotType == 'plot') {
+            model = data['model'];
+            variable = data['variable'];
+        } else if (plotType == 'plot2') {
+            model = data['model2'];
+            variable = data['variable2'];
+        }
+
+        startDate = data['startDate'];
+        endDate = data['endDate'];
+    }
+
+    else if (plotType == 'years') {
+        model = data['model'];
+        variable = data['variable'];
+        years = data['years'].split(',');
+        year = years[years.length - 1];
+        startDate = year + '-01-01T00';
+        endDate = year + '-12-31T23';
+    }
+
+    pointLonLat = $('#pointLonLat').val().replace(',', ', ');
+
+    nasaRequest = DATARODS_TSB[model];
+    nasaRequest = nasaRequest.replace('{0}', variable);
+    nasaRequest = nasaRequest.replace('{1}', pointLonLat);
+    nasaRequest = nasaRequest.replace('{2}', startDate);
+    nasaRequest = nasaRequest.replace('{3}', endDate);
+
+    $('#nasaRequestOutput').html('<b>Data Rods Request:</b><br>' + nasaRequest);
+}
+
+function displayNasaMapRequestOutput(data) {
+    var nasaRequest;
+    var model, variable, plotTime, latN, lonE, lonW, latS;
+
+    if (typeof data === 'string') {
+        data = paramStringToObj(data);
+    }
+
+    model = data['model'];
+    variable = data['variable'];
+    plotTime = data['plotTime'];
+    latN = data['latN'];
+    lonE = data['lonE'];
+    lonW = data['lonW'];
+    latS = data['latS'];
+
+    nasaRequest = DATARODS_PNG;
+    nasaRequest = nasaRequest.replace('{0}', lonW);
+    nasaRequest = nasaRequest.replace('{1}', latS);
+    nasaRequest = nasaRequest.replace('{2}', lonE);
+    nasaRequest = nasaRequest.replace('{3}', latN);
+    nasaRequest = nasaRequest.replace('{4}', plotTime);
+    nasaRequest = nasaRequest.replace('{5}', WMS_VARS[model][variable][0]);
+
+    $('#nasaRequestOutput').html('<b>Data Rods Request:</b><br>' + nasaRequest)
 }

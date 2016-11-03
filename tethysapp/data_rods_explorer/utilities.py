@@ -1,18 +1,5 @@
-import os
-from tethys_apps.base.persistent_store import get_persistent_store_engine as gpse
 import inspect
 from datetime import datetime, timedelta
-
-
-def get_persistent_store_engine(persistent_store_name):
-    """
-    Returns an SQLAlchemy engine object for the persistent store name provided.
-    """
-    # Derive app name
-    app_name = os.path.split(os.path.dirname(__file__))[1]
-
-    # Get engine
-    return gpse(app_name, persistent_store_name)
 
 
 def parse_fences_from_file():
@@ -69,48 +56,3 @@ def generate_datarods_urls_dict(asc2_urls):
         'plot': plot_urls,
         'waterml': waterml_urls
     }
-
-
-def parse_model_database_from_file():
-    db_file = inspect.getfile(inspect.currentframe()).replace('utilities.py',
-                                                              'public/data/model_config.txt')
-    new_model_switch = False
-    model_options = []
-    var_dict = {}
-    wms_vars = {}
-    datarods_tsb = {}
-    with open(db_file, mode='r') as f:
-        f.readline()  # skip column headings line
-        f.readline()
-        for line in f.readlines():
-            if line == '\n':
-                new_model_switch = True
-                continue
-            line = line.strip()
-            linevals = line.split('|')
-            if new_model_switch:
-                model_vals = linevals[0].split('~')
-                model_name = model_vals[0]
-                model_key = model_vals[1]
-                datarods_tsb[model_key] = model_vals[4]
-                model_options.append((model_name, model_key))
-                new_model_switch = False
-                continue
-            else:
-                model_key = linevals[0]
-
-                if model_key not in wms_vars:
-                    wms_vars[model_key] = {}
-
-                wms_vars[model_key][linevals[1]] = [linevals[2], linevals[3], linevals[4]]
-
-                if model_key not in var_dict:
-                    var_dict[model_key] = []
-
-                var_dict[model_key].append({
-                    "text": "%s %s" % (linevals[3], linevals[4]),
-                    "value": linevals[1],
-                    "layerName": linevals[5]
-                })
-
-    return model_options, var_dict, wms_vars, datarods_tsb

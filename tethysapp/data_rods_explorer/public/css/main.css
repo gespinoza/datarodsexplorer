@@ -53,3 +53,17 @@
 #resetPage {
     cursor: pointer;
 }
+#app-actions {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+}
+#png-data-rods {
+    flex: 0 1 auto;
+    width: 65px;
+}
+#nasa-request-output {
+    flex: 0 1 auto;
+    font-size: 6pt;
+}

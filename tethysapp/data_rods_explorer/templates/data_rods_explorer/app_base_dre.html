@@ -226,9 +226,9 @@
                     {# App actions are fixed to the bottom #}
                     {% block app_actions_override %}
                         <div id="app-actions">
-                            <img src="{{ STATIC_URL}}data_rods_explorer/images/nasa_logo.png" style="width:65px;height:54.6px;" align="right">
+                            <div id="nasaRequestOutput"></div>
+                            <img id="png-data-rods" src="{{ STATIC_URL}}data_rods_explorer/images/nasa_logo.png">
                             {% block app_actions %}{% endblock %}
-                            <div id="app-actions-spacer"></div>
                         </div>
                     {% endblock %}
                 </div>
@@ -255,6 +255,9 @@
     <script>
         setVarDict("{{ VAR_DICT }}");
         setModelFences("{{ MODEL_FENCES }}");
+        setDataRodsTSB("{{ DATARODS_TSB }}");
+        setDataRodsPNG("{{ DATARODS_PNG }}");
+        setWMSVars("{{ WMS_VARS }}");
         loadDefaultHome();
         loadVariableOptions('model', 'variable');
     </script>
