@@ -794,7 +794,7 @@ function displayNasaPlotRequestOutput(plotType, data) {
         }
 
         startDate = data['startDate'];
-        endDate = data['endDate'];
+        endDate = data['endDate'].replace('T23', 'T00');
     }
 
     else if (plotType == 'years') {
@@ -814,7 +814,7 @@ function displayNasaPlotRequestOutput(plotType, data) {
     nasaRequest = nasaRequest.replace('{2}', startDate);
     nasaRequest = nasaRequest.replace('{3}', endDate);
 
-    $('#nasaRequestOutput').html('<b>Data Rods Request:</b><br>' + nasaRequest);
+    $('#nasaRequestOutput').html('<b>NASA Data Request:</b><br>' + nasaRequest);
 }
 
 function displayNasaMapRequestOutput(data) {
@@ -841,5 +841,5 @@ function displayNasaMapRequestOutput(data) {
     nasaRequest = nasaRequest.replace('{4}', plotTime);
     nasaRequest = nasaRequest.replace('{5}', WMS_VARS[model][variable][0]);
 
-    $('#nasaRequestOutput').html('<b>Data Rods Request:</b><br>' + nasaRequest)
+    $('#nasaRequestOutput').html('<b>NASA Data Request:</b><br>' + nasaRequest)
 }
