@@ -63,7 +63,7 @@
     flex: 0 1 auto;
     width: 65px;
 }
-#nasa-request-output {
+#nasaRequestOutput {
     flex: 0 1 auto;
-    font-size: 6pt;
+    font-size: 8pt;
 }

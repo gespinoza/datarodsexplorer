@@ -487,10 +487,10 @@ def access_datarods_server(link, overlap_years=False):
     data_flag_text = 'Date&Time'
     error_flag_text = 'ERROR:'
     error_message = None
+    s_lines = []
 
     while error_found and time >= 0:
         s_file = urllib2.urlopen(link)
-        s_lines = []
 
         for line in s_file.readlines():
             if data_flag_text in line:
@@ -514,7 +514,8 @@ def access_datarods_server(link, overlap_years=False):
             raise Exception
     except Exception as e:
         e.error = 999
-        message = error_message if error_message else 'NASA Data Service Error: Missing "%s” tag to end metadata. ' \
+        message = error_message if error_message else 'NASA Data Service Error: Data was either missing "%s” tag to ' \
+                                                      'end metadata, or returned with an empty dataset. ' \
                                                       'See access_datarods_server method in controllers.py for check.' \
                                                       % data_flag_text
         e.message = message

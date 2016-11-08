@@ -1,5 +1,5 @@
-Model_Display_Name~Model_Key_Name~Official_Model_Short_Name~Model_Version~Model_Data_Url_Pattern
-Model_Key|Variable_ID|Get_Map_URL_Layer_Name|Variable_Dropdown_Name|Units|Variable_Layer_Name
+Model_Display_Name~Model_Short_Name~Official_Model_Short_Name~Model_Version~Model_Rods_Url_Pattern
+Model_Short_Name|Rods_Variable_Name|WMS_Layer_Name|Variable_Dropdown_Name|Variable_Units|Legend_Layer_Name
 
 NLDAS-Forcing (LSM)~NLDASF~NLDAS_FORA0125_H~002~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 NLDASF|APCPsfc|NLDAS_FORA0125_H_002_apcpsfc|Precipitation hourly total|kg/m^2|NLDASF:PrecipHrlyTotal
@@ -38,12 +38,12 @@ GLDAS|TSOIL0_10cm|GLDAS_NOAH025_3H_001_tsoil0_10cm|Average layer 1 soil temperat
 GLDAS|Wind|GLDAS_NOAH025_3H_001_wind|Near surface wind magnitude|m/s|GLDAS:NearSurfWindMag
 
 GLDAS 2-Noah (LSM)~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
-GLDAS2|SOILM10_40cm||10-40 cm layer 2 soil moisture content|kg/m^2|GLDAS2:10-40cmLyr2SoilMoistCont
-GLDAS2|SOILM40_100cm||40-100 cm layer 3 soil moisture content|kg/m^2|GLDAS2:40-100cmLyr3SoilMoistCont
-GLDAS2|SOILM100_200cm||100-200 cm layer 4 soil moisture content|kg/m^2|GLDAS2:100-200cmLyr4SoilMoistCont
+GLDAS2|SOILM10_40cm|GLDAS_NOAH025_3H_2_0_SoilMoi10_40cm_inst|10-40 cm layer 2 soil moisture content|kg/m^2|GLDAS2:10-40cmLyr2SoilMoistCont
+GLDAS2|SOILM40_100cm|GLDAS_NOAH025_3H_2_0_SoilMoi40_100cm_inst|40-100 cm layer 3 soil moisture content|kg/m^2|GLDAS2:40-100cmLyr3SoilMoistCont
+GLDAS2|SOILM100_200cm|GLDAS_NOAH025_3H_2_0_SoilMoi100_200cm_inst|100-200 cm layer 4 soil moisture content|kg/m^2|GLDAS2:100-200cmLyr4SoilMoistCont
 
-TRMM (retrieval)~TRMM~TRMM_3B42~7~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.007:{0}itation&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-TRMM|precip|TRMM_3B42_daily_precipitation_V7|Precipitation|mm/hr|TRMM:Precip
+TRMM (retrieval)~TRMM~TRMM_3B42~7~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.7:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
 
 GRACE soil moisture~GRACE~GRACEDADM_CLSM025NA_7D~1.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GRACE|sfsm_inst|GRACEDADM_CLSM025NA_7D_1_0_sfsm_inst|Surface soil moisture percentile|%|GRACE:SurfSoilMoist%
