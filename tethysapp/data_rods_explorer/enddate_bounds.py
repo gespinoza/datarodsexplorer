@@ -43,6 +43,8 @@ def write_fences_file(model_list):
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025_3H&version=2.0&page_size=1&sort_key=start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=TRMM_3B42&version=7&page_size=1&sort_key=start_date
+    # https: // cmr.earthdata.nasa.gov / search / granules?short_name = LPRM_AMSRE_D_SOILM3 & version = 002 & page_size = 1 & sort_key = start_date
+    # https: // cmr.earthdata.nasa.gov / search / granules?short_name = LPRM_AMSRE_A_SOILM3 & version = 002 & page_size = 1 & sort_key = start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=GRACEDADM_CLSM025NA_7D&version=1.0&page_size=1&sort_key=start_date
     url_pattern = "https://cmr.earthdata.nasa.gov/search/granules?short_name={0}&version={1}&page_size=1&sort_key={2}"
     columnheadings = "Model name | Begin time | End time | N , E , S , W bounds\n"
