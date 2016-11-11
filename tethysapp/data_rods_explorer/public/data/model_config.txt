@@ -19,7 +19,7 @@ NLDAS|SSRUNsfc|NLDAS_NOAH0125_H_002_ssrunsfc|Surface runoff|kg/m^2|NLDAS:SurfRun
 NLDAS|SOILM0-10cm|NLDAS_NOAH0125_H_002_soilm0_10cm|0-10 cm soil moisture|kg/m^2|NLDAS:0-10cmSoilMoisture
 NLDAS|SOILM0-100cm|NLDAS_NOAH0125_H_002_soilm0_100cm|0-100 cm soil moisture|kg/m^2|NLDAS:0-100cmSoilMoisture
 NLDAS|SOILM0-200cm|NLDAS_NOAH0125_H_002_soilm0_200cm|0-200 cm soil moisture|kg/m^2|NLDAS:0-200cmSoilMoisture
-NLDAS|SOILM10-40cm|NLDAS_NOAH0125_H_002_soilm10_40cm|0-40 cm soil moisture|kg/m^2|NLDAS:10-40cmSoilMoisture
+NLDAS|SOILM10-40cm|NLDAS_NOAH0125_H_002_soilm10_40cm|10-40 cm soil moisture|kg/m^2|NLDAS:10-40cmSoilMoisture
 NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100 cm soil moisture|kg/m^2|NLDAS:40-100cmSoilMoisture
 NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200 cm soil moisture|kg/m^2|NLDAS:100-200cmSoilMoisture
 NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10 cm soil temperature|K|NLDAS:0-10cmSoilTemp
@@ -64,7 +64,7 @@ AMSREA|opt_depth_c|LPRM_AMSRE_A_SOILM3_002_opt_depth_c|Optical depth C-band asce
 AMSREA|opt_depth_x|LPRM_AMSRE_A_SOILM3_002_opt_depth_x|Optical depth X-band ascending|unitless|AMSRE-A:OptDepthCbandAsc
 AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2 mm skin temperature AMSRE ascending|K|AMSRE-A:2mmSkinTempAsc
 
-TRMM (retrieval)~TRMM~TRMM_3B42~7~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.007:{0}itation&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+TRMM (retrieval)~TRMM~TRMM_3B42~7~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.007:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
 
 GRACE soil moisture~GRACE~GRACEDADM_CLSM025NA_7D~1.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}

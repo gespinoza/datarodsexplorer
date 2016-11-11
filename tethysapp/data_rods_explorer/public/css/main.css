@@ -68,8 +68,15 @@
     font-size: 8pt;
 }
 .tethys-map-view-legend .legend-content .legend-items .legend-item {
-    padding: 0;
+    padding: 0!important;
 }
 .tethys-map-view-legend .legend-content .legend-items .legend-item .btn-legend-action {
     font-size: 8pt;
+}
+.tethys-map-view-legend .legend-content .legend-items .legend-item .tethys-legend-dropdown.open {
+    font-size: 8pt;
+}
+.tethys-map-view-legend .legend-content .legend-items .legend-item .legend-dropdown-toggle {
+    position: absolute;
+    right: 5px;
 }
