@@ -1,9 +1,10 @@
+from django.shortcuts import render
 from tethysapp.data_rods_explorer.model_objects import init_model, get_datarods_tsb, get_var_dict, get_model_fences
 from datetime import datetime
 import urllib2
 
 
-def test_nasa_endpoints_for_all_models_and_variables():
+def test_nasa_endpoints(request):
     init_model()
     model_fences = get_model_fences()
     datarods_tsb = get_datarods_tsb()
@@ -43,12 +44,17 @@ def test_nasa_endpoints_for_all_models_and_variables():
                 error += 1
                 failed_urls.append(url)
 
-    print '''
+    results = '''
     TESTS COMPLETE:
     TOTAL ENDPOINTS TESTED: {0}
     TOTAL SUCCESSFUL: {1}
     TOTAL FAILS: {2}
-    FAILED ENDPOINTS: {3}
-    '''.format(counter, success, error, '\n'.join(failed_urls))
+    {3}{4}
+    '''.format(counter, success, error,
+               'FAILED ENDPOINTS: ' if len(failed_urls) > 0 else '',
+               '\n'.join(failed_urls))
 
-test_nasa_endpoints_for_all_models_and_variables()
+    print results
+    context = {'results': '<br>'.join(results.split('\n'))}
+
+    return render(request, 'data_rods_explorer/test-results.html', context)
