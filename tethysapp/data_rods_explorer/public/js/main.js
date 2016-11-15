@@ -20,7 +20,7 @@ $(function() {
         var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
         lonlat = convertLonLatToMainMapExtents(lonlat);
         document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
-        validateClickPointIsValid()
+        validateClickPoint()
     });
 
     // Listener to automatically resize map when the nav bar opens or closes

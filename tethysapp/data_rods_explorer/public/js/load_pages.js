@@ -27,7 +27,7 @@ function onClickLink(link, navItem) {
             update_legend();
             COMPARE_TWO = false;
         }
-        validateClickPointIsValid()
+        validateClickPoint()
     }
 }
 

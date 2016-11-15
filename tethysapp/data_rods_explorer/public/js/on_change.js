@@ -1,7 +1,8 @@
 function oc_model() {
     var GLDASFlashMessageID = 'GLDAS-get-map-disabled';
     var GLDASFlashMessageText = 'GLDAS does not support the "Display Map" function, ' +
-        'but data rods data can still be obtained under the "Plot one variable" or "Compare two variables" options.';
+        'but data rods data can still be obtained under the "Plot one variable", "Compare two variables", ' +
+        'or "Year-on-year changes" options.';
     var href;
     var GET = getUrlVars();
     var model = $('#model1').val();
@@ -24,7 +25,7 @@ function oc_model() {
     href = constructHref(GET);
     history.pushState("", "", href);
     loadVariableOptions('model', 'variable');
-    validateClickPointIsValid();
+    validateClickPoint();
 
     if (model === "GLDAS") {
         btnDisplayMap.prop('disabled', true);
@@ -96,7 +97,7 @@ function oc_model2() {
     href = constructHref(GET);
     history.pushState("", "", href);
     loadVariableOptions('model2', 'variable2');
-    validateClickPointIsValid();
+    validateClickPoint();
 }
 
 function oc_variable2() {
@@ -119,6 +120,9 @@ function oc_years() {
 
     if (yearsList && yearsList.length > 0) {
         GET['years'] = yearsList.join(',');
+        validateClickPoint();
+    } else {
+        $('a[name=years]').addClass('disabled');
     }
 
     href = constructHref(GET);

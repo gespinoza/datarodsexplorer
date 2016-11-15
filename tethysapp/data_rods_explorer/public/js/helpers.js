@@ -251,14 +251,13 @@ function createPlot(plotType) {
                         two_axis_plot(series, y1Units, y2Units);
                     } else if (plotType === 'years') {
                         if (data['overlap_years']) {
-                            // Change x-axis labels to only show the Month, no years, since years are overlapping
-                            var modText;
-                            $('.highcharts-xaxis-labels').find('text').find('tspan').each(function (i, obj) {
-                                modText = $(obj).text().slice(0, 3);
-                                $(obj).text(modText);
-                            });
+                            modifyXAxis();
                         }
                     }
+                    modifyYAxis();
+                    $('.highcharts-legend-item').on('click', function () {
+                        setTimeout(modifyYAxis, 500);
+                    });
                 }
             }, error: function () {
                 $('#plot-loading').addClass('hidden');
@@ -757,7 +756,7 @@ function convertLonLatToMainMapExtents(lonlat) {
     return lonlat;
 }
 
-function validateClickPointIsValid() {
+function validateClickPoint() {
     if ($('#pointLonLat').val() !== '-9999') {
         var outOfBoundsFlashMessageID = 'out-of-bounds';
         var outOfBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
@@ -767,7 +766,7 @@ function validateClickPointIsValid() {
             $('.btn-plot').addClass('disabled');
         } else {
             removeFlashMessage(outOfBoundsFlashMessageID);
-            $('.btn-plot').removeClass('disabled');
+            enablePlotButtons();
         }
     }
 }
@@ -842,4 +841,42 @@ function displayNasaMapRequestOutput(data) {
     nasaRequest = nasaRequest.replace('{5}', WMS_VARS[model][variable][0]);
 
     $('#nasaRequestOutput').html('<b>NASA Data Request:</b><br>' + nasaRequest)
+}
+
+function enablePlotButtons () {
+    $('.btn-plot').removeClass('disabled');
+    if ($('#years').val() === null) {
+        $('a[name=years]').addClass('disabled');
+    }
+}
+
+function modifyXAxis() {
+    // Change x-axis labels to only show the Month, no years, since years are overlapping
+    var modText;
+    $('.highcharts-xaxis-labels').find('text').find('tspan').each(function (i, obj) {
+        modText = $(obj).text().slice(0, 3);
+        $(obj).text(modText);
+    });
+}
+
+function modifyYAxis() {
+    // Change y-axis to display scientific notation if needed
+    var $yAxis = $('.highcharts-plot').highcharts().yAxis[0];
+    var minY =$yAxis.min;
+    var maxY = $yAxis.max;
+
+    if (maxY && maxY.toString().indexOf('e') !== -1) {
+        var $labels = $('.highcharts-yaxis-labels').find('text');
+        var numLabels = $labels.length;
+        var curVal = minY;
+        var increment = (Number(maxY) - Number(minY)) / (numLabels - 1);
+        $labels.each(function (i, obj) {
+            curVal = Number(curVal.toPrecision(2));
+            $(obj).text(curVal);
+            curVal += increment;
+        });
+    }
+    // Move the y-axis text so it's not covering the axis tick values
+    $('.highcharts-axis').last().find('text')
+        .css('transform', 'matrix3d(0,-1,0.00,0,1.00,0,0.00,0,0,0,1,0,-100,135,0,1)');
 }

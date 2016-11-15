@@ -45,7 +45,7 @@ def test_nasa_endpoints(request):
                 failed_urls.append(url)
 
     results = '''
-    TESTS COMPLETE:
+    TESTS COMPLETE!
     TOTAL ENDPOINTS TESTED: {0}
     TOTAL SUCCESSFUL: {1}
     TOTAL FAILS: {2}
