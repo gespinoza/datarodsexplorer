@@ -36,3 +36,13 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# PyCharm generated files #
+###########################
+.idea/
+*.egg-info/
+
+# Other files #
+###############
+*dates_and_spatial_range.txt
+

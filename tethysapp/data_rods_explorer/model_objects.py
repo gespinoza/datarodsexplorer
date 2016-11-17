@@ -1,96 +1,157 @@
+from socket import gethostname
+from os import path
+from datetime import datetime, timedelta
+
+
+if 'apps.hydroshare' in gethostname():
+    GEOSERVER_URL = 'http://apps.hydroshare.org:8181/geoserver/wms'
+elif 'appsdev.hydroshare' in gethostname():
+    GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
+else:
+    GEOSERVER_URL = 'http://127.0.0.1:8181/geoserver/wms'
+
 WORKSPACE = 'data_rods_explorer'
-GEOSERVER_URL = 'http://appsdev.hydroshare.org:8181/geoserver/wms'
-### Uncomment the following line for local development
-# GEOSERVER_URL =  'http://127.0.0.1:8181/geoserver/wms'
-MODEL_OPTIONS = [('NLDAS-Noah (LSM)', 'nldas'),
-				 ('GLDAS-Noah (LSM)', 'gldas'),
-				 ('GLDAS 2-Noah (LSM)', 'gldas2'),
-				 ('TRMM (retrieval)', 'trmm'),
-				 ('GRACE soil moisture', 'grace')]
-
+MODEL_OPTIONS = []
+MODEL_FENCES = {}
+VAR_DICT = {}
+WMS_VARS = {}
 DATARODS_TSB = {}
-DATARODS_TSB.update({'nldas': {'noah': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   			'variable=NLDAS:NLDAS_NOAH0125_H.002:{0}&'  # SSRUNsfc
-							            'type=asc2&location=GEOM:POINT({1})&'
-							            'startDate={2}&endDate={3}'),
-							   'forcing': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   			   'variable=NLDAS:NLDAS_FORA0125_H.002:{0}&'  # SSRUNsfc
-							               'type=asc2&location=GEOM:POINT({1})&'
-							               'startDate={2}&endDate={3}')
-							  }})
-DATARODS_TSB.update({'gldas': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   'variable=GLDAS:GLDAS_NOAH025_3H.001:{0}&'  # precip
-							   'type=asc2&location=GEOM:POINT({1})&'
-							   'startDate={2}&endDate={3}')
-					})
-DATARODS_TSB.update({'gldas2': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   'variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&' # SOILM40_100cm
-							   'startDate={2}&endDate={3}&'
-							   'location=GEOM:POINT({1})&type=asc2') # %28-112.3,%2030.4%29
-					})
-DATARODS_TSB.update({'trmm': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							  'variable=TRMM:TRMM_3B42.007:{0}itation&'
-							  'type=asc2&location=GEOM:POINT({1})&'
-							  'startDate={2}&endDate={3}')
-					})
-DATARODS_TSB.update({'grace': ('http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?'
-							   'variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}_inst&'
-							   'type=asc2&location=GEOM:POINT({1})&'
-							   'startDate={2}&endDate={3}')
-					})
-
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
-				'&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
-				'&LAYERS=Time-Averaged.{5}'  # NLDAS_NOAH0125_M_002_soilm0_100cm
-				'&STYLES=default&TRANSPARENT=TRUE&FORMAT=image/tiff'
-				'&time={4}'  # 2008-01-01T00:00:00Z/2008-01-01T00:00:00Z
-				'&bbox={0},{1},{2},{3}')  # -119,30,-107,36
+                '&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
+                '&LAYERS=Time-Averaged.{5}'  # NLDAS_NOAH0125_M_002_soilm0_100cm
+                '&STYLES=default&TRANSPARENT=TRUE&FORMAT=image/tiff'
+                '&time={4}'  # 2008-01-01T00:00:00Z/2008-01-01T00:00:00Z
+                '&bbox={0},{1},{2},{3}')  # -119,30,-107,36
 
-WMS_VARS = {"nldas": {}, "gldas": {}, "gldas2": {}, "trmm": {}, "grace": {}}
-WMS_VARS['nldas'].update({"APCPsfc": ["NLDAS_FORA0125_H_002_apcpsfc", "Precipitation hourly total", "kg/m^2"],
-						  "DLWRFsfc": ["NLDAS_FORA0125_H_002_dlwrfsfc", "Surface DW longwave radiation flux", "W/m^2"],
-						  "DSWRFsfc": ["NLDAS_FORA0125_H_002_dswrfsfc", "Surface DW shortwave radiation flux", "W/m^2"],
-						  "PEVAPsfc": ["NLDAS_FORA0125_H_002_pevapsfc", "Potential evaporation", "kg/m^2"],
-						  "SPFH2m": ["NLDAS_FORA0125_H_002_spfh2m", "2-m above ground specific humidity", "kg/kg"],
-						  "TMP2m": ["NLDAS_FORA0125_H_002_tmp2m", "2-m above ground temperature", "K"],
-						  "UGRD10m": ["NLDAS_FORA0125_H_002_ugrd10m", "10-m above ground zonal wind", "m/s"],
-						  "VGRD10m": ["NLDAS_FORA0125_H_002_vgrd10m", "10-m above ground meridional wind", "m/s"],
-						  "EVPsfc": ["NLDAS_NOAH0125_H_002_evpsfc", "Total evapotranspiration", "kg/m^2"],
-						  "GFLUXsfc": ["NLDAS_NOAH0125_H_002_gfluxsfc", "Ground heat flux", "w/m^2"],
-						  "LHTFLsfc": ["NLDAS_NOAH0125_H_002_lhtflsfc", "Latent heat flux", "w/m^2"],
-						  "SHTFLsfc": ["NLDAS_NOAH0125_H_002_shtflsfc", "Sensible heat flux", "(w/m^2)"],
-						  "SSRUNsfc": ["NLDAS_NOAH0125_H_002_ssrunsfc", "Surface runoff (non-infiltrating)", "kg/m^2"],
-						  "BGRIUNdfc": ["NLDAS_NOAH0125_H_002_bgriundfc", "Subsurface runoff (baseflow)", "kg/m^2"],
-						  "SOILM0-10cm": ["NLDAS_NOAH0125_H_002_soilm0_10cm", "0-10 cm soil moisture content", "kg/m^2"],
-						  "SOILM0-100cm": ["NLDAS_NOAH0125_H_002_soilm0_100cm", "0-100 cm soil moisture content", "kg/m^2"],
-						  "SOILM0-200cm": ["NLDAS_NOAH0125_H_002_soilm0_200cm", "0-200 cm soil moisture content", "kg/m^2"],
-						  "SOILM10-40cm": ["NLDAS_NOAH0125_H_002_soilm10_40cm", "0-40 cm soil moisture content", "kg/m^2"],
-						  "SOILM40-100cm": ["NLDAS_NOAH0125_H_002_soilm40_100cm", "40-100 cm soil moisture content", "kg/m^2"],
-						  "SOILM100-200cm": ["NLDAS_NOAH0125_H_002_soilm100_200cm", "100-200 cm soil moisture content", "kg/m^2"],
-						  "TSOIL0-10cm": ["NLDAS_NOAH0125_H_002_tsoil0_10cm", "0-10 cm soil temperature", "K"]
-						})
-WMS_VARS['gldas'].update({"Evap": ["", "Total Evapotranspiration", "kg/m^2/s"],
-						  "precip": ["", "Precipitation rate", "kg/m^2/hr"],
-						  "Rainf": ["", "Rain rate", "kg/m^2/s"],
-						  "Snowf": ["", "Snow rate", "kg/m^2/s"],
-						  "Qs": ["", "Surface Runoff", "kg/m^2/s"],
-						  "Qsb": ["", "Subsurface Runoff", "kg/m^2/s"],
-						  "SOILM0-100cm": ["", "0-100 cm top 1 meter soil moisture content", "kg/m^2"],
-						  "SOILM0-10cm": ["", "0-10 cm layer 1 soil moisture content", "kg/m^2"],
-						  "SOILM10-40cm": ["", "10-40 cm layer 2 soil moisture content", "kg/m^2"],
-						  "SOILM40-100cm": ["", "40-100 cm layer 3 soil moisture content", "kg/m^2"],
-						  "Tair": ["", "Near surface air temperature", "K"],
-						  "TSOIL0-10cm": ["", "Average layer 1 soil temperature", "K"],
-						  "Wind": ["", "Near surface wind magnitude", "m/s"]
-						})
-WMS_VARS['gldas2'].update({
-						  "SOILM10_40cm": ["", "10-40 cm layer 2 soil moisture content", "kg/m^2"],
-						  "SOILM40_100cm": ["", "40-100 cm layer 3 soil moisture content", "kg/m^2"],
-						  "SOILM100_200cm": ["", "0-10 cm layer 1 soil moisture content", "kg/m^2"]
-						})
-WMS_VARS['trmm'].update({"precip": ["TRMM_3B42_daily_precipitation_V7", "Precipitation", "mm/hr"]
-					    })
-WMS_VARS['grace'].update({"sfsm": ["GRACEDADM_CLSM025NA_7D_1_0_sfsm_inst", "Surface Soil Moisture", "percentile"],
-						  "rtzsm": ["GRACEDADM_CLSM025NA_7D_1_0_rtzsm_inst", "Root Zone Soil Moisture", "percentile"],
-						  "gws": ["GRACEDADM_CLSM025NA_7D_1_0_gws_inst", "Ground Water", "percentile"]
-						})
+
+def init_model():
+    global MODEL_OPTIONS, VAR_DICT, WMS_VARS, DATARODS_TSB, MODEL_FENCES
+
+    MODEL_OPTIONS, VAR_DICT, WMS_VARS, DATARODS_TSB = parse_model_database_from_file()
+    MODEL_FENCES = parse_fences_from_file()
+
+
+def get_model_options():
+    global MODEL_OPTIONS
+    return MODEL_OPTIONS
+
+
+def get_model_fences():
+    global MODEL_FENCES
+    return MODEL_FENCES
+
+
+def get_var_dict():
+    global VAR_DICT
+    return VAR_DICT
+
+
+def get_wms_vars():
+    global WMS_VARS
+    return WMS_VARS
+
+
+def get_datarods_tsb():
+    global DATARODS_TSB
+    return DATARODS_TSB
+
+
+def get_workspace():
+    global WORKSPACE
+    return WORKSPACE
+
+
+def get_geoserver_url():
+    global GEOSERVER_URL
+    return GEOSERVER_URL
+
+
+def get_datarods_png():
+    global DATARODS_PNG
+    return DATARODS_PNG
+
+
+def parse_fences_from_file():
+    """
+    Get date, time and spatial extent fences. Modelname will default to first one listed in input file.
+    Begin dates will be actual model begin date + 1, and end dates will be actual model end date -1, to avoid chance
+    of user selecting hours out of range for dates that are within range.
+    """
+    model_fences = {}
+
+    fencefile = path.join(path.dirname(path.realpath(__file__)), 'public/data/dates_and_spatial_range.txt')
+
+    with open(fencefile, mode='r') as f:
+        f.readline()  # skip column headings line
+        for line in f.readlines():
+            if not (line == '' or 'Model name' in line):      # end condition
+                line = line.strip()
+                linevals = line.split('|')
+                start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1)) \
+                    .strftime('%m/%d/%Y')
+                # begin_time = linevals[1].split(' ')[1]
+                end_date = (datetime.strptime(linevals[2].split(' ')[0], '%m/%d/%Y') - timedelta(days=1)) \
+                    .strftime('%m/%d/%Y')
+                # end_time = linevals[2].split(' ')[1]
+                nbound = linevals[3].split(', ')[0]
+                ebound = linevals[3].split(', ')[1]
+                sbound = linevals[3].split(', ')[2]
+                wbound = linevals[3].split(', ')[3]
+                model_fences[linevals[0]] = {
+                    'start_date': start_date,
+                    'end_date': end_date,
+                    'extents': {
+                        'maxY': nbound,
+                        'maxX': ebound,
+                        'minY': sbound,
+                        'minX': wbound
+                    }
+                }
+
+    return model_fences
+
+
+def parse_model_database_from_file():
+    new_model_switch = False
+    model_options = []
+    var_dict = {}
+    wms_vars = {}
+    datarods_tsb = {}
+
+    db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+
+    with open(db_file, mode='r') as f:
+        f.readline()  # skip column headings line
+        f.readline()
+        for line in f.readlines():
+            if line == '\n':
+                new_model_switch = True
+                continue
+            line = line.strip()
+            linevals = line.split('|')
+            if new_model_switch:
+                model_vals = linevals[0].split('~')
+                model_name = model_vals[0]
+                model_key = model_vals[1]
+                datarods_tsb[model_key] = model_vals[4]
+                model_options.append((model_name, model_key))
+                new_model_switch = False
+                continue
+            else:
+                model_key = linevals[0]
+
+                if model_key not in wms_vars:
+                    wms_vars[model_key] = {}
+
+                wms_vars[model_key][linevals[1]] = [linevals[2], linevals[3], linevals[4]]
+
+                if model_key not in var_dict:
+                    var_dict[model_key] = []
+
+                var_dict[model_key].append({
+                    "text": "%s %s" % (linevals[3], linevals[4]),
+                    "value": linevals[1],
+                    "layerName": linevals[5]
+                })
+
+    return model_options, var_dict, wms_vars, datarods_tsb

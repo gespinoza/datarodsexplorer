@@ -1,20 +1,85 @@
-
-/*
-.exit-button.extra-button {
-	padding-right: 0px;
+#map-loading {
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    opacity: 0.5;
 }
 
-.inrow {
-	display: inline;
+#map-loading img {
+    z-index: 10000;
 }
 
-#container > * {
-	display: inline;
+#plot-loading {
+    position: absolute;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    opacity: 0.5;
+    height: 250px;
 }
 
-.form-control {
-	padding: 6px 12px; 
-	background-color: red;
-	opacity: 0.4;
+#plot-container {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
 }
-*/
+
+.option-viewData {
+    background: #5971A8;
+    padding: 2px;
+    margin: 1px;
+    text-align: center;
+    color: white;
+}
+
+.option-viewData:hover {
+    background: white;
+    color: black;
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+.alert {
+    margin-bottom: 0;
+}
+#resetPage {
+    cursor: pointer;
+}
+#app-actions {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+}
+#png-data-rods {
+    flex: 0 1 auto;
+    width: 65px;
+}
+#nasaRequestOutput {
+    flex: 0 1 auto;
+    font-size: 8pt;
+}
+.tethys-map-view-legend .legend-content .legend-items .legend-item {
+    padding: 0!important;
+}
+.tethys-map-view-legend .legend-content .legend-items .legend-item .btn-legend-action {
+    font-size: 8pt;
+}
+.tethys-map-view-legend .legend-content .legend-items .legend-item .tethys-legend-dropdown.open {
+    font-size: 8pt;
+}
+.tethys-map-view-legend .legend-content .legend-items .legend-item .legend-dropdown-toggle {
+    position: absolute;
+    right: 5px;
+}
+.highcharts-axis:last-child text {
+    transform: matrix3d(0,-1,0.00,0,1.00,0,0.00,0,0,0,1,0,-100,135,0,1);
+}

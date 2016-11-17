@@ -10,7 +10,7 @@ app_class = 'data_rods_explorer.app:DataRodsExplorer'
 app_package_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tethysapp', app_package)
 
 ### Python Dependencies ###
-dependencies = []
+dependencies = ['python-dateutil']
 
 setup(
     name=release_package,

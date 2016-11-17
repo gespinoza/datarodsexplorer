@@ -1,264 +1,309 @@
-function page_and_parameters_html(href, page) {
-	var GET = getUrlVars();
-	var href = href + '?';
-	for (var key in GET) {
-		href = href + '&' + key + '=' + GET[key];
-	}
-	page_and_parameters(href, page);
+function onClickLink(link, navItem) {
+    if ($(link).hasClass('open')) {
+        $(link).removeClass('open');
+        $('#nav-' + navItem).addClass('hidden');
+
+        if (navItem == 'plot2') {
+            removeFlashMessage('bound-adjusted');
+            TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
+            update_legend();
+            COMPARE_TWO = false;
+        }
+    } else {
+        $('.nav-link').removeClass('open');
+        $(link).addClass('open');
+        $('.nav-item').addClass('hidden');
+        $('#nav-' + navItem).removeClass('hidden');
+
+        loadNavOptionsAndParams(navItem);
+
+        if (navItem == 'plot2') {
+            TETHYS_MAP_VIEW.getMap().addLayer(MODEL2_LAYER);
+            update_legend();
+            COMPARE_TWO = true;
+        } else {
+            removeFlashMessage('bound-adjusted');
+            TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
+            update_legend();
+            COMPARE_TWO = false;
+        }
+        validateClickPoint()
+    }
 }
 
-function page_and_parameters(href, page) {
-	var GET = getUrlVars(href);
-	href = href.split('?')[0]
-	if (GET['model']) {
-		var model = GET['model'];
-	} else {
-		var model = document.getElementById('model').value;
-	}
-	if (GET['variable']) {
-		var varia = GET['variable'];
-	} else {
-		var varia = VAR_DICT[model][0].value;//document.getElementById('variable').value;
-	}
-	if (GET['plotTime']) {
-		var plotDate = GET['plotTime'];
-	} else {
-		var plotTime = date_to_normal(current_date(140));
-	    var plotDate = date_to_rods(plotTime['date']) + 'T' + plotTime['hour'];
-	}
-	href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
+function loadNavOptionsAndParams(navItem) {
+    var GET = getUrlVars();
+    var data, model, varia, plotDate, plotTime, endDate, startDate, model2, varia2, years;
 
-	if (page == 'plot') {
-		if (GET['endDate']) {
-			endDate = GET['endDate'];
-		} else {
-			var endDate = current_date(133, '23');
-		}
-		if (GET['startDate']) {
-			startDate =  GET['startDate'];
-		} else {
-			var startDate = current_date(140, '0');
-		}
-		href = href + '&startDate=' + startDate + '&endDate=' + endDate;
-	} else if (page == 'plot2') {
-		if (GET['model2']) {
-			var model2 = GET['model2'];
-		} else {
-			var model2 = 'nldas'; //1st element
-		}
-		if (model === model2 && varia == VAR_DICT[model][0].value) {
-			var varia2 = VAR_DICT[model2][1].value;
-		} else {
-			var varia2 = VAR_DICT[model2][0].value;
-		}
-		if (GET['endDate']) {
-			endDate = GET['endDate'];
-		} else {
-			var endDate = current_date(133, '23');
-		}
-		if (GET['startDate']) {
-			startDate =  GET['startDate'];
-		} else {
-			var startDate = current_date(140, '0');
-		}
-		href = href + '&model2=' + model2 + '&variable2=' + varia2 + '&startDate=' + startDate + '&endDate=' + endDate;
-	} else if (page == 'years') {
-		var endDate = current_date(140, '23');
-		years = endDate.substr(0, 4);
-		href =  href + '&years=' + years;
-	}
-	window.location = href;
+    if (GET['model']) {
+        model = GET['model'];
+    } else {
+        model = $('#model1').val();
+    }
+
+    if (GET['variable']) {
+        varia = GET['variable'];
+    } else {
+        varia = VAR_DICT[model][0].value;
+    }
+
+    if (GET['plotTime']) {
+        plotDate = GET['plotTime'];
+    } else {
+        plotTime = rodsDateToDateHourPickerDict(current_date(140));
+        plotDate = dateHourPickerToRodsDate(plotTime['date']) + 'T' + plotTime['hour'];
+    }
+
+    data = {
+        'model': model,
+        'variable': varia,
+        'plotTime': plotDate
+    };
+
+    if (navItem.indexOf('plot') !== -1) {
+
+        if (GET['endDate']) {
+            endDate = GET['endDate'];
+        } else {
+            endDate = getValidRodsDate(plotDate, model);
+        }
+
+        data['endDate'] = endDate;
+
+        if (GET['startDate']) {
+            startDate =  GET['startDate'];
+        } else {
+            startDate = getPrevRodsDate(endDate, 7);
+        }
+
+        data['startDate'] = startDate;
+
+        if (navItem == 'plot2') {
+            if (GET['model2']) {
+                model2 = GET['model2'];
+            } else {
+                model2 = 'NLDASF'; //1st element
+            }
+
+            data['model2'] = model2;
+
+            if (model === model2 && varia == VAR_DICT[model][0].value) {
+                varia2 = VAR_DICT[model2][1].value;
+            } else {
+                varia2 = VAR_DICT[model2][0].value;
+            }
+
+            data['variable2'] = varia2;
+        }
+
+    } else if (navItem == 'years') {
+        if (GET['years']) {
+            years = GET['years'];
+            data['years'] = years;
+        }
+    }
+    if (navItem == 'plot') {
+        loadDefaultsForPlotNav(data);
+    } else if (navItem == 'plot2') {
+        loadDefaultsForPlot2Nav(data);
+        loadVariableOptions('model2', 'variable2', data);
+    } else if (navItem == 'years') {
+        loadDefaultsForYearsNav(data);
+    }
+    addVarsToURL(data);
 }
 
-function load_default_home(end_date) {
-	var counter = 0;
-	var GET = getUrlVars();
-	var href = window.location.href.split('?')[0];
-	
-	if (GET['model']) {
-		var model = GET['model'];
-	} else {
-		var model = document.getElementById('model').value;
-		counter = counter + 1;
-	}
-	if (GET['variable']) {
-		var varia = GET['variable'];
-	} else {
-		var varia = VAR_DICT[model][0].value;//document.getElementById('variable').value;
-		counter = counter + 1;
-	}
-	if (GET['plotTime']) {
-		var plotTime = date_to_normal(GET['plotTime']);
-	} else {
-		var plotTime = {}
-		plotTime['date'] = end_date;
-		plotTime['hour'] = '00';
-		console.log(plotTime);
-	    document.getElementById('plot_date').value = plotTime['date'];
-	    document.getElementById('plot_hour').value = plotTime['hour'];
-		counter = counter + 1;
-	}
+function loadDefaultHome() {
+    var href;
+    var GET = getUrlVars();
+    var model, plotTime = {};
 
-	if (counter > 0) {
-		var plotDate = date_to_rods(plotTime['date']);
-		plotDate = plotDate + 'T' + plotTime['hour'];
-		href = href + '?model=' + model + '&variable=' + varia + '&plotTime=' + plotDate;
-		window.location = href;
-	} else {
-		document.getElementById('model').value = model;
-		document.getElementById('variable').value = varia;
-		document.getElementById('plot_date').value = plotTime['date'];
-	    document.getElementById('plot_hour').value = plotTime['hour'];
-	}
+    if (GET['model']) {
+        model = GET['model'];
+    }else {
+        model = $('#model1').val();
+        GET['model'] = model;
+    }
+
+    if (GET['variable'] === undefined) {
+        GET['variable'] = VAR_DICT[model][0].value;
+    }
+
+    if (GET['plotTime']) {
+        plotTime = rodsDateToDateHourPickerDict(GET['plotTime']);
+    } else {
+        plotTime['date'] = MODEL_FENCES[model]['end_date'];
+        plotTime['hour'] = '00';
+        GET['plotTime'] = dateHourPickerToRodsDate(plotTime['date'], plotTime['hour'])
+    }
+
+    $('#model1').val(model);
+    $('#variable').val(GET['variable']);
+    $('#plot_date').val(plotTime['date']);
+    $('#plot_hour').val(plotTime['hour']);
+
+    href = constructHref(GET);
+    window.history.pushState({}, 'None', href);
+
+    loadExtentsLayers(model)
 }
 
-function load_default_plot() {
-	var counter = 0;
-	var GET = getUrlVars();
-	var href = window.location.href; //.split('?')[0]
-	if (GET['model']) {
-		var model = GET['model'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['variable']) {
-		var varia = GET['variable'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['plotTime']) {
-		var plotTime = date_to_normal(GET['plotTime']);
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['startDate']) {
-		var startDate = date_to_normal(GET['startDate']);
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['endDate']) {
-		var endDate = date_to_normal(GET['endDate']);
-	} else {
-		counter = counter + 1;
-	}
+function loadDefaultsForPlotNav(data) {
+    var GET = data ? data : getUrlVars();
+    var startDate, endDate;
 
-	if (counter > 0) {
-		page_and_parameters(href, 'plot');
-	} else {
-		document.getElementById('model').value = model;
-		document.getElementById('variable').value = varia;
-		document.getElementById('plot_date').value = plotTime['date'];
-		document.getElementById('plot_hour').value = plotTime['hour'];
-		document.getElementById('startDate').value = startDate['date'];
-	    document.getElementById('endDate').value = endDate['date'];
-	}
+    if (GET['endDate']) {
+        endDate = GET['endDate'];
+    } else {
+        endDate = getValidRodsDate(GET['plotDate'], model);
+    }
+
+    if (GET['startDate']) {
+        startDate =  GET['startDate'];
+    } else {
+        startDate = getPrevRodsDate(endDate, 7);
+    }
+
+    $('#startDate1').val(rodsDateToDateHourPickerDict(startDate)['date']);
+    $('#endDate1').val(rodsDateToDateHourPickerDict(endDate)['date']);
+
+    updateTemporalFences();
 }
 
-function load_default_plot2() {
-	var counter = 0;
-	var GET = getUrlVars();
-	var href = window.location.href; //.split('?')[0]
-	if (GET['model']) {
-		var model = GET['model'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['variable']) {
-		var varia = GET['variable'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['model2']) {
-		var model2 = GET['model2'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['variable2']) {
-		var varia2 = GET['variable2'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['plotTime']) {
-		var plotTime = date_to_normal(GET['plotTime']);
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['startDate']) {
-		var startDate = date_to_normal(GET['startDate']);
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['endDate']) {
-		var endDate = date_to_normal(GET['endDate']);
-	} else {
-		counter = counter + 1;
-	}
+function loadDefaultsForPlot2Nav(data) {
+    var GET = data ? data : getUrlVars();
+    var model2, varia2, startDate, endDate;
 
-	if (counter > 0) {
-		page_and_parameters(href, 'plot2');
-	} else {
-		document.getElementById('model').value = model;
-		document.getElementById('variable').value = varia;
-		document.getElementById('model2').value = model2;
-		document.getElementById('variable2').value = varia2;
-		document.getElementById('plot_date').value = plotTime['date'];
-		document.getElementById('plot_hour').value = plotTime['hour'];
-		document.getElementById('startDate').value = startDate['date'];
-	    document.getElementById('endDate').value = endDate['date'];
-	}
+    if (GET['model2']) {
+        model2 = GET['model2'];
+    } else {
+        model2 = 'NLDASF'; //1st element
+    }
+
+    if (GET['endDate']) {
+        endDate = GET['endDate'];
+    } else {
+        endDate = getValidRodsDate(get['plotDate'], model2);
+    }
+
+    if (GET['startDate']) {
+        startDate =  GET['startDate'];
+    } else {
+        startDate = getPrevRodsDate(endDate, 7);
+    }
+
+    if (GET['model'] === model2 && GET['variable'] == VAR_DICT[GET['model']][0].value) {
+        varia2 = VAR_DICT[model2][1].value;
+    } else {
+        varia2 = VAR_DICT[model2][0].value;
+    }
+
+    $('#model2').val(model2);
+    $('#variable2').val(varia2);
+    $('#startDate2').val(rodsDateToDateHourPickerDict(startDate)['date']);
+    $('#endDate2').val(rodsDateToDateHourPickerDict(endDate)['date']);
+
+    updateTemporalFences();
 }
 
-function load_default_years() {
-	var counter = 0;
-	var GET = getUrlVars();
-	var href = window.location.href; //.split('?')[0]
-	if (GET['model']) {
-		var model = GET['model'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['variable']) {
-		var varia = GET['variable'];
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['plotTime']) {
-		var plotTime = date_to_normal(GET['plotTime']);
-	} else {
-		counter = counter + 1;
-	}
-	if (GET['years']) {
-		var years = GET['years'];
-	} else {
-		counter = counter + 1;
-	}
+function loadDefaultsForYearsNav(data) {
+    var GET = data ? data : getUrlVars();
+    var years;
 
-	if (counter > 0) {
-		page_and_parameters(href, 'years');
-	} else {
-		document.getElementById('model').value = model;
-		document.getElementById('variable').value = varia;
-		document.getElementById('plot_date').value = plotTime['date'];
-		document.getElementById('plot_hour').value = plotTime['hour'];
-		//from here the code is new
-		var years_list = years.split(',');
-		var years_array = [];
-		for (var i=0; i < years_list.length; i++) {
-			if (years_list[i].indexOf('-') === -1) {
-				years_array = years_array.concat(years_list[i])
-			} else {
-				var start_yy = parseInt(years_list[i].split('-')[0]);
-				var end_yy = parseInt(years_list[i].split('-')[1]);
-				for (start_yy; start_yy <= end_yy; start_yy++) {
-					years_array = years_array.concat(start_yy.toString());
-				}
-			}
-		}
-		var years_options = document.getElementById('years');
-		for (var i=0; i < years_options.length; i++) {
-			if (years_array.indexOf(years_options[i].value) != -1) {
-				years_options[i].selected = true;
-			}
-		}
-	}
+    if (GET['years']) {
+        $('#years')
+            .val(GET['years'].split(','))
+            .trigger('change');
+    }
+}
+
+function addVarsToURL(vars) {
+    var href = window.location.href.split('?')[0] + '?';
+    Object.keys(vars).forEach(function (key) {
+        href = href + key + '=' + vars[key] + '&';
+    });
+    href = href.slice(0, -1);
+    window.history.pushState({}, 'None', href);
+}
+
+function loadExtentsLayers(model) {
+    $(function () {
+        var extents = validateExtents(MODEL_FENCES[model].extents);
+        var minX = parseFloat(extents.minX);
+        var maxX = parseFloat(extents.maxX);
+        var minY = parseFloat(extents.minY);
+        var maxY = parseFloat(extents.maxY);
+        var map = TETHYS_MAP_VIEW.getMap();
+
+        var getStyle = function (layer) {
+            var strokeColor = layer === 1 ? 'blue' : 'red';
+            var fillColor = layer === 1 ? 'rgba(0, 0, 255, 0.1)' : 'rgba(255, 0, 0, 0.1)';
+
+            return new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: strokeColor,
+                    width: 3
+                }),
+                fill: new ol.style.Fill({
+                    color: fillColor
+                })
+            });
+        };
+
+        var geojsonObject = {
+            'type': 'FeatureCollection',
+            'crs': {
+                'type': 'name',
+                'properties': {
+                    'name': 'EPSG:4326'
+                }
+            },
+            'features': [{
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Polygon',
+                    'coordinates': [[
+                        ol.proj.fromLonLat([minX, maxY]),
+                        ol.proj.fromLonLat([maxX, maxY]),
+                        ol.proj.fromLonLat([maxX, minY]),
+                        ol.proj.fromLonLat([minX, minY]),
+                        ol.proj.fromLonLat([minX, maxY])
+                    ]]
+                }
+            }]
+        };
+
+        var source1 = new ol.source.Vector({
+            features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+        });
+
+        var source2 = new ol.source.Vector({
+            features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+        });
+
+        var olExtents = [minX, minY, maxX, maxY];
+        var olProjection = 'EPSG:4326';
+
+        MODEL1_LAYER = new ol.layer.Vector({
+            source: source1,
+            style: getStyle(1),
+            name: 'model1_extents',
+            extent: olExtents
+        });
+        MODEL2_LAYER = new ol.layer.Vector({
+            source: source2,
+            style: getStyle(2),
+            name: 'model2_extents',
+            extent: olExtents
+        });
+        MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
+        MODEL2_LAYER['tethys_legend_title'] = 'Model 2 Extents';
+        MODEL1_LAYER['tethys_legend_extent'] = olExtents;
+        MODEL2_LAYER['tethys_legend_extent'] = olExtents;
+        MODEL1_LAYER['tethys_legend_extent_projection'] = olProjection;
+        MODEL2_LAYER['tethys_legend_extent_projection'] = olProjection;
+
+        map.addLayer(MODEL1_LAYER);
+        update_legend();
+    });
 }
