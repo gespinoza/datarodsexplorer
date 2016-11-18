@@ -23,13 +23,18 @@ def test_nasa_endpoints(request):
 
     for model in model_fences:
         nasa_url_template = datarods_tsb[model]
-        # Use if testing range of all available dates
-        # start_date = datetime.strptime(model_fences[model]['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d') + 'T23'
-        # end_date = datetime.strptime(model_fences[model]['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d') + 'T00'
-        # Use if specifying a smaller subset of available dates from latest date backwards
-        end_date_obj = datetime.strptime(model_fences[model]['end_date'], '%m/%d/%Y')
-        end_date = end_date_obj.strftime('%Y-%m-%d') + 'T00'
-        start_date = (end_date_obj - timedelta(days=7)).strftime('%Y-%m-%d') + 'T00'
+
+        # If testing range of all available dates
+        if request.GET.get('full'):
+            print "#$@&$^*@#&$^(@*&$^@#&*($#@"
+            start_date = datetime.strptime(model_fences[model]['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d') + 'T23'
+            end_date = datetime.strptime(model_fences[model]['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d') + 'T00'
+        else:
+            # If testing latest week (Default)
+            end_date_obj = datetime.strptime(model_fences[model]['end_date'], '%m/%d/%Y')
+            end_date = end_date_obj.strftime('%Y-%m-%d') + 'T00'
+            start_date = (end_date_obj - timedelta(days=7)).strftime('%Y-%m-%d') + 'T00'
+
         extents = model_fences[model]['extents']
         y = float(extents['minY']) + ((float(extents['maxY']) - float(extents['minY'])) / 2)
         x = float(extents['minX']) + ((float(extents['maxX']) - float(extents['minX'])) / 2)
