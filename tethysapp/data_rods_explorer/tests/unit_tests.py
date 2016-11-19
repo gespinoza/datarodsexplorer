@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from tethysapp.data_rods_explorer.model_objects import init_model, get_datarods_tsb, get_var_dict, get_model_fences
 from datetime import datetime, timedelta
-import urllib2
+from urllib2 import urlopen
 
 
 def test_nasa_endpoints(request):
@@ -25,8 +25,7 @@ def test_nasa_endpoints(request):
         nasa_url_template = datarods_tsb[model]
 
         # If testing range of all available dates
-        if request.GET.get('full'):
-            print "#$@&$^*@#&$^(@*&$^@#&*($#@"
+        if request.GET.get('full') and request.GET['full'] == 'true':
             start_date = datetime.strptime(model_fences[model]['start_date'], '%m/%d/%Y').strftime('%Y-%m-%d') + 'T23'
             end_date = datetime.strptime(model_fences[model]['end_date'], '%m/%d/%Y').strftime('%Y-%m-%d') + 'T00'
         else:
@@ -45,7 +44,7 @@ def test_nasa_endpoints(request):
             var = var_obj['value']
             url = nasa_url_template.format(var, lonlat, start_date, end_date)
             try:
-                nasa_file = urllib2.urlopen(url)
+                nasa_file = urlopen(url)
                 if 'Date&Time' in nasa_file.read():
                     success += 1
                 else:
