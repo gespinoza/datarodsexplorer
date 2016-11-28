@@ -1,4 +1,5 @@
 from urllib2 import urlopen
+from requests import get
 from os import path
 from sys import path as syspath
 syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 will be found
@@ -7,30 +8,44 @@ from datetime import datetime, timedelta
 
 
 def extract_model_data_from_config_file():
-    db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+    # Attempt to parse model_config.txt from GitHub repo master branch
+    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
+                   'data_rods_explorer/public/data/model_config.txt')
+    f = get(db_file_url)
+    if f.status_code == 200:
+        if f.encoding is None:
+            f.encoding = 'utf-8'
+        lines = f.iter_lines(decode_unicode=True)
+        next(lines)  # Skip first line
+        next(lines)  # Skip second line
+    else:
+        # If the file cannot be parsed from GitHub, use the locally stored file instead
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+        with open(db_file, mode='r') as f:
+            f.readline()  # Skip first line
+            f.readline()  # Skip second line
+            lines = f.readlines()
+
     new_model_switch = False
     model_list = []
 
-    with open(db_file, mode='r') as f:
-        f.readline()  # skip column headings lines
-        f.readline()
-        for line in f.readlines():
-            if line == '\n':
-                new_model_switch = True
-                continue
-            line = line.strip()
-            linevals = line.split('|')
-            if new_model_switch:
-                model_vals = linevals[0].split('~')
-                model_key = model_vals[1]
-                model_short_name = model_vals[2]
-                model_version = model_vals[3]
-                model_list.append({
-                    'key': model_key,
-                    'short_name': model_short_name,
-                    'version': model_version
-                })
-                new_model_switch = False
+    for line in lines:
+        if line == '\n' or line == '':
+            new_model_switch = True
+            continue
+        line = line.strip()
+        linevals = line.split('|')
+        if new_model_switch:
+            model_vals = linevals[0].split('~')
+            model_key = model_vals[1]
+            model_short_name = model_vals[2]
+            model_version = model_vals[3]
+            model_list.append({
+                'key': model_key,
+                'short_name': model_short_name,
+                'version': model_version
+            })
+            new_model_switch = False
 
     return model_list
 
@@ -43,8 +58,8 @@ def write_fences_file(model_list):
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025_3H&version=2.0&page_size=1&sort_key=start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=TRMM_3B42&version=7&page_size=1&sort_key=start_date
-    # https: // cmr.earthdata.nasa.gov / search / granules?short_name = LPRM_AMSRE_D_SOILM3 & version = 002 & page_size = 1 & sort_key = start_date
-    # https: // cmr.earthdata.nasa.gov / search / granules?short_name = LPRM_AMSRE_A_SOILM3 & version = 002 & page_size = 1 & sort_key = start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSRE_D_SOILM3&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSRE_A_SOILM3&version=002&page_size=1&sort_key=start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=GRACEDADM_CLSM025NA_7D&version=1.0&page_size=1&sort_key=start_date
     url_pattern = "https://cmr.earthdata.nasa.gov/search/granules?short_name={0}&version={1}&page_size=1&sort_key={2}"
     columnheadings = "Model name | Begin time | End time | N , E , S , W bounds\n"

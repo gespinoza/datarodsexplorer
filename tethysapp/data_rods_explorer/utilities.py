@@ -420,13 +420,16 @@ def get_data_rod_years(req_post, point_lon_lat):
 def generate_datarods_urls_dict(asc2_urls):
     plot_urls = []
     waterml_urls = []
+    netcdf_urls = []
 
     for url in asc2_urls:
         plot_urls.append(url.replace('asc2', 'plot'))
         waterml_urls.append(url.replace('asc2', 'waterml'))
+        netcdf_urls.append(url.replace('asc2', 'netcdf'))
 
     return {
         'asc2': asc2_urls,
         'plot': plot_urls,
-        'waterml': waterml_urls
+        'waterml': waterml_urls,
+        'netcdf': netcdf_urls
     }
