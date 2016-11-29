@@ -119,7 +119,7 @@ def parse_model_database_from_file():
     f = get(db_file_url)
     if f.status_code == 200:
         if f.encoding is None:
-            f.encoding = 'utf-8'
+            f.encoding = 'ascii'
         lines = f.iter_lines(decode_unicode=True)
         next(lines)  # Skip first line
         next(lines)  # Skip second line

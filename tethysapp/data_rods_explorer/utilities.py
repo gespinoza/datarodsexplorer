@@ -7,7 +7,7 @@ import urllib2
 from math import copysign
 from datetime import datetime
 from dateutil import parser as dateparser
-from model_objects import get_workspace, get_geoserver_url, get_wms_vars, get_datarods_png, get_datarods_tsb,\
+from model_objects import get_workspace, get_geoserver_url, get_wms_vars, get_datarods_png, get_datarods_tsb, \
     get_model_fences, get_model_options
 from tethys_sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button, MVLayer
 
@@ -339,8 +339,8 @@ def get_data_rod_plot(req_get, point_lon_lat):
     variable = req_get['variable']
     superstring = get_datarods_tsb()[model]
 
-    dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
-                                 req_get['startDate'], req_get['endDate'])
+    dr_link = str(superstring.format(variable, point_lon_lat.replace(',', ',%20'),
+                                     req_get['startDate'], req_get['endDate']))
 
     dr_ts = get_data_from_nasa_server(dr_link)
 
@@ -358,8 +358,8 @@ def get_data_rod_plot2(req_get, point_lon_lat):
     variable1 = req_get['variable']
     superstring1 = get_datarods_tsb()[model1]
 
-    dr_link1 = superstring1.format(variable1, point_lon_lat.replace(',', ',%20'),
-                                   start_date, end_date)
+    dr_link1 = str(superstring1.format(variable1, point_lon_lat.replace(',', ',%20'),
+                                       start_date, end_date))
 
     data1 = get_data_from_nasa_server(dr_link1)
 
@@ -368,8 +368,8 @@ def get_data_rod_plot2(req_get, point_lon_lat):
     variable2 = req_get['variable2']
     superstring2 = get_datarods_tsb()[model2]
 
-    dr_link2 = superstring2.format(variable2, point_lon_lat.replace(',', ',%20'),
-                                   start_date, end_date)
+    dr_link2 = str(superstring2.format(variable2, point_lon_lat.replace(',', ',%20'),
+                                       start_date, end_date))
     data2 = get_data_from_nasa_server(dr_link2)
     # Create list
     dr_ts = [{'name': get_wms_vars()[model1][variable1][1] + ' (' + get_wms_vars()[model1][variable1][2] + ')',
@@ -403,9 +403,9 @@ def get_data_rod_years(req_post, point_lon_lat):
                               'data': data})
                 dr_links.append(dr_link)
         else:
-            dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
-                                         '{0}-01-01T00'.format(year),
-                                         '{0}-12-31T23'.format(year))
+            dr_link = str(superstring.format(variable, point_lon_lat.replace(',', ',%20'),
+                                             '{0}-01-01T00'.format(year),
+                                             '{0}-12-31T23'.format(year)))
 
             data = get_data_from_nasa_server(dr_link, overlap_years)
             dr_ts.append({'name': year,
