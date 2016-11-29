@@ -423,9 +423,9 @@ def generate_datarods_urls_dict(asc2_urls):
     netcdf_urls = []
 
     for url in asc2_urls:
-        plot_urls.append(str(url.replace('asc2', 'plot')))
-        waterml_urls.append(str(url.replace('asc2', 'waterml')))
-        netcdf_urls.append(str(url.replace('asc2', 'netcdf')))
+        plot_urls.append(url.replace('asc2', 'plot'))
+        waterml_urls.append(url.replace('asc2', 'waterml'))
+        netcdf_urls.append(url.replace('asc2', 'netcdf'))
 
     return {
         'asc2': asc2_urls,

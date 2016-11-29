@@ -118,9 +118,7 @@ def parse_model_database_from_file():
                    'data_rods_explorer/public/data/model_config.txt')
     f = get(db_file_url)
     if f.status_code == 200:
-        if f.encoding is None:
-            f.encoding = 'ascii'
-        lines = f.iter_lines(decode_unicode=True)
+        lines = f.iter_lines()
         next(lines)  # Skip first line
         next(lines)  # Skip second line
     else:
