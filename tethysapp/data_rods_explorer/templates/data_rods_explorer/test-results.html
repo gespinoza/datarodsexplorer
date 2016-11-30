@@ -11,5 +11,13 @@
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 
 {% block app_content %}
-    <div>{{ results |safe }}</div>
+    <div>{{ results_text |safe }}</div>
+    {% if failed_urls %}
+        <br>FAILED URLS:
+        {% for url in failed_urls %}
+            <br>
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+        {% endfor %}
+    {% endif %}
+
 {% endblock %}

@@ -1,6 +1,7 @@
 from socket import gethostname
 from os import path
 from datetime import datetime, timedelta
+from requests import get
 
 
 if 'apps.hydroshare' in gethostname():
@@ -112,46 +113,57 @@ def parse_fences_from_file():
 
 
 def parse_model_database_from_file():
+    # Attempt to parse model_config.txt from GitHub repo master branch
+    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
+                   'data_rods_explorer/public/data/model_config.txt')
+    f = get(db_file_url)
+    if f.status_code == 200:
+        lines = f.iter_lines()
+        next(lines)  # Skip first line
+        next(lines)  # Skip second line
+    else:
+        # If the file cannot be parsed from GitHub, use the locally stored file instead
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+        with open(db_file, mode='r') as f:
+            f.readline()  # Skip first line
+            f.readline()  # Skip second line
+            lines = f.readlines()
+
     new_model_switch = False
     model_options = []
     var_dict = {}
     wms_vars = {}
     datarods_tsb = {}
 
-    db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+    for line in lines:
+        if line == '\n' or line == '':
+            new_model_switch = True
+            continue
+        line = line.strip()
+        linevals = line.split('|')
+        if new_model_switch:
+            model_vals = linevals[0].split('~')
+            model_name = model_vals[0]
+            model_key = model_vals[1]
+            datarods_tsb[model_key] = model_vals[4]
+            model_options.append((model_name, model_key))
+            new_model_switch = False
+            continue
+        else:
+            model_key = linevals[0]
 
-    with open(db_file, mode='r') as f:
-        f.readline()  # skip column headings line
-        f.readline()
-        for line in f.readlines():
-            if line == '\n':
-                new_model_switch = True
-                continue
-            line = line.strip()
-            linevals = line.split('|')
-            if new_model_switch:
-                model_vals = linevals[0].split('~')
-                model_name = model_vals[0]
-                model_key = model_vals[1]
-                datarods_tsb[model_key] = model_vals[4]
-                model_options.append((model_name, model_key))
-                new_model_switch = False
-                continue
-            else:
-                model_key = linevals[0]
+            if model_key not in wms_vars:
+                wms_vars[model_key] = {}
 
-                if model_key not in wms_vars:
-                    wms_vars[model_key] = {}
+            wms_vars[model_key][linevals[1]] = [linevals[2], linevals[3], linevals[4]]
 
-                wms_vars[model_key][linevals[1]] = [linevals[2], linevals[3], linevals[4]]
+            if model_key not in var_dict:
+                var_dict[model_key] = []
 
-                if model_key not in var_dict:
-                    var_dict[model_key] = []
-
-                var_dict[model_key].append({
-                    "text": "%s %s" % (linevals[3], linevals[4]),
-                    "value": linevals[1],
-                    "layerName": linevals[5]
-                })
+            var_dict[model_key].append({
+                "text": "%s %s" % (linevals[3], linevals[4]),
+                "value": linevals[1],
+                "layerName": linevals[5]
+            })
 
     return model_options, var_dict, wms_vars, datarods_tsb
