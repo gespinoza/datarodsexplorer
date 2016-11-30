@@ -15,7 +15,7 @@ def extract_model_data_from_config_file():
     if f.status_code == 200:
         if f.encoding is None:
             f.encoding = 'utf-8'
-        lines = f.iter_lines(decode_unicode=True)
+        lines = f.iter_lines()
         next(lines)  # Skip first line
         next(lines)  # Skip second line
     else:
