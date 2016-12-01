@@ -880,3 +880,45 @@ function modifyYAxis() {
     $('.highcharts-axis').last().find('text')
         .css('transform', 'matrix3d(0,-1,0.00,0,1.00,0,0.00,0,0,0,1,0,-100,135,0,1)');
 }
+
+function removeExistingPoint(pointAddedBefore) {
+    var numExistingPts = 0;
+    if (pointAddedBefore) {
+        numExistingPts = 1;
+    }
+    var map = TETHYS_MAP_VIEW.getMap();
+    var pointSource = map.getLayers().item(1).getSource();
+
+    while (pointSource.getFeatures().length > numExistingPts) {
+        pointSource.removeFeature(pointSource.getFeatures()[0]);
+    }
+}
+
+function addToURL(lon, lat) {
+    var href;
+    var GET = getUrlVars();
+
+    // Only variable2 is affected by this change event. Everything else stays the same.
+    GET['lon'] = lon;
+    GET['lat'] = lat;
+
+    href = constructHref(GET);
+    history.pushState("", "", href);
+}
+
+function addNewPoint(lon, lat, centerOnPoint) {
+    var map = TETHYS_MAP_VIEW.getMap();
+    var latLonCoords = [Number(lon), Number(lat)];
+    var mapCoords = ol.proj.transform(latLonCoords, 'EPSG:4326', 'EPSG:3857');
+
+    map.getLayers().item(1).getSource().addFeature(new ol.Feature({
+        geometry: new ol.geom.Point(mapCoords)
+    }));
+    document.getElementById('pointLonLat').value = parseFloat(lon).toFixed(4) + ',' + parseFloat(lat).toFixed(4);
+    validateClickPoint();
+    addToURL(lon, lat);
+
+    if (centerOnPoint) {
+        map.getView().setCenter(mapCoords);
+    }
+}

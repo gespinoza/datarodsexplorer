@@ -115,7 +115,6 @@ function oc_years() {
     var href;
     var GET = getUrlVars();
 
-    //From here the code is new
     var yearsList = $('#years').val();
 
     if (yearsList && yearsList.length > 0) {

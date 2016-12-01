@@ -114,7 +114,7 @@
                             <a id="resetPage">Reset</a>
                         </div>
                         <div class="exit-button">
-                            <a href="https://github.com/gespinoza/datarodsexplorer/blob/master/DataRodsExplorer-OnlineHelpGuide.pdf" target="_blank">About</a>
+                            <a href="{% static 'data_rods_explorer/data/DataRodsExplorer-OnlineHelpGuide.pdf' %}" target="_blank">About</a>
                         </div>
                     {% endblock %}
                 </div>
@@ -123,20 +123,15 @@
         {% block app_content_override %}
             <div id="app-content">
                 {% block flash %}
-                    {% if messages %}
-                        <div class="flash-messages">
-                            {% for message in messages %}
-                                <div id="{{ message.id }}" class="alert {% if message.category %}alert-{{ message.category }}{% endif %} alert-dismissible" role="alert">
-                                    <b><span class="glyphicon glyphicon-{{ message.category }}-sign" aria-hidden="true"></span>
-{#                                    <button type="button" class="close" data-dismiss="alert">#}
-{#                                        <span aria-hidden="true">&times;</span>#}
-{#                                        <span class="sr-only">Close</span>#}
-{#                                    </button>#}
-                                    {{ message.text }}
-                                </b></div>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                    <div class="flash-messages">
+                        <div id="query-point-info" class="alert alert-info alert-dismissible" role="alert">
+                            <b><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+                                Click on the map to define data query location, or enter a lon/lat coordinate:
+                                <input type="number" min="-180" max="180" id="lon" placeholder="Lon" style="width: 100px">
+                                <input type="number" min="-90" max="90" id="lat" placeholder="Lat" style="width: 100px">
+                                <button type="button" id="btn-addPoint">Go</button>
+                            </b></div>
+                    </div>
                 {% endblock %}
 
                 {% block app_navigation_override %}
@@ -154,7 +149,7 @@
                                         <li class="separator"></li>
                                         <li>Select Map date & time</li>
                                         {% gizmo date_picker select_date %}
-                                        {% gizmo select_input select_hour%}
+                                        {% gizmo select_input select_hour %}
 
                                         <form id="parametersForm" name="parametersForm">
                                             {% csrf_token %}
@@ -258,8 +253,10 @@
         setDataRodsTSB("{{ DATARODS_TSB }}");
         setDataRodsPNG("{{ DATARODS_PNG }}");
         setWMSVars("{{ WMS_VARS }}");
-        loadDefaultHome();
-        loadVariableOptions('model', 'variable');
+        $(function () {
+            loadDefaultHome();
+            loadVariableOptions('model', 'variable');
+        });
     </script>
 {% endblock %}
 </body>

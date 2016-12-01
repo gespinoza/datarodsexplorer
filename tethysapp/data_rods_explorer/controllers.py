@@ -73,11 +73,11 @@ def home(request):
         'select_model2': select_model2,
         'plot_button3': plot_button3,
         'select_years': select_years,
-        'messages': [{
-            'category': 'info',
-            'text': 'Click on the map to define data query location.',
-            'id': 'click-map'
-        }]
+        # 'messages': [{
+        #     'category': 'info',
+        #     'text': 'Click on the map to define data query location.',
+        #     'id': 'click-map'
+        # }]
     }
 
     return render(request, 'data_rods_explorer/app_base_dre.html', context)

@@ -60,6 +60,15 @@ function loadNavOptionsAndParams(navItem) {
         'plotTime': plotDate
     };
 
+    // Keep lon, lat in URL if already there
+    if (GET['lon']) {
+        data['lon'] = GET['lon'];
+    }
+
+    if (GET['lat']) {
+        data['lat'] = GET['lat'];
+    }
+
     if (navItem.indexOf('plot') !== -1) {
 
         if (GET['endDate']) {
@@ -116,11 +125,13 @@ function loadNavOptionsAndParams(navItem) {
 function loadDefaultHome() {
     var href;
     var GET = getUrlVars();
-    var model, plotTime = {};
+    var model = GET['model'];
+    var plotTime = {};
+    var lon = GET['lon'];
+    var lat = GET['lat'];
+    var navItem;
 
-    if (GET['model']) {
-        model = GET['model'];
-    }else {
+    if (model === undefined) {
         model = $('#model1').val();
         GET['model'] = model;
     }
@@ -142,10 +153,35 @@ function loadDefaultHome() {
     $('#plot_date').val(plotTime['date']);
     $('#plot_hour').val(plotTime['hour']);
 
+    if (lon !== undefined) {
+        $('#lon').val(lon)
+    }
+
+    if (lat !== undefined) {
+        $('#lat').val(lat)
+    }
+
+    if (lon !== undefined && lat !== undefined) {
+        addNewPoint(Number(lon), Number(lat), true);
+    }
+
     href = constructHref(GET);
     window.history.pushState({}, 'None', href);
 
-    loadExtentsLayers(model)
+    if (GET['years'] !== undefined) {
+        navItem = 'years';
+    } else if (GET['variable2'] !== undefined) {
+        navItem = 'plot2'
+    } else if (GET['startDate'] !== undefined) {
+        navItem = 'plot'
+    }
+
+    // Must be called before the onClickLink() function
+    loadExtentsLayers(model);
+
+    if (navItem) {
+        onClickLink($('#nav-' + navItem).prev().children()[0], navItem);
+    }
 }
 
 function loadDefaultsForPlotNav(data) {
@@ -227,83 +263,81 @@ function addVarsToURL(vars) {
 }
 
 function loadExtentsLayers(model) {
-    $(function () {
-        var extents = validateExtents(MODEL_FENCES[model].extents);
-        var minX = parseFloat(extents.minX);
-        var maxX = parseFloat(extents.maxX);
-        var minY = parseFloat(extents.minY);
-        var maxY = parseFloat(extents.maxY);
-        var map = TETHYS_MAP_VIEW.getMap();
+    var extents = validateExtents(MODEL_FENCES[model].extents);
+    var minX = parseFloat(extents.minX);
+    var maxX = parseFloat(extents.maxX);
+    var minY = parseFloat(extents.minY);
+    var maxY = parseFloat(extents.maxY);
+    var map = TETHYS_MAP_VIEW.getMap();
 
-        var getStyle = function (layer) {
-            var strokeColor = layer === 1 ? 'blue' : 'red';
-            var fillColor = layer === 1 ? 'rgba(0, 0, 255, 0.1)' : 'rgba(255, 0, 0, 0.1)';
+    var getStyle = function (layer) {
+        var strokeColor = layer === 1 ? 'blue' : 'red';
+        var fillColor = layer === 1 ? 'rgba(0, 0, 255, 0.1)' : 'rgba(255, 0, 0, 0.1)';
 
-            return new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: strokeColor,
-                    width: 3
-                }),
-                fill: new ol.style.Fill({
-                    color: fillColor
-                })
-            });
-        };
-
-        var geojsonObject = {
-            'type': 'FeatureCollection',
-            'crs': {
-                'type': 'name',
-                'properties': {
-                    'name': 'EPSG:4326'
-                }
-            },
-            'features': [{
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Polygon',
-                    'coordinates': [[
-                        ol.proj.fromLonLat([minX, maxY]),
-                        ol.proj.fromLonLat([maxX, maxY]),
-                        ol.proj.fromLonLat([maxX, minY]),
-                        ol.proj.fromLonLat([minX, minY]),
-                        ol.proj.fromLonLat([minX, maxY])
-                    ]]
-                }
-            }]
-        };
-
-        var source1 = new ol.source.Vector({
-            features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+        return new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: strokeColor,
+                width: 3
+            }),
+            fill: new ol.style.Fill({
+                color: fillColor
+            })
         });
+    };
 
-        var source2 = new ol.source.Vector({
-            features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
-        });
+    var geojsonObject = {
+        'type': 'FeatureCollection',
+        'crs': {
+            'type': 'name',
+            'properties': {
+                'name': 'EPSG:4326'
+            }
+        },
+        'features': [{
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Polygon',
+                'coordinates': [[
+                    ol.proj.fromLonLat([minX, maxY]),
+                    ol.proj.fromLonLat([maxX, maxY]),
+                    ol.proj.fromLonLat([maxX, minY]),
+                    ol.proj.fromLonLat([minX, minY]),
+                    ol.proj.fromLonLat([minX, maxY])
+                ]]
+            }
+        }]
+    };
 
-        var olExtents = [minX, minY, maxX, maxY];
-        var olProjection = 'EPSG:4326';
-
-        MODEL1_LAYER = new ol.layer.Vector({
-            source: source1,
-            style: getStyle(1),
-            name: 'model1_extents',
-            extent: olExtents
-        });
-        MODEL2_LAYER = new ol.layer.Vector({
-            source: source2,
-            style: getStyle(2),
-            name: 'model2_extents',
-            extent: olExtents
-        });
-        MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
-        MODEL2_LAYER['tethys_legend_title'] = 'Model 2 Extents';
-        MODEL1_LAYER['tethys_legend_extent'] = olExtents;
-        MODEL2_LAYER['tethys_legend_extent'] = olExtents;
-        MODEL1_LAYER['tethys_legend_extent_projection'] = olProjection;
-        MODEL2_LAYER['tethys_legend_extent_projection'] = olProjection;
-
-        map.addLayer(MODEL1_LAYER);
-        update_legend();
+    var source1 = new ol.source.Vector({
+        features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
     });
+
+    var source2 = new ol.source.Vector({
+        features: (new ol.format.GeoJSON()).readFeatures(geojsonObject)
+    });
+
+    var olExtents = [minX, minY, maxX, maxY];
+    var olProjection = 'EPSG:4326';
+
+    MODEL1_LAYER = new ol.layer.Vector({
+        source: source1,
+        style: getStyle(1),
+        name: 'model1_extents',
+        extent: olExtents
+    });
+    MODEL2_LAYER = new ol.layer.Vector({
+        source: source2,
+        style: getStyle(2),
+        name: 'model2_extents',
+        extent: olExtents
+    });
+    MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
+    MODEL2_LAYER['tethys_legend_title'] = 'Model 2 Extents';
+    MODEL1_LAYER['tethys_legend_extent'] = olExtents;
+    MODEL2_LAYER['tethys_legend_extent'] = olExtents;
+    MODEL1_LAYER['tethys_legend_extent_projection'] = olProjection;
+    MODEL2_LAYER['tethys_legend_extent_projection'] = olProjection;
+
+    map.addLayer(MODEL1_LAYER);
+    update_legend();
 }

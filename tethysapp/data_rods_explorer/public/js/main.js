@@ -9,19 +9,38 @@ $(function() {
     map.getLayers().item(1).setZIndex(10000);
 
     map.on('singleclick', function(evt) {
-        removeFlashMessage('click-map');
-        var pointSource = map.getLayers().item(1).getSource();
-
-        while (pointSource.getFeatures().length > 1) {
-            pointSource.removeFeature(pointSource.getFeatures()[0]);
-        }
-
         var coords = evt.coordinate;
         var lonlat = ol.proj.transform(coords, 'EPSG:3857', 'EPSG:4326');
+        var lon, lat;
+
         lonlat = convertLonLatToMainMapExtents(lonlat);
-        document.getElementById('pointLonLat').value = parseFloat(lonlat[0]).toFixed(4) + ',' + parseFloat(lonlat[1]).toFixed(4);
-        validateClickPoint()
+        lon = parseFloat(lonlat[0]).toFixed(4);
+        lat = parseFloat(lonlat[1]).toFixed(4);
+        removeExistingPoint(true);
+        addNewPoint(lon, lat, false);
+        $('#lon').val(lon);
+        $('#lat').val(lat);
     });
+
+    $('#btn-addPoint').on('click', function () {
+        var lon = $('#lon').val();
+        var lat = $('#lat').val();
+
+        removeExistingPoint();
+        addNewPoint(lon, lat, true);
+    });
+
+    $('#lon').add('#lat')
+        .on('focus', function () {
+            $(this).on('keyup', function (e) {
+                if (e.which === 13) {
+                    $('#btn-addPoint').trigger('click');
+                }
+            })
+        })
+        .on('blur', function () {
+            $(this).off('keyup');
+        });
 
     // Listener to automatically resize map when the nav bar opens or closes
     (function () {
