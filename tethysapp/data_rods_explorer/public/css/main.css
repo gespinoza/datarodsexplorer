@@ -32,7 +32,7 @@
     align-items: center;
 }
 
-.option-viewData {
+.option-viewData, .option-uploadToHS {
     background: #5971A8;
     padding: 2px;
     margin: 1px;
@@ -40,7 +40,7 @@
     color: white;
 }
 
-.option-viewData:hover {
+.option-viewData:hover, .option-uploadToHS:hover {
     background: white;
     color: black;
     cursor: pointer;
@@ -82,4 +82,10 @@
 }
 .highcharts-axis:last-child text {
     transform: matrix3d(0,-1,0.00,0,1.00,0,0.00,0,0,0,1,0,-100,135,0,1);
+}
+#plot-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
 }

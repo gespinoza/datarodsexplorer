@@ -214,6 +214,7 @@
                             <div id="plot-loading" class="hidden">
                                 <img src="/static/data_rods_explorer/images/main-loading-anim.gif" />
                             </div>
+                            <br>
                             <div id="plot-container"></div>
                         </div>
                     {% endblock %}
@@ -230,6 +231,50 @@
             </div>
         {% endblock %}
     </div>
+    <!-- Upload to HydroShare Modal -->
+    <div id="modalUploadToHS" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Upload to HydroShare</h4>
+                </div>
+                <div class="modal-body">
+                    <fieldset>
+                        <div class="form-group hidden">
+                            <label for="resType" class="control-label">Resource Type:</label>
+                            <input type="text" id="resType" />
+                        </div>
+                        <div class="form-group hidden">
+                            <label for="rodsEndpoint" class="control-label">Rods Endpoint:</label>
+                            <input type="text" id="rodsEndpoint" />
+                        </div>
+                        <div class="form-group">
+                            <label for="resTitle" class="control-label">Resource Title:</label>
+                            <input type="text" class="form-control resField" id="resTitle">
+                        </div>
+                        <div class="form-group">
+                            <label for="resAbstract" class="control-label">Resource Abstract:</label>
+                            <textarea rows="6" cols="50" id="resAbstract" class="form-control resField"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="resKeywords" class="control-label">Resource Keywords:</label>
+                            <input type="text" class="form-control resField" id="resKeywords">
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <div class="button-group flex1-0">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="btn-uploadToHS" class="btn btn-default btn-upload">Upload</button>
+                    </div>
+                </div>
+            </div>
+            <!--End modal content-->
+        </div>
+    </div>
+    <!--End modal-->
 {% endblock %}
 
 {% block scripts %}

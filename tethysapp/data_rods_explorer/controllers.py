@@ -6,6 +6,10 @@ from model_objects import get_geoserver_url, get_wms_vars, get_datarods_png, get
 from utilities import create_map, create_select_model, create_plot_ctrls, create_map_date_ctrls, \
     create_years_list, load_tiff_ly, get_data_rod_plot, get_data_rod_plot2, get_data_rod_years
 from json import dumps
+from tethys_services.backends.hs_restclient_helper import get_oauth_hs
+from requests import get
+from tempfile import TemporaryFile
+from ast import literal_eval
 
 
 def home(request):
@@ -72,12 +76,7 @@ def home(request):
         'plot_button2': plot_button2,
         'select_model2': select_model2,
         'plot_button3': plot_button3,
-        'select_years': select_years,
-        # 'messages': [{
-        #     'category': 'info',
-        #     'text': 'Click on the map to define data query location.',
-        #     'id': 'click-map'
-        # }]
+        'select_years': select_years
     }
 
     return render(request, 'data_rods_explorer/app_base_dre.html', context)
@@ -197,3 +196,70 @@ def years(request):
         }
 
         return render(request, 'data_rods_explorer/plot.html', context)
+
+
+def upload_to_hs(request):
+    if request.is_ajax() and request.method == 'GET':
+        res_id = None
+        params = request.GET
+        res_type = params.get('res_type', None)
+        res_title = params.get('res_title', None)
+        res_abstract = params.get('res_abstract', None)
+        res_keywords = params.get('res_keywords', None)
+        rods_endpoints = params.get('rods_endpoints', None)
+
+        if rods_endpoints:
+            rods_endpoints = literal_eval(str(rods_endpoints))
+
+        try:
+            hs = get_oauth_hs(request)
+        except:
+            return JsonResponse({
+                'success': False,
+                'message': 'You must be logged into the app through HydroShare to access this feature.'
+            })
+
+        num_endpoints = len(rods_endpoints)
+
+        for i, url in enumerate(rods_endpoints):
+            with TemporaryFile() as f:
+                r = get(str(url))
+
+                for chunk in r.iter_content(chunk_size=2048):
+                    f.write(chunk)
+
+                f.seek(0)
+                filename = 'rods{i}.{ext}'.format(i='' if i == 0 else i + 1,
+                                                  ext='nc' if 'netcdf' in str(url) else 'txt')
+                # Netcdf resources can only have one file, so if there are more than one, create a GenericResource
+                if res_type == 'NetcdfResource' and num_endpoints > 1:
+                    res_type = 'GenericResource'
+
+                # Resource should only be created the first time, then added to all subsequent times
+                if i == 0:
+                    res_id = hs.createResource(resource_type=str(res_type),
+                                               title=str(res_title),
+                                               resource_filename=filename,
+                                               resource_file=f,
+                                               abstract=str(res_abstract) if res_abstract else None,
+                                               keywords=str(res_keywords).split(',') if res_keywords else None)
+                else:
+                    counter = 0
+                    failed = True
+                    while failed:
+                        if counter == 15:
+                            raise Exception
+                        try:
+                            hs.addResourceFile(res_id, resource_filename=filename, resource_file=f)
+                            failed = False
+                        except hs.HydroShareHTTPException as e:
+                            if 'with method POST and params None' in str(e):
+                                failed = True
+                                counter += 1
+                            else:
+                                raise e
+
+        return JsonResponse({
+            'success': True,
+            'res_id': res_id
+        })

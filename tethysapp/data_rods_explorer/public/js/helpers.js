@@ -243,7 +243,14 @@ function createPlot(plotType) {
                     initHighChartsPlot($('.highcharts-plot'), hcPlotType);
                     $('#plot-loading').addClass('hidden');
 
-                    if (plotType === 'plot2') {
+                    $('.option-uploadToHS').on('click', function () {
+                        $('#resType').val($(this).data('restype'));
+                        $('#rodsEndpoint').val($(this).data('rodsendpoint'));
+                        $('#modalUploadToHS').modal('show');
+                    });
+                    if (plotType === 'plot') {
+                        modifyYAxis();
+                    } else if (plotType === 'plot2') {
                         var opts = $('#plot2-options');
                         var series = opts.attr('data-series');
                         var y1Units = opts.attr('data-y1units');
@@ -254,7 +261,6 @@ function createPlot(plotType) {
                             modifyXAxis();
                         }
                     }
-                    modifyYAxis();
                     $('.highcharts-legend-item').on('click', function () {
                         setTimeout(modifyYAxis, 500);
                     });
@@ -489,17 +495,23 @@ function openDataRodsUrls(datarods_urls) {
     });
 }
 
-function displayFlashMessage(id, type, message) {
+function displayFlashMessage(id, type, message, allowClose) {
+    var closeHtml = '';
     if ($('#' + id).length !== 0) {
         return;
     }
+
+    if (allowClose) {
+        closeHtml = '<button type="button" class="close" data-dismiss="alert">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '<span class="sr-only">Close</span>' +
+            '</button>';
+    }
+
     $('.flash-messages').append(
         '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+        closeHtml +
         '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +
-        // '<button type="button" class="close" data-dismiss="alert">' +
-        // '<span aria-hidden="true">&times;</span>' +
-        // '<span class="sr-only">Close</span>' +
-        // '</button>' +
         message +
         '</b></div>'
     );
