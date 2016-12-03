@@ -45,4 +45,4 @@ Thumbs.db
 # Other files #
 ###############
 *dates_and_spatial_range.txt
-
+docs/*.pdf
