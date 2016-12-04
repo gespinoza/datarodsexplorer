@@ -2,7 +2,7 @@
 
 ### Data Rods Explorer - Readme ##
 
-This github repository is for the development and maintenance of the **Data Rods Explorer (DRE)**, by Gonzalo Espinoza, started in 2015. DRE is a web app for browsing, mapping, and plotting time series of hydrometeorological variables from NASA Land Surface Models and retrievals (NLDAS, GLDAS, LPRM AMSRE, TRMM, GRACE; see DRE User Guide for more details)
+This github repository is for the development and maintenance of the **Data Rods Explorer (DRE)**, by Gonzalo Espinoza, started in 2015. DRE is a web client app that enables users to browse several NASA-hosted data sets. The interface enables visualization and download of NASA observation retrievals and land surface model (LSM) outputs by variable, space and time. The key variables are precipitation, wind, temperature, surface downward radiation flux, heat flux, humidity, soil moisture, groundwater, runoff, and evapotranspiration. These variables describe the main components of the water cycle over land masses.
 
 Key links: 
  - Run the [Data Rods Explorer on HydroShare-apps](https://apps.hydroshare.org/apps/data-rods-explorer)
