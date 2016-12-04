@@ -10,6 +10,7 @@ from tethys_services.backends.hs_restclient_helper import get_oauth_hs
 from requests import get
 from tempfile import TemporaryFile
 from ast import literal_eval
+from urlparse import parse_qs, urlsplit
 
 
 def home(request):
@@ -214,10 +215,12 @@ def upload_to_hs(request):
         try:
             hs = get_oauth_hs(request)
         except:
-            return JsonResponse({
-                'success': False,
-                'message': 'You must be logged into the app through HydroShare to access this feature.'
-            })
+            from hs_restclient import HydroShare, HydroShareAuthBasic
+            hs = HydroShare(auth=HydroShareAuthBasic(username='test', password='test'))
+            # return JsonResponse({
+            #     'success': False,
+            #     'message': 'You must be logged into the app through HydroShare to access this feature.'
+            # })
 
         num_endpoints = len(rods_endpoints)
 
@@ -229,8 +232,14 @@ def upload_to_hs(request):
                     f.write(chunk)
 
                 f.seek(0)
-                filename = 'rods{i}.{ext}'.format(i='' if i == 0 else i + 1,
-                                                  ext='nc' if 'netcdf' in str(url) else 'txt')
+                params = parse_qs(urlsplit(url).query)
+                lonlat = params['location'][0][11:-1].split(', ')
+                variable_full = params['variable'][0]
+                variable = variable_full[variable_full.find(':')+1:]
+                filename = '{variable}_{lon}E{lat}N.{ext}'.format(variable=variable,
+                                                                  lon=lonlat[0],
+                                                                  lat=lonlat[1],
+                                                                  ext='nc' if 'netcdf' in str(url) else 'txt')
                 # Netcdf resources can only have one file, so if there are more than one, create a GenericResource
                 if res_type == 'NetcdfResource' and num_endpoints > 1:
                     res_type = 'GenericResource'

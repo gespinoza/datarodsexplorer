@@ -244,9 +244,7 @@ function createPlot(plotType) {
                     $('#plot-loading').addClass('hidden');
 
                     $('.option-uploadToHS').on('click', function () {
-                        $('#resType').val($(this).data('restype'));
-                        $('#rodsEndpoint').val($(this).data('rodsendpoint'));
-                        $('#modalUploadToHS').modal('show');
+                        prepareAndOpenHSUploadModal(this);
                     });
                     if (plotType === 'plot') {
                         modifyYAxis();
@@ -497,6 +495,8 @@ function openDataRodsUrls(datarods_urls) {
 
 function displayFlashMessage(id, type, message, allowClose) {
     var closeHtml = '';
+    var sign = type === 'success' ? 'ok' : type;
+
     if ($('#' + id).length !== 0) {
         return;
     }
@@ -511,7 +511,7 @@ function displayFlashMessage(id, type, message, allowClose) {
     $('.flash-messages').append(
         '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible" role="alert">' +
         closeHtml +
-        '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +
+        '<b><span class="glyphicon glyphicon-' + sign + '-sign" aria-hidden="true"></span> ' +
         message +
         '</b></div>'
     );
@@ -933,4 +933,43 @@ function addNewPoint(lon, lat, centerOnPoint) {
     if (centerOnPoint) {
         map.getView().setCenter(mapCoords);
     }
+}
+
+function prepareAndOpenHSUploadModal(clickedObj) {
+    var rodsEndpointsListStr = $(clickedObj).data('rodsendpoints');
+    var rodsEndpointsList = eval(rodsEndpointsListStr);
+    var numUrls = rodsEndpointsList.length;
+    var lon = $('#lon').val();
+    var lat = $('#lat').val();
+    var abstractDefault = 'This resource was created using the Data Rods Explorer app and contains time series ' +
+        'corresponding to ' + lon + ' longitude and ' + lat + ' latitude, including:\n';
+    var keyWords = [];
+    rodsEndpointsList.forEach(function (url) {
+        var rodsParams = paramStringToObj(url.split('?')[1]);
+        var variableFull = rodsParams['variable'];
+        var modelSplitIndex = variableFull.indexOf(':');
+        var modelKey = variableFull.slice(0, modelSplitIndex);
+        if (modelKey === 'NLDAS' && variableFull.indexOf('_FORA') !== -1) {
+            modelKey += 'F';
+        }
+        var varSplitIndex = variableFull.indexOf(':', modelSplitIndex + 1);
+        var variableKey = variableFull.slice(varSplitIndex + 1);
+        var modelName = $('#model1').find('[value=' + modelKey + ']').text();
+        var varListItems = WMS_VARS[modelKey][variableKey];
+        var variableAndUnits = varListItems[1] + ' in ' + varListItems[2];
+        var startDate = rodsParams['startDate'];
+        var endDate = rodsParams['endDate'];
+
+        abstractDefault += variableAndUnits + ' from the ' + modelName + ' model, recorded from ' + startDate + ' to ' + endDate + '.\n';
+        if (keyWords.indexOf(modelKey) === -1) {
+            keyWords.push(modelKey);
+        }
+    });
+
+    $('#resTitle').val('');
+    $('#resType').val($(clickedObj).data('restype'));
+    $('#rodsEndpoint').val(rodsEndpointsListStr);
+    $('#modalUploadToHS').modal('show');
+    $('#resAbstract').val(abstractDefault);
+    $('#resKeywords').val(keyWords.join(', '));
 }
