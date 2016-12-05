@@ -48,6 +48,7 @@ This user guide has the following main sections:
 | --- | --- | --- |
 | 4-Dec-16 | David Arctur, Bill Teng | Initial user guide final draft |
 |   |   |   |
+|   |   |   |
 
 
 
@@ -521,7 +522,6 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 **Reference URLs** :
 
 - General info: [http://ldas.gsfc.nasa.gov/gldas/](http://ldas.gsfc.nasa.gov/gldas/)
-
 - Readme: [http://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS\_V1/README.GLDAS.pdf](http://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS_V1/README.GLDAS.pdf)
 
 **GLDAS-Noah v1 variables** : evapotranspiration, precipitation rate, rain rate, snow rate, surface runoff, subsurface runoff, 0-10cm soil moisture, 10-40cm soil moisture, 40-100cm soil moisture, 0-100cm soil moisture, near-surface air temperature, 0-10cm soil temperature, near-surface wind magnitude.
@@ -589,7 +589,6 @@ The [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/maste
 We will look at the 2-line header block and the first model in the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file, as of Nov 20, 2016. The top line in the header block identifies the model-specific content needed for data requests (with &quot;~&quot; field separator character); the second line in the header block identifies the variable-specific details needed for each model (with &quot;|&quot; field separator character).
 
     Model_Display_Name~Model_Key_Name~Official_Model_Short_Name~Model_Version~Model_Data_Url_Pattern
-
     Model_Key|Data_Rods_Variable_ID|WMS_Layer_Name|Variable_Dropdown_Name|Units|Variable_Layer_Name
 
 Below these header lines, each model block is preceded by a blank line. The first line in each model block defines the model identifiers and the data service endpoint URL template. Note the use of placeholders {0} for the model variable identifier, {1} for the location coordinates, {2} for the start date, and {3} for the end date. These are all filled in through user selections while running DRE.
@@ -635,117 +634,12 @@ Each night at 3am US Eastern Time, a cron job executes [enddate\_bounds.py](http
 
 Here is the output for the NLDAS-Noah begin-date query (the others are essentially the same):
 
-**&lt;results&gt;**
+![Code01](figs/code01.png)
 
-**&lt;hits&gt;332016&lt;/hits&gt;**
-
-**&lt;took&gt;117&lt;/took&gt;**
-
-**&lt;references&gt;**
-
-**&lt;reference&gt;**
-
-**&lt;name&gt;**
-
-**NLDAS\_NOAH0125\_H.002:NLDAS\_NOAH0125\_H.A19790102.0100.002.grb**
-
-**&lt;/name&gt;**
-
-**&lt;id&gt;G1238384728-GES\_DISC&lt;/id&gt;**
-
-**&lt;location&gt;**
-
-**https://cmr.earthdata.nasa.gov:443/search/concepts/G1238384728-GES\_DISC/1**
-
-**&lt;/location&gt;**
-
-**&lt;revision-id&gt;1&lt;/revision-id&gt;**
-
-**&lt;/reference&gt;**
-
-**&lt;/references&gt;**
-
-**&lt;/results&gt;**
 
 Visiting the URL in the highlighted text above results in a text file download with the following xml content:
 
-&lt;Granule&gt;
-
-  &lt;GranuleUR&gt;NLDAS\_NOAH0125\_H.002:NLDAS\_NOAH0125\_H.A19790102.0100.002.grb&lt;/GranuleUR&gt;
-
-  &lt;InsertTime&gt;2012-03-05T00:08:43Z&lt;/InsertTime&gt;
-
-  &lt;LastUpdate&gt;2012-03-05T00:08:43Z&lt;/LastUpdate&gt;
-
-  &lt;Collection&gt;
-
-    &lt;ShortName&gt;NLDAS\_NOAH0125\_H&lt;/ShortName&gt;
-
-    &lt;VersionId&gt;002&lt;/VersionId&gt;
-
-  &lt;/Collection&gt;
-
-  &lt;DataGranule&gt;
-
-    &lt;SizeMBDataGranule&gt;6.569757461547852&lt;/SizeMBDataGranule&gt;
-
-    &lt;ProducerGranuleId&gt;NLDAS\_NOAH0125\_H.A19790102.0100.002.grb&lt;/ProducerGranuleId&gt;
-
-    &lt;DayNightFlag&gt;UNSPECIFIED&lt;/DayNightFlag&gt;
-
-    &lt;ProductionDateTime&gt;2012-03-05T00:08:43Z&lt;/ProductionDateTime&gt;
-
-  &lt;/DataGranule&gt;
-
-  &lt;Temporal&gt;
-
-**   **  **&lt;RangeDateTime&gt;**
-
-**      &lt;BeginningDateTime&gt;1979-01-02T01:00:00Z&lt;/BeginningDateTime&gt;**
-
-**      &lt;EndingDateTime&gt;1979-01-02T01:00:00Z&lt;/EndingDateTime&gt;**
-
-**    &lt;/RangeDateTime&gt;**
-
-  &lt;/Temporal&gt;
-
-  &lt;Spatial&gt;
-
-    &lt;HorizontalSpatialDomain&gt;
-
-      &lt;Geometry&gt;
-
-**        &lt;BoundingRectangle&gt;**
-
-**          &lt;WestBoundingCoordinate&gt;-125.0&lt;/WestBoundingCoordinate&gt;**
-
-**          &lt;NorthBoundingCoordinate&gt;53.0&lt;/NorthBoundingCoordinate&gt;**
-
-**          &lt;EastBoundingCoordinate&gt;-67.0&lt;/EastBoundingCoordinate&gt;**
-
-**          &lt;SouthBoundingCoordinate&gt;25.0&lt;/SouthBoundingCoordinate&gt;**
-
-**        &lt;/BoundingRectangle&gt;**
-
-      &lt;/Geometry&gt;
-
-    &lt;/HorizontalSpatialDomain&gt;
-
-  &lt;/Spatial&gt;
-
-  &lt;OnlineAccessURLs&gt;
-
-    &lt;OnlineAccessURL&gt;      &lt;URL&gt;http://hydro1.gesdisc.eosdis.nasa.gov/data/NLDAS/NLDAS\_NOAH0125\_H.002/1979/002/NLDAS\_NOAH0125\_H.A19790102.0100.002.grb&lt;/URL&gt;
-
-    &lt;/OnlineAccessURL&gt;
-
-  &lt;/OnlineAccessURLs&gt;
-
-  &lt;Orderable&gt;false&lt;/Orderable&gt;
-
-  &lt;DataFormat&gt;GRIB&lt;/DataFormat&gt;
-
-&lt;/Granule&gt;
+ ![Code02](figs/code02.png)
 
 The yellow highlight in this last XML file contains the beginning date and time of the NLDAS-Noah model outputs (all variables). The orange highlight contains the spatial bounds.
 
@@ -761,7 +655,7 @@ Here is a sample output of enddates\_bounds.py, stored in [dates\_and\_spatial\_
     TRMM|12/31/1997 22:30:00|08/31/2016 22:29:59|50.0, 180.0, -50.0, -180.0
     GRACE|01/06/2003 00:00:00|05/03/2015 23:59:59|74.0, -45.75, 10.75, -171.0
 
-The NLDAS bounds found in the previous XML outputs are highlighted in yellow. Note that the end-date for NLDAS came from a separate CMR query, with **&amp;sort\_key=-start\_date**.
+The NLDAS bounds found in the previous XML outputs appear on the second line of this file. Note that the end-date for NLDAS came from a separate CMR query, with **&amp;sort\_key=-start\_date**.
 
 ### Synchronization issues between the NASA CMR metadata and actual Data Rods availability
 
