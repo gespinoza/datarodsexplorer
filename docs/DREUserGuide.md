@@ -604,7 +604,7 @@ The remaining lines for each model block define each variable, using the vertica
     NLDASF|SPFH2m|NLDAS_FORA0125_H_002_spfh2m|2-m above ground specific humidity|kg/kg|NLDASF:2mAbvGrndSpecifHumid
     NLDASF|TMP2m|NLDAS_FORA0125_H_002_tmp2m|2-m above ground temperature|K|NLDASF:2mAbvGrndTemp
     NLDASF|UGRD10m|NLDAS_FORA0125_H_002_ugrd10m|10-m above ground zonal wind|m/s|NLDASF:10mAbvGrndZonalWind
-    NLDASF|VGRD10m|NLDAS_FORA0125_H_002_vgrd10m|10-m above ground meridional wind|m/s|NLDASF:10mAbvGrndMeridWind**
+    NLDASF|VGRD10m|NLDAS_FORA0125_H_002_vgrd10m|10-m above ground meridional wind|m/s|NLDASF:10mAbvGrndMeridWind
 
 ### <a name="running-enddates"></a>Running the enddate\_bounds.py script (cron job)
 
