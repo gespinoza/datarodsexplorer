@@ -168,7 +168,7 @@ This user guide has the following main sections:
 ## <a name="poster-for-agu"></a>Poster for AGU 2016
 
  ![](figs/agu-poster.png)
-[_(download from DRE github repository)_](AGU2016_access_geoss_BT_120116_1908.pdf)
+[_(download poster PDF from DRE github repository)_](AGU2016_access_geoss_BT_120116_1908.pdf)
 
 ---
 
