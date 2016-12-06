@@ -716,10 +716,10 @@ function updateTemporalFences(modelNum) {
         }
     }
 
-    if ($endDate.val() !== '') {
+    if ($endDate && $endDate.val() !== '') {
         validateDateFormat($endDate);
     }
-    if ($startDate.val() !== '') {
+    if ($startDate && $startDate.val() !== '') {
         validateDateFormat($startDate);
     }
 }
