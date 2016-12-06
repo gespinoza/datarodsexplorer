@@ -462,7 +462,7 @@ If the condition persists, take note of the conditions in which it occurred and 
 
 Initial point of contact for NASA data-related questions is [William Teng](mailto:william.l.teng@nasa.gov). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
 
-### <a name="nasa-giovanni"></a>NASA Giovanni
+### <a name="giovanni"></a>NASA Giovanni
 
 **Giovanni** is the reference data server for all data rods: [http://giovanni.gsfc.nasa.gov/giovanni](http://giovanni.gsfc.nasa.gov/giovanni)
 
