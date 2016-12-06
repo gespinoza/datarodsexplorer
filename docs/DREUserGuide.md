@@ -236,11 +236,13 @@ Because DRE populates all pull-down lists and date-time selection fields with va
 To pick a model, click on the pulldown field directly below the **Product-Model** heading in the left margin panel, see Figure 2 below. Once the model is chosen, the list of variables is updated to match, see Figure 3. Figure 4 shows picking the date and time.
 
  ![Figure 2](figs/fig02-03.png)
+ 
  <a name="fig02"></a>_Figure 2. Product-Model List_ 
  
  <a name="fig03"></a>_Figure 3. Variable List (NLDAS-Forcing model)_
 
- ![Figure 4](figs/fig04.png)
+ ![Figure 4](figs/fig04.png) 
+ 
  <a name="fig04"></a>_Figure 4. Date and Time Pickers_
 
 - Note the dates after Nov 17 in Figure 4 are grayed out; these are fenced off so the user cannot try to pick them for data (this was screen-captured on Nov 22).
