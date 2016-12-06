@@ -130,7 +130,8 @@ def plot(request):
             )
             context = {
                 'timeseries_plot': timeseries_plot,
-                'datarods_urls_dict': datarods_urls_dict
+                'datarods_urls_dict': datarods_urls_dict,
+                'plot_type': 'plot'
             }
         except Exception as e:
             print str(e)
@@ -162,7 +163,7 @@ def plot2(request):
 
         context = {
             'timeseries_plot': timeseries_plot,
-            'plot2': True,
+            'plot_type': 'plot2',
             'datarods_urls_dict': datarods_urls_dict
         }
 
@@ -193,7 +194,8 @@ def years(request):
 
         context = {
             'timeseries_plot': timeseries_plot,
-            'datarods_urls_dict': datarods_urls_dict
+            'datarods_urls_dict': datarods_urls_dict,
+            'plot_type': 'years'
         }
 
         return render(request, 'data_rods_explorer/plot.html', context)
@@ -208,6 +210,7 @@ def upload_to_hs(request):
         res_abstract = params.get('res_abstract', None)
         res_keywords = params.get('res_keywords', None)
         rods_endpoints = params.get('rods_endpoints', None)
+        plot_type = params.get('plot_type', None)
 
         if rods_endpoints:
             rods_endpoints = literal_eval(str(rods_endpoints))
@@ -215,12 +218,13 @@ def upload_to_hs(request):
         try:
             hs = get_oauth_hs(request)
         except:
-            from hs_restclient import HydroShare, HydroShareAuthBasic
-            hs = HydroShare(auth=HydroShareAuthBasic(username='test', password='test'))
-            # return JsonResponse({
-            #     'success': False,
-            #     'message': 'You must be logged into the app through HydroShare to access this feature.'
-            # })
+            # Uncomment if testing locally
+            # from hs_restclient import HydroShare, HydroShareAuthBasic
+            # hs = HydroShare(auth=HydroShareAuthBasic(username='test', password='test'))
+            return JsonResponse({
+                'success': False,
+                'message': 'You must be logged into the app through HydroShare to access this feature.'
+            })
 
         num_endpoints = len(rods_endpoints)
 
@@ -235,11 +239,19 @@ def upload_to_hs(request):
                 params = parse_qs(urlsplit(url).query)
                 lonlat = params['location'][0][11:-1].split(', ')
                 variable_full = params['variable'][0]
-                variable = variable_full[variable_full.find(':')+1:]
-                filename = '{variable}_{lon}E{lat}N.{ext}'.format(variable=variable,
-                                                                  lon=lonlat[0],
-                                                                  lat=lonlat[1],
-                                                                  ext='nc' if 'netcdf' in str(url) else 'txt')
+                variable_short = variable_full[variable_full.find(':')+1:]
+                variable = variable_short.replace('.', '_').replace(':', '_')
+                fname_base = '{variable}_{lon}E{lat}N'.format(variable=variable,
+                                                              lon=lonlat[0],
+                                                              lat=lonlat[1])
+                fname_ext = 'nc' if 'netcdf' in str(url) else 'txt'
+
+                if plot_type == 'years':
+                    year = params['endDate'][0][:4]
+                    filename = '{base}_{year}.{ext}'.format(base=fname_base, year=year, ext=fname_ext)
+                else:
+                    filename = '{base}.{ext}'.format(base=fname_base, ext=fname_ext)
+
                 # Netcdf resources can only have one file, so if there are more than one, create a GenericResource
                 if res_type == 'NetcdfResource' and num_endpoints > 1:
                     res_type = 'GenericResource'

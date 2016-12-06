@@ -495,7 +495,18 @@ function openDataRodsUrls(datarods_urls) {
 
 function displayFlashMessage(id, type, message, allowClose) {
     var closeHtml = '';
-    var sign = type === 'success' ? 'ok' : type;
+    var sign;
+
+    switch (type) {
+        case 'success':
+            sign = 'ok';
+            break;
+        case 'danger':
+            sign = 'remove';
+            break;
+        default:
+            sign = type;
+    }
 
     if ($('#' + id).length !== 0) {
         return;
@@ -626,7 +637,7 @@ function returnLaterDateHourPickerDate(date1, date2) {
 
 function updateTemporalFences(modelNum) {
     var boundsAdjustedFlashMessageID = 'bound-adjusted';
-    var boundsAdjustedFlashMessageText = 'Note: Model 2 date bounds were adjusted to mutually valid dates for the two models.'
+    var boundsAdjustedFlashMessageText = 'Note: Date bounds were adjusted to mutually valid dates for the two models.';
     var model1 = $('#model1').val();
     var model2 = $('#model2').val();
     var earliestDateForModel1 = MODEL_FENCES[model1].start_date;
@@ -705,6 +716,9 @@ function updateTemporalFences(modelNum) {
             displayFlashMessage(boundsAdjustedFlashMessageID, 'info', boundsAdjustedFlashMessageText)
         }
     }
+
+    validateDateFormat($endDate);
+    validateDateFormat($startDate);
 }
 
 function updateSpatialFences(differentiator, model) {
@@ -938,7 +952,6 @@ function addNewPoint(lon, lat, centerOnPoint) {
 function prepareAndOpenHSUploadModal(clickedObj) {
     var rodsEndpointsListStr = $(clickedObj).data('rodsendpoints');
     var rodsEndpointsList = eval(rodsEndpointsListStr);
-    var numUrls = rodsEndpointsList.length;
     var lon = $('#lon').val();
     var lat = $('#lat').val();
     var abstractDefault = 'This resource was created using the Data Rods Explorer app and contains time series ' +
@@ -967,9 +980,52 @@ function prepareAndOpenHSUploadModal(clickedObj) {
     });
 
     $('#resTitle').val('');
+    $('#plotType').val($(clickedObj).data('plottype'));
     $('#resType').val($(clickedObj).data('restype'));
     $('#rodsEndpoint').val(rodsEndpointsListStr);
     $('#modalUploadToHS').modal('show');
     $('#resAbstract').val(abstractDefault);
     $('#resKeywords').val(keyWords.join(', '));
+}
+
+function validateDateFormat($dateObj) {
+    var invalidDateFlashMessageId = 'invalid-date';
+    var invalidDateFlashMessageText = 'The date just entered is invalid. Please select a date, or type one with format mm/dd/yyyy';
+    var originalDate = $($dateObj).val();
+    var originalMonthDayYearList = originalDate.split('/');
+    var newMonthDayYearList = [];
+    var newDate;
+    var numDateSegments = originalMonthDayYearList.length;
+    var i;
+
+    removeFlashMessage(invalidDateFlashMessageId);
+
+    if (originalDate === '' || originalDate === undefined) {
+        displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
+        return false;
+    }
+
+    if (numDateSegments !== 3) {
+        displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
+        return false;
+    }
+
+    for (i = 0; i < numDateSegments; i += 1) {
+        var piece = originalMonthDayYearList[i];
+        if (i < 2 && piece.length === 1) {
+            newMonthDayYearList.push('0' + piece);
+        } else if ( (i < 2 && piece.length === 2) || (i == 2 && piece.length === 4) ) {
+            newMonthDayYearList.push(piece);
+        } else {
+            displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
+            return false;
+        }
+    }
+
+    newDate = newMonthDayYearList.join('/');
+
+    if (newDate !== originalDate) {
+        $($dateObj).val(newDate);
+    }
+    return true;
 }

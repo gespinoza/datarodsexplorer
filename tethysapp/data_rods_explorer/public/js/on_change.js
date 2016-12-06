@@ -50,12 +50,17 @@ function oc_variable() {
 function oc_map_dt() {
     var href;
     var GET = getUrlVars();
+    var $datePickerObj = $('#plot_date');
+    var isValid = validateDateFormat($datePickerObj);
 
-    // Only the plotTime is affected by this change event. Everything else stays the same.
-    GET['plotTime'] = dateHourPickerToRodsDate($('#plot_date').val(), $('#plot_hour').val());
+    if (isValid) {
 
-    href = constructHref(GET);
-    history.pushState("", "", href);
+        // Only the plotTime is affected by this change event. Everything else stays the same.
+        GET['plotTime'] = dateHourPickerToRodsDate($datePickerObj.val(), $('#plot_hour').val());
+
+        href = constructHref(GET);
+        history.pushState("", "", href);
+    }
 }
 
 function oc_sten_dt(datePickerID) {
@@ -64,19 +69,23 @@ function oc_sten_dt(datePickerID) {
     var differentiator = datePickerID[datePickerID.length - 1];
     var $startDate = $('#startDate' + differentiator);
     var $endDate = $('#endDate' + differentiator);
+    var $datePickerObj = $('#' + datePickerID);
+    var isValid = validateDateFormat($datePickerObj);
 
-    // Always have both startDates (model 1 and 2) and both endDates (model 1 and 2) match
-    $('.' + datePickerID.slice(0, -1)).val($('#' + datePickerID).val());
+    if (isValid) {
+        // Always have both startDates (model 1 and 2) and both endDates (model 1 and 2) match
+        $('.' + datePickerID.slice(0, -1)).val($datePickerObj.val());
 
 
-    GET['startDate'] = dateHourPickerToRodsDate($startDate.val(), '00'); //First hour
-    GET['endDate'] = dateHourPickerToRodsDate($endDate.val(), '23'); //Last hour
+        GET['startDate'] = dateHourPickerToRodsDate($startDate.val(), '00'); //First hour
+        GET['endDate'] = dateHourPickerToRodsDate($endDate.val(), '23'); //Last hour
 
-    href = constructHref(GET);
-    history.pushState("", "", href);
+        href = constructHref(GET);
+        history.pushState("", "", href);
 
-    if (datePickerID.indexOf('endDate') !== -1) {
-        $startDate.datepicker('setEndDate', $('#' + datePickerID).val());
+        if (datePickerID.indexOf('endDate') !== -1) {
+            $startDate.datepicker('setEndDate', $datePickerObj.val());
+        }
     }
 }
 

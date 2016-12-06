@@ -71,16 +71,17 @@ $(function() {
     });
 
     $('#btn-uploadToHS').on('click', function () {
-        var uploadID = 'hs-res-upload';
+        var uploadToHSFlashMessageID = 'hs-res-upload';
         var data = {
             'res_type': $('#resType').val(),
             'res_title': $('#resTitle').val() || 'Untitled Resource',
             'res_abstract': $('#resAbstract').val(),
             'res_keywords': $('#resKeywords').val(),
-            'rods_endpoints': $('#rodsEndpoint').val()
+            'rods_endpoints': $('#rodsEndpoint').val(),
+            'plot_type': $('#plotType').val()
         };
-
-        displayFlashMessage(uploadID, 'info', 'Creating HydroShare resource...');
+        removeFlashMessage(uploadToHSFlashMessageID);
+        displayFlashMessage(uploadToHSFlashMessageID, 'info', 'Creating HydroShare resource...');
 
         $('#modalUploadToHS').modal('hide');
 
@@ -91,19 +92,19 @@ $(function() {
             dataType: 'json',
             contentType: 'json',
             success: function (response) {
-                removeFlashMessage(uploadID);
+                removeFlashMessage(uploadToHSFlashMessageID);
                 if (response.hasOwnProperty('success')) {
                     if (response.success) {
-                        displayFlashMessage(uploadID, 'success', 'The HydroShare resource was created successfully! ' +
+                        displayFlashMessage(uploadToHSFlashMessageID, 'success', 'The HydroShare resource was created successfully! ' +
                             'View it ' +
                             '<a href="https://www.hydroshare.org/resource/' + response.res_id + '" target="_blank">' +
                             'here' +
                             '</a>', true);
                     } else {
-                        displayFlashMessage(uploadID, 'warning', response.message, true);
+                        displayFlashMessage(uploadToHSFlashMessageID, 'warning', response.message, true);
                     }
                 } else {
-                    displayFlashMessage(uploadID, 'danger', 'An error ocurred while uploading the data to HydroShare.', true);
+                    displayFlashMessage(uploadToHSFlashMessageID, 'danger', 'An error ocurred while uploading the data to HydroShare.', true);
                 }
             }
         });

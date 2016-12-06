@@ -25,15 +25,15 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdown-export">
-            <li class="option-uploadToHS" id="optn-uploadToHS" data-restype="GenericResource" data-rodsendpoints="{{ datarods_urls_dict.asc2 }}">
+            <li class="option-uploadToHS" id="optn-uploadToHS" data-plottype="{{ plot_type }}" data-restype="GenericResource" data-rodsendpoints="{{ datarods_urls_dict.asc2 }}">
                 ASCII
             </li>
-            <li class="option-uploadToHS" id="optn-uploadToHS" data-restype="NetcdfResource" data-rodsendpoints="{{ datarods_urls_dict.netcdf }}">
+            <li class="option-uploadToHS" id="optn-uploadToHS" data-plottype="{{ plot_type }}" data-restype="NetcdfResource" data-rodsendpoints="{{ datarods_urls_dict.netcdf }}">
                 NetCDF
             </li>
         </ul>
     </div>
-    {% if plot2 %}
+    {% if plot_type == 'plot2' %}
         <div id='plot2container' style="height: 250px; width: 100%"></div>
         {% gizmo plot_view timeseries_plot %}
         <div id="plot2-options"
