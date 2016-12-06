@@ -396,7 +396,7 @@ Do not download a time series result just to upload it to HydroShare. Once it is
 
 This section lists the informational and error messages you might encounter during use.
 
-==**Tip**==: See [Testing the NASA data services](#testing-services) (section below) if you want to verify which data services are online or having difficulty.
+**==Tip==**: See [Testing the NASA data services](#testing-services) (section below) if you want to verify which data services are online or having difficulty.
 
 **Message 1.** Messages are displayed between the Data Rods Explorer title bar and the map frame. These are either informative instructions, or explanatory about error conditions. Informative messages are displayed with blue text against a blue background box. The following example shows the most common informative message: &quot;Click on the map to define data query location, or enter a coordinate:&quot; You don&#39;t need to define a location for mapping, just for plots.
 
