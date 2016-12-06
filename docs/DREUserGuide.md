@@ -135,31 +135,31 @@ This user guide has the following main sections:
 
 **<a name="figures"></a>Figures**
 
-[Figure 1.](#fig01) DRE initial startup with defaults
-[Figure 2.](#fig02) DRE Product-Model List
-[Figure 3.](#fig03) DRE Variable List for NLDAS-Forcings
-[Figure 4.](#fig04) DRE Date and Time Pickers
-[Figure 5.](#fig05) Display Map of NLDAS Surface downward longwave radiation flux 
-[Figure 6.](#fig06) Display map of TRMM Precipitation on Oct 31, 2013
-[Figure 7.](#fig07) Plot of TRMM Precipitation, November 2012-October 2013
-[Figure 8.](#fig08) Picking second model for comparison (NLDAS 0-100cm soil moisture)
-[Figure 9.](#fig09) Model 1 plot (blue) uses left y-axis; Model 2 plot (black) uses right y-axis
-[Figure 10.](#fig10) Picking years for comparison
-[Figure 11.](#fig11) Plotting Year-to-Year comparisons with GRACE soil moisture
-[Figure 12.](#fig12) Navigating Days-Months-Years in the Date Picker
-[Figure 13.](#fig13) LPRM-AMSRE-D Optical Depth C-band plotted over GLDAS2-Evapotranspiration
-[Figure 14.](#fig14) Making LPRM layer transparent enough to see GLDAS2-Evapotranspiration layer
-[Figure 15.](#fig15) Download Choices (NASA data services) for Time Series Data
-[Figure 16.](#fig16) Download Choices (chart only, no metadata) for Time Series Data and Plot Image
-[Figure 17.](#fig17) Choices for Uploading Time Series Data to HydroShare
-[Figure 18.](#fig18) Example Resource Description for Soil Moisture Time Series, 2011-2016
-[Figure 19.](#fig19) HydroShare Upload Progress Messages
-[Figure 20.](#fig20) Excerpt from HydroShare Resource Details for Uploaded Time Series
-[Figure 21.](#fig21) User information notices
+   - [Figure 1.](#fig01) DRE initial startup with defaults 
+   - [Figure 2.](#fig02) DRE Product-Model List 
+   - [Figure 3.](#fig03) DRE Variable List for NLDAS-Forcings 
+   - [Figure 4.](#fig04) DRE Date and Time Pickers 
+   - [Figure 5.](#fig05) Display Map of NLDAS Surface downward longwave radiation flux 
+   - [Figure 6.](#fig06) Display map of TRMM Precipitation on Oct 31, 2013 
+   - [Figure 7.](#fig07) Plot of TRMM Precipitation, November 2012-October 2013 
+   - [Figure 8.](#fig08) Picking second model for comparison (NLDAS 0-100cm soil moisture) 
+   - [Figure 9.](#fig09) Model 1 plot (blue) uses left y-axis; Model 2 plot (black) uses right y-axis 
+   - [Figure 10.](#fig10) Picking years for comparison 
+   - [Figure 11.](#fig11) Plotting Year-to-Year comparisons with GRACE soil moisture 
+   - [Figure 12.](#fig12) Navigating Days-Months-Years in the Date Picker 
+   - [Figure 13.](#fig13) LPRM-AMSRE-D Optical Depth C-band plotted over GLDAS2-Evapotranspiration 
+   - [Figure 14.](#fig14) Making LPRM layer transparent enough to see GLDAS2-Evapotranspiration layer 
+   - [Figure 15.](#fig15) Download Choices (NASA data services) for Time Series Data 
+   - [Figure 16.](#fig16) Download Choices (chart only, no metadata) for Time Series Data and Plot Image 
+   - [Figure 17.](#fig17) Choices for Uploading Time Series Data to HydroShare 
+   - [Figure 18.](#fig18) Example Resource Description for Soil Moisture Time Series, 2011-2016 
+   - [Figure 19.](#fig19) HydroShare Upload Progress Messages 
+   - [Figure 20.](#fig20) Excerpt from HydroShare Resource Details for Uploaded Time Series 
+   - [Figure 21.](#fig21) User information notices 
 
 **<a name="tables"></a>Tables**
 
-[Table 1.](#tab01) NASA Data Rods: Product / Model Characteristics
+   - [Table 1.](#tab01) NASA Data Rods: Product / Model Characteristics 
 
 ---
 
