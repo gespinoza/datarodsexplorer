@@ -7,7 +7,7 @@ This github repository is for the development and maintenance of the **Data Rods
 Key links: 
  - Run the [Data Rods Explorer on HydroShare-apps](https://apps.hydroshare.org/apps/data-rods-explorer)
  - Run the [Data Rods Explorer on HydroShare-appsdev](https://appsdev.hydroshare.org/apps/data-rods-explorer)
- - Download the [DRE User Guide (pdf)](https://github.com/gespinoza/datarodsexplorer/blob/master/docs/DREUserGuide.pdf)
+ - View the [DRE User Guide](https://github.com/gespinoza/datarodsexplorer/blob/master/docs/DREUserGuide.md)
  - View/edit the draft [User/Developer Guide on googledocs](https://docs.google.com/document/d/16v9j-HuuYwOpd-iXGDXRJCZFtWpDnE6EDNLC9UQMbjk/edit#)
  - View the Tethys Platform [home](http://www.tethysplatform.org/),  [documentation](http://docs.tethysplatform.org/en/latest/), and [tutorials](http://docs.tethysplatform.org/en/latest/tutorials.html)
  - Prototype [ArcGIS Online web app](https://www.arcgis.com/home/webmap/viewer.html?webmap=93b7c28dca3b4c86863408a4a90f729f&extent=-180,-60.799,180,81.0806) showing GLDAS data rods for several hydromet variables. Clicking on a grid cell results in a popup with data service links to WaterML, Ascii tabular, and plot outputs of the time series at that cell. 
