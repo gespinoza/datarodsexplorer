@@ -8,11 +8,11 @@ _Browse NASA data services for land surface model maps and time series_
 
 The [Data Rods Explorer (DRE)](https://apps.hydroshare.org/apps/data-rods-explorer) is a web client app that enables users to browse several NASA-hosted data sets. The interface enables visualization and download of NASA observation retrievals and land surface model (LSM) outputs by variable, space and time. The key variables are precipitation, wind, temperature, surface downward radiation flux, heat flux, humidity, soil moisture, groundwater, runoff, and evapotranspiration. These variables describe the main components of the water cycle over land masses.
 
-### App Outputs
+### <a name="app-out"></a>App Outputs
 
 The user can obtain a map of a variable at any valid date-time stamp; plot a time series (data rod) of values at a point location; compare two model variables&#39; time series over a mutually-available time period; and plot year-on-year changes in time series for a given model or retrieval variable. Tabular text format, csv, xls, netCDF, and plots of time series can be downloaded, as well as graphic images of the plots. Data query results may be uploaded to a user&#39;s account in [HydroShare.org](https://www.hydroshare.org/).
 
-### Example Uses of the App
+### <a name="examples"></a>Example Uses of the App
 
 This app is great for researching behaviors and interactions of hydrologic variables over space and time. For example, Katie Born compared temporal patterns of several hydrologic variables at a selection of watersheds representing five distinct climates across Texas. DRE helped her decide on the locations and time periods to examine in detail, as well as providing the data for her analysis. (Note: she used a much earlier version without many of the current features)
 
@@ -21,13 +21,13 @@ This app is great for researching behaviors and interactions of hydrologic varia
 
 
 
-### Credits, Authors, Contributors, Contacts
+### <a name="credits"></a>Credits, Authors, Contributors, Contacts
 
 DRE was developed in 2015-2016 by Dr. Gonzalo Espinoza as part of his PhD work at the University of Texas at Austin, and by Shawn Crawley, MS student at Brigham Young University, Provo UT. The development was directed by Dr. David Arctur at the University of Texas at Austin, and supported by NASA ROSES NNH11ZDA001N-ACCESS and NNH13ZDA001N-ACCESS, William Teng, PI.
 
 Questions on software development should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
 
-### To learn more
+### <a name="learn"></a>To learn more
 
 This user guide has the following main sections:
 
@@ -37,14 +37,14 @@ This user guide has the following main sections:
 - **[NASA References](#nasa-references)** – links to the relevant NASA reference pages and the Giovanni data server
 - The last two sections, **[Keeping DRE Up to Date](#keeping-dre-uptodate)** and **[DRE App Process Flow](#dre-app-flow)** , are for NASA staff and other researchers/developers wanting to maintain this app. This includes making changes in the model configurations, understanding the program logic, and testing the NASA data services.
 
-### Future changes expected
+### <a name="future"></a>Future changes expected
 
 - GLDAS-1 to be removed 12/31/2016; GLDAS-2 to be expanded
 - MERRA-Land model and data layers to be added (by Spring 2017)
 - TRMM is now a static product. For RT precipitation, NASA will add GPM
 ( [Global Precipitation Measurement](http://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
 
-### Revision History
+### <a name="revs"></a>Revision History
 
 | **Date** | **Authors, Editors** | **Notes** |
 | --- | --- | --- |
@@ -62,12 +62,12 @@ This user guide has the following main sections:
 
 **[About DRE](#about-dre)**
 
-- App Outputs
-- Example Uses of the App
-- Credits, Authors, Contributors, Contacts
-- To learn more
-- Future changes expected
-- Revision History
+- [App Outputs](#app-out)
+- [Example Uses of the App](#examples)
+- [Credits, Authors, Contributors, Contacts](#credits)
+- [To learn more](#learn)
+- [Future changes expected](#future)
+- [Revision History](#revs)
 
 **[Poster for AGU 2016](#poster-for-agu)**
 
@@ -95,41 +95,41 @@ This user guide has the following main sections:
 
 **[NASA References](#nasa-references)** 
 
-- 	_NASA Servers and Search Portals_ 
+- 	_[NASA Servers and Search Portals](#nasa-servers)_ 
 
    - 	[NASA Giovanni](#giovanni) 
-   - 	NASA Global Change Master Directory (GCMD)
-   - 	NASA Common Metadata Repository (CMR)
+   - 	[NASA Global Change Master Directory (GCMD)](#gcmd)
+   - 	[NASA Common Metadata Repository (CMR)](#cmr)
 
-- 	_References for models and variables_ 
+- 	_[References for models and variables](#nasa-models)_ 
 
-   - LDAS - Land Data Assimilation System 
-   - NLDAS - National Land Data Assimilation System
-   - GLDAS - Global Land Data Assimilation System
-   - GLDAS 2 - Global Land Data Assimilation System 
-   - GRACE - Gravity Recovery and Climate Experiment 
-   - LPRM - Land Parameter Retrieval Model
-   - TRMM - Tropical Rainfall Measuring Mission
-   - MERRA-Land (forthcoming)
+   - [LDAS - Land Data Assimilation System](#ldas) 
+   - [NLDAS - National Land Data Assimilation System](#nldas)
+   - [GLDAS - Global Land Data Assimilation System](#gldas) 
+   - [GLDAS 2 - Global Land Data Assimilation System](#gldas2)
+   - [GRACE - Gravity Recovery and Climate Experiment](#grace) 
+   - [LPRM - Land Parameter Retrieval Model](#lprm)
+   - [TRMM - Tropical Rainfall Measuring Mission](#trmm)
+   - [MERRA-Land (forthcoming)](#merra) 
 
 **[Keeping DRE Up to Date](#keeping-dre-uptodate)** 
 
-- Using the NASA Data Rods Variables Info spreadsheet
-- Reading and editing the model\_config.txt file
-- Running the enddate\_bounds.py script (cron job)
-- Synchronization issues between the NASA CMR metadata and actual Data Rods availability
+- [Using the NASA Data Rods Variables Info spreadsheet](#datarods-vars)
+- [Reading and editing the model\_config.txt file](#config)
+- [Running the enddate\_bounds.py script (cron job)](#fences)
+- [Synchronization issues between the NASA CMR metadata and actual Data Rods availability](#sync-issues)
 
 **[DRE App Process Flow](#dre-app-flow)**
 
-- User opens the Data Rods Explorer app
-- User clicks on any of the Time Series plot options (Plot one variable, Compare two variables, or Year-on-year changes)
-- User chooses a different model from the model dropdown 
-- User chooses different variable/dates/time from a dropdown
-- User clicks on the map 
-- User clicks the &quot;Display Map&quot; button
-- User clicks the &quot;Plot&quot; button for &quot;Plot one variable&quot;
-- User clicks the &quot;Plot&quot; button for &quot;Compare two variables&quot;
-- User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;
+- [User opens the Data Rods Explorer app](#user-opens)
+- [User clicks on any of the Time Series plot options (Plot one variable, Compare two variables, or Year-on-year changes)](#user-plots)
+- [User chooses a different model from the model dropdown](#diff-model) 
+- [User chooses different variable/dates/time from a dropdown](#diff-var)
+- [User clicks on the map](#user-clicks-map) 
+- [User clicks the &quot;Display Map&quot; button](#user-display-map)
+- [User clicks the &quot;Plot&quot; button for &quot;Plot one variable&quot;](#user-plot1)
+- [User clicks the &quot;Plot&quot; button for &quot;Compare two variables&quot;](#user-plot2)
+- [User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;](#user-plot-yr)
 - [Testing NASA Data Services](#testing-services)
 - [DRE Regression Tests](#dre-regression-tests) 
 
@@ -458,7 +458,7 @@ If the condition persists, take note of the conditions in which it occurred and 
 
 ## <a name="nasa-references"></a>NASA References
 
-## NASA Servers and Search Portals
+## <a name="nasa-servers"></a>NASA Servers and Search Portals
 
 Initial point of contact for NASA data-related questions is [William Teng](mailto:william.l.teng@nasa.gov). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
 
@@ -470,7 +470,7 @@ Initial point of contact for NASA data-related questions is [William Teng](mailt
 
 [http://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&amp;starttime=2016-11-14T00:00:00Z&amp;endtime=2016-11-14T00:00:00Z&amp;data=NLDAS\_NOAH0125\_H\_002\_soilm0\_100cm&amp;dataKeyword=nldas\_noah\_0125\_h](http://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&amp;starttime=2016-11-14T00:00:00Z&amp;endtime=2016-11-14T00:00:00Z&amp;data=NLDAS_NOAH0125_H_002_soilm0_100cm&amp;dataKeyword=nldas_noah_0125_h)   (tested Nov 22, 2016)
 
-### NASA Global Change Master Directory (GCMD)
+### <a name="gcmd"></a>NASA Global Change Master Directory (GCMD)
 
 The [Global Change Master Directory (GCMD)](http://gcmd.nasa.gov/) is a catalog to search for Earth science data and services.
 
@@ -478,7 +478,7 @@ The [Global Change Master Directory (GCMD)](http://gcmd.nasa.gov/) is a catalog 
 
 - [GCMD Portal search for datasets](http://gcmd.nasa.gov/search/Titles.do?search=#titles)
 
-### NASA Common Metadata Repository (CMR)
+### <a name="cmr"></a>NASA Common Metadata Repository (CMR)
 
 The CMR is an earth science metadata repository for NASA EOSDIS data.
 
@@ -486,7 +486,7 @@ The CMR is an earth science metadata repository for NASA EOSDIS data.
 - CMR Search [API documentation](https://cmr.earthdata.nasa.gov/search/site/search_api_docs.html)
 - Example of finding end-date and bounding-box for models in CMR (section below)
 
-## References for models and variables
+## <a name="nasa-models"></a>References for models and variables
 
 <a name="tab01"></a>Table 1. NASA Data Rods: Product / Model Characteristics
 
@@ -511,7 +511,7 @@ Further online references:
 
 **Note** that most model outputs are updated on a regular basis, though not synchronized with each other. For the exact and most current availability dates for these models, see [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt) which is updated by cron job nightly at 3am US ET. See related section for more details.
 
-### LDAS - Land Data Assimilation System
+### <a name="ldas"></a>LDAS - Land Data Assimilation System
 
 **Reference URL** : [http://ldas.gsfc.nasa.gov/index.php](http://ldas.gsfc.nasa.gov/index.php)
 
@@ -519,7 +519,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 - [LDAS FAQ](http://ldas.gsfc.nasa.gov/faq), eg, &quot;is there a shapefile for the NLDAS grid?&quot; (yes)
 
-### NLDAS - National Land Data Assimilation System
+### <a name="nldas"></a>NLDAS - National Land Data Assimilation System
 
 **Reference URL** :
 
@@ -532,7 +532,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
-### GLDAS - Global Land Data Assimilation System
+### <a name="gldas"></a>GLDAS - Global Land Data Assimilation System
 
 **Reference URLs** :
 
@@ -543,7 +543,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
-### GLDAS 2 - Global Land Data Assimilation System
+### <a name="gldas2"></a>GLDAS 2 - Global Land Data Assimilation System
 
 **Reference URLs** :
 
@@ -556,7 +556,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 _**Note**: GLDAS-2 will be enhanced during 2017, to take the place of the GLDAS-1 model being retired._
 
-### GRACE - Gravity Recovery and Climate Experiment
+### <a name="grace"></a>GRACE - Gravity Recovery and Climate Experiment
 
 **Reference URLs** :
 
@@ -565,7 +565,7 @@ _**Note**: GLDAS-2 will be enhanced during 2017, to take the place of the GLDAS-
 
 **GRACE variables** : 0-2 cm surface soil moisture percentile, 0-100 cm root zone soil moisture percentile, shallow groundwater percentile. Percentile values are based on the period 1948-2012.
 
-### LPRM - Land Parameter Retrieval Model
+### <a name="lprm"></a>LPRM - Land Parameter Retrieval Model
 
 **Reference URL** : [LPRM overview and metadata](http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=GCMD&amp;KeywordPath=Parameters%7CLAND+SURFACE%7CSOILS%7CSOIL+MOISTURE%2FWATER+CONTENT&amp;EntryId=GES_DISC_LPRM_AMSRE_A_SOILM3_V002&amp;MetadataType=0&amp;lbnode=mdlb3http://gcmd.nasa.gov/KeywordSearch/Metadata.do?Portal=GCMD&amp;KeywordPath=Parameters%7CLAND+SURFACE%7CSOILS%7CSOIL+MOISTURE%2FWATER+CONTENT&amp;EntryId=GES_DISC_LPRM_AMSRE_A_SOILM3_V002&amp;MetadataType=0&amp;lbnode=mdlb3)
 
@@ -573,7 +573,7 @@ _**Note**: GLDAS-2 will be enhanced during 2017, to take the place of the GLDAS-
 
 This Level 3 (gridded) data set&#39;s land surface parameters, surface soil moisture, land surface (skin) temperature, and vegetation water content, are derived from passive microwave remote sensing data from the Advanced Microwave Scanning Radiometer-Earth Observing System (AMSR-E), using the Land Parameter Retrieval Model (LPRM). There are two files per day, one ascending (daytime) and one descending (nighttime), archived as two different products. The data set covers the period from June 2002 to October 2011 (when the AMSR-E on the NASA EOS Aqua satellite stopped producing data due to a problem with the rotation of its antenna), at a spatial resolution of 0.25 degree. The data are stored in netCDF format.
 
-### TRMM - Tropical Rainfall Measuring Mission
+### <a name="trmm"></a>TRMM - Tropical Rainfall Measuring Mission
 
 **Reference URL** : [http://trmm.gsfc.nasa.gov/](http://trmm.gsfc.nasa.gov/)
 
@@ -581,7 +581,7 @@ The TRMM satellite, a joint mission between the National Aeronautics and Space A
 
 TRMM is now a static product. For RT precipitation, we will add GPM ( [Global Precipitation Measurement](http://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
 
-### MERRA-Land (forthcoming)
+### <a name="merra"></a>MERRA-Land (forthcoming)
 
 Land Surface Model suite of surface hydrology variables, similar to LDAS
 
@@ -595,11 +595,11 @@ Land Surface Model suite of surface hydrology variables, similar to LDAS
 
 These two sections, **Keeping DRE Up to Date** and **[DRE App Process Flow](#dre-app-flow)** , are for NASA staff and other researchers/developers wanting to help maintain this app. This includes making changes in the model configurations, and understanding the program logic.
 
-### Using the NASA Data Rods Variables Info spreadsheet
+### <a name="datarods-vars"></a>Using the NASA Data Rods Variables Info spreadsheet
 
 The [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0) is maintained by NASA GES-DISC staff, and provides the basic information to be used within DRE for all data server requests. Initial point of contact for NASA data-related questions is [William Teng](mailto:william.l.teng@nasa.gov). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
 
-### Reading and editing the model\_config.txt file
+### <a name="config"></a>Reading and editing the model\_config.txt file
 
 The [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file is constructed from content in the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0) mentioned above. This provides a configuration specification for each model and variable, which enables constructing queries to the NASA Common Metadata Repository (CMR) and to the Giovanni data server at the user&#39;s direction, for all purposes of the DRE. This only needs to be updated if something changes about the NASA CMR or data servers, or if there are more models and/or variables to be described. Any such changes from NASA should be communicated and confirmed by means of the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0).
 
@@ -622,7 +622,7 @@ The remaining lines for each model block define each variable, using the vertica
     NLDASF|UGRD10m|NLDAS_FORA0125_H_002_ugrd10m|10-m above ground zonal wind|m/s|NLDASF:10mAbvGrndZonalWind
     NLDASF|VGRD10m|NLDAS_FORA0125_H_002_vgrd10m|10-m above ground meridional wind|m/s|NLDASF:10mAbvGrndMeridWind
 
-### <a name="running-enddates"></a>Running the enddate\_bounds.py script (cron job)
+### <a name="fences"></a>Running the enddate\_bounds.py script (cron job)
 
 Each night at 3am US Eastern Time, a cron job executes [enddate\_bounds.py](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/enddate_bounds.py), which parses the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file, and builds URLs to query the NASA Common Metadata Repository (CMR) for the spatial and temporal bounds for each model&#39;s datasets. This is a multi-step procedure:
 
@@ -674,7 +674,7 @@ Here is a sample output of enddates\_bounds.py, stored in [dates\_and\_spatial\_
 
 The NLDAS bounds found in the previous XML outputs appear on the second line of this file. Note that the end-date for NLDAS came from a separate CMR query, with **&amp;sort\_key=-start\_date**.
 
-### Synchronization issues between the NASA CMR metadata and actual Data Rods availability
+### <a name="sync-issues"></a>Synchronization issues between the NASA CMR metadata and actual Data Rods availability
 
 Some of the NASA models accessible through DRE are in ongoing development (NLDAS, GLDAS, TRMM), while others are completed and won&#39;t continue to change. However, several more models and variables will be added by 2017, so we will be keeping up with those as well. The model datasets provided for DRE have all been specially organized for gridded map &amp; time series access via the NASA Giovanni data server. Whenever the data rods services for NLDAS, GLDAS and TRMM are being updated, there is a window of time from a few hours to a few days, in which the CMR metadata for the original gridded data is not in sync with the data rods services, ie, the data rods may lag the source data. During these times, when we run the enddates\_bounds.py cron job to update the dates\_and\_spatial\_range.txt file, the DRE can think it has more recent data for some models than it actually has.
 
@@ -688,7 +688,7 @@ This portion of the guide is intended to help software developers understand the
 
 Two important data files mentioned below are the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) and [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt). The model\_config.txt is maintained and accessed in the [github repo](https://github.com/gespinoza/datarodsexplorer/tree/master/tethysapp/data_rods_explorer/public/data), but the github version of dates\_and\_spatial\_range.txt is typically out of date, since this file is updated by nightly cron job. It is maintained in [https://apps.hydroshare.org/static/data\_rods\_explorer/data/dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt).
 
-### User opens the Data Rods Explorer app
+### <a name="user-opens"></a>User opens the Data Rods Explorer app
 
 1. The &quot;home&quot; function in controllers.py is called
   1. The model\_config.txt file is parsed and stored in global python variables
@@ -715,7 +715,7 @@ Two important data files mentioned below are the [model\_config.txt](https://git
     2. Either sets the corresponding inputs based on what is in the URL, or if nothing is in the URL, default values are set in the inputs and the URL
     3. Loads the model 1 extents layer onto the map, which shows the boundaries for which the current model are valid
 
-### User clicks on any of the Time Series plot options (Plot one variable, Compare two variables, or Year-on-year changes)
+### <a name="user-plots"></a>User clicks on any of the Time Series plot options (Plot one variable, Compare two variables, or Year-on-year changes)
 
 1. The &quot;onClickLink&quot; function from load\_pages.js is called, which does the following:
   1. Either shows or hides the user inputs for the option clicked (shows if hidden, hides if shown)
@@ -723,7 +723,7 @@ Two important data files mentioned below are the [model\_config.txt](https://git
   3. Adds or removes the Model 2 extents layer on the map depending on whether the &quot;Compare two variables&quot; was clicked to show/activate the user inputs, or hide them
   4. Based on the option selected, the default values from the user inputs are set and then reflected in the URL
 
-### User chooses a different model from the model dropdown
+### <a name="diff-model"></a>User chooses a different model from the model dropdown
 
 1. The corresponding on-change function (oc\_model, oc\_model2) from on\_change.js is called, which does the following:
   1. The change is reflected in the corresponding URL parameter
@@ -731,12 +731,12 @@ Two important data files mentioned below are the [model\_config.txt](https://git
   3. The temporal bounds are updated for the date pickers (disabling dates outside of the bounds)
   4. The model extents are redrawn to reflect the spatial bounds
 
-### User chooses different variable/dates/time from a dropdown
+### <a name="diff-var"></a>User chooses different variable/dates/time from a dropdown
 
 1. The corresponding on-change function (oc\_variable, oc\_years) from on\_change.js is called, which does the following:
   1. The change is reflected in the corresponding URL parameter
 
-### User clicks on the map
+### <a name="user-clicks-map"></a>User clicks on the map
 
 1. The map&#39;s &quot;singleclick&quot; event listener registered in main.js is fired and does the following:
   1. Removes any previously drawn point, and then draws a new one at the clicked location
@@ -745,7 +745,7 @@ Two important data files mentioned below are the [model\_config.txt](https://git
     1. An error is thrown if the click is outside of the model extents and the plot buttons are disabled
     2. Plot buttons are enabled if the click point is valid
 
-### User clicks the &quot;Display Map&quot; button
+### <a name="user-display-map"></a>User clicks the &quot;Display Map&quot; button
 
 1. The &quot;load\_map&quot; function from helpers.js is called, which does the following:
   1. Parses parameters (corresponding to currently selected model/variable/plotTime) from the URL
@@ -762,7 +762,7 @@ Two important data files mentioned below are the [model\_config.txt](https://git
   1. Creates a new WMSTile layer using the OpenLayers API
   2. Adds the layer to the map and legend
 
-### User clicks the &quot;Plot&quot; button for &quot;Plot one variable&quot;
+### <a name="user-plot1"></a>User clicks the &quot;Plot&quot; button for &quot;Plot one variable&quot;
 
 1. The &quot;createPlot&quot; function in helpers.js is called, which does the following:
   1. Sets a number of hidden inputs to reflect the map&#39;s current configuration (zoom level, center x and y, and extents
@@ -780,7 +780,7 @@ Two important data files mentioned below are the [model\_config.txt](https://git
 3. The AJAX success function does the following:
   1. Initializes/renders the time series plot view Tethys Gizmo with the HighCharts API
 
-### User clicks the &quot;Plot&quot; button for &quot;Compare two variables&quot;
+### <a name="user-plot2"></a>User clicks the &quot;Plot&quot; button for &quot;Compare two variables&quot;
 
 1. Same as step 1 of &quot;Plot one variable &#39;Plot&#39; button is clicked&quot;
 2. Same as step 2 of &quot;Plot one variable &#39;Plot&#39; button is clicked&quot;, except steps 2b and 2c happen for now for two separate model/variable NASA URL endpoints resulting in two distinct time series.
@@ -788,7 +788,7 @@ Two important data files mentioned below are the [model\_config.txt](https://git
   1. Initializes/renders the time series plot view Tethys Gizmo with the HighCharts API
   2. Calls a &quot;two\_axis\_plot&quot; function which modifies the time series plot to display two distinct axes for the separate time series
 
-### User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;
+### <a name="user-yr"></a>User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;
 
 1. Same as step 1 of &quot;Plot one variable &#39;Plot&#39; button is clicked&quot;
 2. Same as step 2 of &quot;Plot one variable &#39;Plot&#39; button is clicked&quot;, except steps 2b and 2c happen for now for multiple NASA URL endpoints, one for each year that the user selected. Thus, multiple time series will be parsed.
