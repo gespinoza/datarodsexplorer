@@ -182,7 +182,7 @@ _**Demo Step 3:**_ **Click on &quot;Plot one variable&quot; below Time series in
 
 _**Demo Step 4:**_ ** Click in the &quot;Start date&quot; text field** , _and notice the popup calendar display_. **Click on the month-year heading at the top** , _and notice it changes scale to a month at a time_. **Click on the year heading at the top again** , _and notice it changes scale to a year at a time_. **Pick a year that&#39;s 3 years previous to now, then pick a month, then a date**. **For the &quot;End date&quot; use the default (gets latest available data) or pick a date that&#39;s a week earlier (and 3 years after the start date).****Now click the Plot button **. _If you get an error using the latest available date, back it up a week and hit Plot again._** Then pick another location which would have a different climate and click Plot again**_. Notice the NASA Data Request at bottom has changed; it is always the latest request from DRE to NASA Giovanni. If you copy &amp; paste this time series request in another browser tab, you will see the tabular data with time series metadata._
 
-==Note==: _you can edit the dates directly in the text field, but the date bounds will not be enforced, so you can potentially enter a date outside the supported range. Also, the latest date may show on the map but not on a plot, because of the additional processing needed for data rods indexing, after the model-variable gridded data is received and available. This is usually no more than a few hours or days of lag time._
+**Note**: _you can edit the dates directly in the text field, but the date bounds will not be enforced, so you can potentially enter a date outside the supported range. Also, the latest date may show on the map but not on a plot, because of the additional processing needed for data rods indexing, after the model-variable gridded data is received and available. This is usually no more than a few hours or days of lag time._
 
 _**Demo Step 5:**_   **Click &quot;Compare two variables&quot; just below the Plot button**. _A new section will open up, to allow selection of the second model and date range._ **Choose GRACE soil moisture for the second model, and &quot;0-100cm root zone soil moisture&quot; for the second variable**. _Notice there is a new line in the Map Control Panel, lower-left corner of the map frame._ **Click on Model 2 Extents in the Map Control Panel** , _and the map will zoom to show the GRACE spatial extent as a red rectangle_. **Click on &quot;NLDAS:0-100cmSoilMoisture&quot; in the Map Control Panel, then on Model 1 Extents**. _You can use these to quickly change the focus. You can also zoom in by holding the shift key while dragging a zoom rectangle on the map around your area of interest._
 
@@ -229,7 +229,7 @@ However, DRE can be started to display any given model and variable, date and ti
 
 Because DRE populates all pull-down lists and date-time selection fields with valid contents, it will always fill in missing parameters with default values.
 
-==**Tip**==: As you start exploring NASA data availability, you may notice that some models are no longer updated (static end date), while others are continually updated but lag the current date by a few days to several weeks. This lag or latency is due to differing workflows to process the incoming spatial data for time series indexing. NLDAS variables are usually available within a few days of the current date, while GLDAS variables may lag by a month, and TRMM by more than that. Due to these variations, a script is run nightly at 3am ET to update an external file listing all the products/models&#39; data availability. You can check this file at any time here: [dates\_and\_spatial\_range.txt (apps server)](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)
+**Tip**: As you start exploring NASA data availability, you may notice that some models are no longer updated (static end date), while others are continually updated but lag the current date by a few days to several weeks. This lag or latency is due to differing workflows to process the incoming spatial data for time series indexing. NLDAS variables are usually available within a few days of the current date, while GLDAS variables may lag by a month, and TRMM by more than that. Due to these variations, a script is run nightly at 3am ET to update an external file listing all the products/models&#39; data availability. You can check this file at any time here: [dates\_and\_spatial\_range.txt (apps server)](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)
 
 ### Selecting and displaying gridded maps of model variables
 
@@ -244,7 +244,7 @@ To pick a model, click on the pulldown field directly below the **Product-Model*
 
 - Note the dates after Nov 17 in Figure 4 are grayed out; these are fenced off so the user cannot try to pick them for data (this was screen-captured on Nov 22).
 - Similarly, the user can&#39;t pick a date earlier than the model&#39;s begin date as reported in [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt).
-- ==**Tip**==: You can edit the date directly, but the date bounds will not be enforced, so you can potentially enter a date outside the supported range.
+- **Tip**: You can edit the date directly, but the date bounds will not be enforced, so you can potentially enter a date outside the supported range.
 See [Quickly navigating the date picker](#nav-date-picker) below for more tips.
 
 
@@ -314,9 +314,9 @@ The &quot;date picker&quot; is the tool that lets you pick a date for a model-va
 
 Notice that dates after Nov 24 in (a) are grayed out; this is because they are &quot;fenced off&quot; as not ready for viewing. Similarly, years prior to 1979 (e) are not available, nor are dates before Jan 2, 1979 (f).
 
-==**Tip**==: You can edit the date directly, but the date bounds will not be enforced, so you can potentially enter a date outside the supported range.
+**Tip**: You can edit the date directly, but the date bounds will not be enforced, so you can potentially enter a date outside the supported range.
 
-==**Tip**==: Sometimes you may find that you can get a gridded variable map for a date and time, but you cannot get a time series with that end date/time. If this happens, **try changing the end-date to a day earlier, or a month earlier**. If it works then, it was possible that the time series was in the process of being updated, and was not yet indexed through the end date indicated in the NASA CMR registry.
+**Tip**: Sometimes you may find that you can get a gridded variable map for a date and time, but you cannot get a time series with that end date/time. If this happens, **try changing the end-date to a day earlier, or a month earlier**. If it works then, it was possible that the time series was in the process of being updated, and was not yet indexed through the end date indicated in the NASA CMR registry.
 
 ### <a name="map-controls"></a>Using the map controls panel
 
@@ -330,7 +330,7 @@ As mentioned elsewhere, you can request and stack multiple model-variable grid m
 
 <a name="fig14"></a>_Figure 14. Making LPRM layer transparent enough to see GLDAS2-Evapotranspiration layer_
 
-==Note==: The **Drawing Layer** in the Map Controls Panel refers to the plot point you can place on the map, for location of the time series plots.
+**Note**: The **Drawing Layer** in the Map Controls Panel refers to the plot point you can place on the map, for location of the time series plots.
 
 ### <a name="reset"></a>Using the Reset button
 
@@ -359,7 +359,7 @@ These two approaches for downloading the plot data are both provided because the
 
 <a name="fig16"></a>_Figure 16. Download Choices (chart only, no metadata) for Time Series Data and Plot Image_
 
-One other point to make regarding the View Raw Data choices: if your plots have two variables or year-to-year changes, then choosing to View Raw Data as ASCII, Plot or NetCDF will create multiple new browser tabs, one for each variable-time series. ==**Tip**==: IF YOU DON&#39;T SEE multiple new tabs, this could be due to your browser&#39;s pop-up blocker (depends on the browser). Check online for your browser&#39;s method of adding an exception to the pop-up blocker, and add an exception for the following sites:   **appsdev.hydroshare.org** , and **apps.hydroshare.org**.
+One other point to make regarding the View Raw Data choices: if your plots have two variables or year-to-year changes, then choosing to View Raw Data as ASCII, Plot or NetCDF will create multiple new browser tabs, one for each variable-time series. ****Tip****: IF YOU DON&#39;T SEE multiple new tabs, this could be due to your browser&#39;s pop-up blocker (depends on the browser). Check online for your browser&#39;s method of adding an exception to the pop-up blocker, and add an exception for the following sites:   **appsdev.hydroshare.org** , and **apps.hydroshare.org**.
 
 ### <a name="upload"></a>Uploading time series query results to HydroShare
 
@@ -388,7 +388,7 @@ Clicking on the &quot;**here**&quot; link in the second message above will open 
  ![Figure 20](figs/fig20.png)
 <a name="fig20"></a>_Figure 20. Excerpt from HydroShare Resource Details for Uploaded Time Series_
 
-Do not download a time series result just to upload it to HydroShare. Once it is in the graph frame, it&#39;s ready to upload. ==Note==: DRE does not enable upload of the model-variable maps.
+Do not download a time series result just to upload it to HydroShare. Once it is in the graph frame, it&#39;s ready to upload. **Note**: DRE does not enable upload of the model-variable maps.
 
 ---
 
@@ -396,7 +396,7 @@ Do not download a time series result just to upload it to HydroShare. Once it is
 
 This section lists the informational and error messages you might encounter during use.
 
-**==Tip==**: See [Testing the NASA data services](#testing-services) (section below) if you want to verify which data services are online or having difficulty.
+**Tip**: See [Testing the NASA data services](#testing-services) (section below) if you want to verify which data services are online or having difficulty.
 
 **Message 1.** Messages are displayed between the Data Rods Explorer title bar and the map frame. These are either informative instructions, or explanatory about error conditions. Informative messages are displayed with blue text against a blue background box. The following example shows the most common informative message: &quot;Click on the map to define data query location, or enter a coordinate:&quot; You don&#39;t need to define a location for mapping, just for plots.
 
@@ -408,7 +408,7 @@ This section lists the informational and error messages you might encounter duri
 
  ![Message 2](figs/msg02.png)
 
-When GLDAS is selected as the model, the Display Map button is disabled (grayed out). ==Note== that GLDAS will be phased out after Dec 31, 2016.
+When GLDAS is selected as the model, the Display Map button is disabled (grayed out). **Note** that GLDAS will be phased out after Dec 31, 2016.
 
 **Message 3.** The models made available for data rods almost all have different temporal bounds, so when you choose **Compare two variables** for plotting time series from different models, it&#39;s possible to pick a date range for one that will not work for the other. DRE checks this and adjusts the allowed date range for comparison to the mutually available bounds, and displays an info message to let you know.
 
@@ -469,7 +469,7 @@ Initial point of contact for NASA data-related questions is [William Teng](mailt
 
 The [Global Change Master Directory (GCMD)](http://gcmd.nasa.gov/) is a catalog to search for Earth science data and services.
 
-==Note==: the GCMD catalog content is being migrated to the newer CMR, see next item
+**Note**: the GCMD catalog content is being migrated to the newer CMR, see next item
 
 - [GCMD Portal search for datasets](http://gcmd.nasa.gov/search/Titles.do?search=#titles)
 
@@ -504,7 +504,7 @@ Further online references:
 - [Data Rods Time Series Reference](http://disc.sci.gsfc.nasa.gov/hydrology/data-rods-time-series-data) (web)
 - [Data Rods Variables Info (spreadsheet)](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0)
 
-==Note== that most model outputs are updated on a regular basis, though not synchronized with each other. For the exact and most current availability dates for these models, see [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt) which is updated by cron job nightly at 3am US ET. See related section for more details.
+**Note** that most model outputs are updated on a regular basis, though not synchronized with each other. For the exact and most current availability dates for these models, see [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt) which is updated by cron job nightly at 3am US ET. See related section for more details.
 
 ### LDAS - Land Data Assimilation System
 
@@ -525,7 +525,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **NLDAS-Noah v2 variables** : evapotranspiration, ground heat flux, latent heat flux, sensible heat flux, surface runoff, 0-10cm soil moisture, 10-40cm soil moisture, 40-100cm soil moisture, 0-100cm soil moisture, 100-200cm soil moisture, 0-10cm soil temperature.
 
-==**Tip**==: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
+**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
 ### GLDAS - Global Land Data Assimilation System
 
@@ -536,7 +536,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **GLDAS-Noah v1 variables** : evapotranspiration, precipitation rate, rain rate, snow rate, surface runoff, subsurface runoff, 0-10cm soil moisture, 10-40cm soil moisture, 40-100cm soil moisture, 0-100cm soil moisture, near-surface air temperature, 0-10cm soil temperature, near-surface wind magnitude.
 
-==**Tip**==: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
+**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
 ### GLDAS 2 - Global Land Data Assimilation System
 
@@ -547,9 +547,9 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **GLDAS-Noah v2 variables** : evapotranspiration, rain rate, snow rate, surface runoff, subsurface runoff.
 
-==**Tip**==: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
+**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
-_==Note==: GLDAS-2 will be enhanced during 2017, to take the place of the GLDAS-1 model being retired._
+_**Note**: GLDAS-2 will be enhanced during 2017, to take the place of the GLDAS-1 model being retired._
 
 ### GRACE - Gravity Recovery and Climate Experiment
 
@@ -806,7 +806,7 @@ Data rod request for GLDAS Evapotranspiration:
 
 You can copy/paste/execute these URLs into a new browser tab, in case of questions about whether the NASA service is working as expected.
 
-==**Tip**==: Data rod requests for Ascii tabular, netCDF, and plots are almost identical. The only parameter you need to change for a time series to get a different format result is &amp;type, as follows:
+**Tip**: Data rod requests for Ascii tabular, netCDF, and plots are almost identical. The only parameter you need to change for a time series to get a different format result is &amp;type, as follows:
 
     &type=asc2 (ascii tabular)
     &type=netcdf
