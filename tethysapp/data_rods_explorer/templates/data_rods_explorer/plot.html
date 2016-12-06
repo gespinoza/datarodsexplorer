@@ -1,8 +1,7 @@
 {% if error %}
-<div id="Error999">{{ error }}</div>
+    <div id="Error999">{{ error }}</div>
 {% else %}
     {% load tethys_gizmos %}
-    <br>
     <div class="dropdown">
         <button class="btn dropdown-toggle" type="button" id="dropdown-viewData" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             View Raw Data from NASA in New Tab...
@@ -12,15 +11,29 @@
             <li class="option-viewData" id="optn-viewDataAscii" onclick="openDataRodsUrls({{ datarods_urls_dict.asc2 }})">
                 ASCII
             </li>
+            <li class="option-viewData" id="optn-viewDataNetCDF" onclick="openDataRodsUrls({{ datarods_urls_dict.netcdf }})">
+                NetCDF
+            </li>
             <li class="option-viewData" id="optn-viewDataPlot" onclick="openDataRodsUrls({{ datarods_urls_dict.plot }})">
                 Plot
             </li>
-            <li class="option-viewData" id="optn-viewDataNetCDF" onclick="openDataRodsUrls({{ datarods_urls_dict.netcdf }})">
+        </ul>
+    </div>
+    <div class="dropdown">
+        <button class="btn dropdown-toggle" type="button" id="dropdown-hydroshare" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span><img src="/static/data_rods_explorer/images/hydroshare_logo.svg" width="20" height="20"></span>Upload to HydroShare
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdown-export">
+            <li class="option-uploadToHS" id="optn-uploadToHS" data-plottype="{{ plot_type }}" data-restype="GenericResource" data-rodsendpoints="{{ datarods_urls_dict.asc2 }}">
+                ASCII
+            </li>
+            <li class="option-uploadToHS" id="optn-uploadToHS" data-plottype="{{ plot_type }}" data-restype="NetcdfResource" data-rodsendpoints="{{ datarods_urls_dict.netcdf }}">
                 NetCDF
             </li>
         </ul>
     </div>
-    {% if plot2 %}
+    {% if plot_type == 'plot2' %}
         <div id='plot2container' style="height: 250px; width: 100%"></div>
         {% gizmo plot_view timeseries_plot %}
         <div id="plot2-options"

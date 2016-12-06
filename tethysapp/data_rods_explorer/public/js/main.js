@@ -69,4 +69,44 @@ $(function() {
         var location = window.location;
         location.href = location.origin + location.pathname;
     });
+
+    $('#btn-uploadToHS').on('click', function () {
+        var uploadToHSFlashMessageID = 'hs-res-upload';
+        var data = {
+            'res_type': $('#resType').val(),
+            'res_title': $('#resTitle').val() || 'Untitled Resource',
+            'res_abstract': $('#resAbstract').val(),
+            'res_keywords': $('#resKeywords').val(),
+            'rods_endpoints': $('#rodsEndpoint').val(),
+            'plot_type': $('#plotType').val()
+        };
+        removeFlashMessage(uploadToHSFlashMessageID);
+        displayFlashMessage(uploadToHSFlashMessageID, 'info', 'Creating HydroShare resource...');
+
+        $('#modalUploadToHS').modal('hide');
+
+        $.ajax({
+            url: '/apps/data-rods-explorer/upload-to-hs/',
+            type: 'GET',
+            data: data,
+            dataType: 'json',
+            contentType: 'json',
+            success: function (response) {
+                removeFlashMessage(uploadToHSFlashMessageID);
+                if (response.hasOwnProperty('success')) {
+                    if (response.success) {
+                        displayFlashMessage(uploadToHSFlashMessageID, 'success', 'The HydroShare resource was created successfully! ' +
+                            'View it ' +
+                            '<a href="https://www.hydroshare.org/resource/' + response.res_id + '" target="_blank">' +
+                            'here' +
+                            '</a>', true);
+                    } else {
+                        displayFlashMessage(uploadToHSFlashMessageID, 'warning', response.message, true);
+                    }
+                } else {
+                    displayFlashMessage(uploadToHSFlashMessageID, 'danger', 'An error ocurred while uploading the data to HydroShare.', true);
+                }
+            }
+        });
+    });
 });

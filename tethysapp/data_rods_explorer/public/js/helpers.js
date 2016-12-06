@@ -243,7 +243,12 @@ function createPlot(plotType) {
                     initHighChartsPlot($('.highcharts-plot'), hcPlotType);
                     $('#plot-loading').addClass('hidden');
 
-                    if (plotType === 'plot2') {
+                    $('.option-uploadToHS').on('click', function () {
+                        prepareAndOpenHSUploadModal(this);
+                    });
+                    if (plotType === 'plot') {
+                        modifyYAxis();
+                    } else if (plotType === 'plot2') {
                         var opts = $('#plot2-options');
                         var series = opts.attr('data-series');
                         var y1Units = opts.attr('data-y1units');
@@ -254,7 +259,6 @@ function createPlot(plotType) {
                             modifyXAxis();
                         }
                     }
-                    modifyYAxis();
                     $('.highcharts-legend-item').on('click', function () {
                         setTimeout(modifyYAxis, 500);
                     });
@@ -489,17 +493,36 @@ function openDataRodsUrls(datarods_urls) {
     });
 }
 
-function displayFlashMessage(id, type, message) {
+function displayFlashMessage(id, type, message, allowClose) {
+    var closeHtml = '';
+    var sign;
+
+    switch (type) {
+        case 'success':
+            sign = 'ok';
+            break;
+        case 'danger':
+            sign = 'remove';
+            break;
+        default:
+            sign = type;
+    }
+
     if ($('#' + id).length !== 0) {
         return;
     }
+
+    if (allowClose) {
+        closeHtml = '<button type="button" class="close" data-dismiss="alert">' +
+            '<span aria-hidden="true">&times;</span>' +
+            '<span class="sr-only">Close</span>' +
+            '</button>';
+    }
+
     $('.flash-messages').append(
         '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible" role="alert">' +
-        '<b><span class="glyphicon glyphicon-' + type + '-sign" aria-hidden="true"></span>' +
-        // '<button type="button" class="close" data-dismiss="alert">' +
-        // '<span aria-hidden="true">&times;</span>' +
-        // '<span class="sr-only">Close</span>' +
-        // '</button>' +
+        closeHtml +
+        '<b><span class="glyphicon glyphicon-' + sign + '-sign" aria-hidden="true"></span> ' +
         message +
         '</b></div>'
     );
@@ -614,7 +637,7 @@ function returnLaterDateHourPickerDate(date1, date2) {
 
 function updateTemporalFences(modelNum) {
     var boundsAdjustedFlashMessageID = 'bound-adjusted';
-    var boundsAdjustedFlashMessageText = 'Note: Model 2 date bounds were adjusted to mutually valid dates for the two models.'
+    var boundsAdjustedFlashMessageText = 'Note: Date bounds were adjusted to mutually valid dates for the two models.';
     var model1 = $('#model1').val();
     var model2 = $('#model2').val();
     var earliestDateForModel1 = MODEL_FENCES[model1].start_date;
@@ -626,10 +649,8 @@ function updateTemporalFences(modelNum) {
 
     if (modelNum === '1') {
         $plotDate = $('#plot_date');
-        if (!$('#nav-plot').hasClass('hidden')) {
-            $endDate = $('#endDate1');
-            $startDate = $('#startDate1');
-        }
+        $endDate = $('#endDate1');
+        $startDate = $('#startDate1');
 
         var $datePickers = $plotDate.add($endDate);
 
@@ -642,6 +663,7 @@ function updateTemporalFences(modelNum) {
                 $(elem).val(earliestDateForModel1);
             }
         });
+
         if ($startDate && $startDate.length > 0) {
             $startDate.datepicker('setStartDate', earliestDateForModel1);
             $startDate.datepicker('setEndDate', $endDate.val());
@@ -692,6 +714,13 @@ function updateTemporalFences(modelNum) {
         if (model2BoundsModified) {
             displayFlashMessage(boundsAdjustedFlashMessageID, 'info', boundsAdjustedFlashMessageText)
         }
+    }
+
+    if ($endDate.val() !== '') {
+        validateDateFormat($endDate);
+    }
+    if ($startDate.val() !== '') {
+        validateDateFormat($startDate);
     }
 }
 
@@ -921,4 +950,88 @@ function addNewPoint(lon, lat, centerOnPoint) {
     if (centerOnPoint) {
         map.getView().setCenter(mapCoords);
     }
+}
+
+function prepareAndOpenHSUploadModal(clickedObj) {
+    var rodsEndpointsListStr = $(clickedObj).data('rodsendpoints');
+    var rodsEndpointsList = eval(rodsEndpointsListStr);
+    var lon = $('#lon').val();
+    var lat = $('#lat').val();
+    var abstractDefault = 'This resource was created using the Data Rods Explorer app and contains time series ' +
+        'corresponding to ' + lon + ' longitude and ' + lat + ' latitude, including:\n';
+    var keyWords = [];
+    rodsEndpointsList.forEach(function (url) {
+        var rodsParams = paramStringToObj(url.split('?')[1]);
+        var variableFull = rodsParams['variable'];
+        var modelSplitIndex = variableFull.indexOf(':');
+        var modelKey = variableFull.slice(0, modelSplitIndex);
+        if (modelKey === 'NLDAS' && variableFull.indexOf('_FORA') !== -1) {
+            modelKey += 'F';
+        }
+        var varSplitIndex = variableFull.indexOf(':', modelSplitIndex + 1);
+        var variableKey = variableFull.slice(varSplitIndex + 1);
+        var modelName = $('#model1').find('[value=' + modelKey + ']').text();
+        var varListItems = WMS_VARS[modelKey][variableKey];
+        var variableAndUnits = varListItems[1] + ' in ' + varListItems[2];
+        var startDate = rodsParams['startDate'];
+        var endDate = rodsParams['endDate'];
+
+        abstractDefault += variableAndUnits + ' from the ' + modelName + ' model, recorded from ' + startDate + ' to ' + endDate + '.\n';
+        if (keyWords.indexOf(modelKey) === -1) {
+            keyWords.push(modelKey);
+        }
+    });
+
+    $('#resTitle').val('');
+    $('#plotType').val($(clickedObj).data('plottype'));
+    $('#resType').val($(clickedObj).data('restype'));
+    $('#rodsEndpoint').val(rodsEndpointsListStr);
+    $('#modalUploadToHS').modal('show');
+    $('#resAbstract').val(abstractDefault);
+    $('#resKeywords').val(keyWords.join(', '));
+}
+
+function validateDateFormat($dateObj) {
+    var invalidDateFlashMessageId = 'invalid-date';
+    var invalidDateFlashMessageText = 'The date just entered is invalid. Please select a date, or type one with format mm/dd/yyyy';
+    var originalDate = $($dateObj).val();
+    var originalMonthDayYearList;
+    var newMonthDayYearList = [];
+    var newDate;
+    var numDateSegments;
+    var i;
+
+    removeFlashMessage(invalidDateFlashMessageId);
+
+    if (originalDate === '' || originalDate === undefined) {
+        displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
+        return false;
+    }
+
+    originalMonthDayYearList = originalDate.split('/');
+    numDateSegments = originalMonthDayYearList.length;
+
+    if (numDateSegments !== 3) {
+        displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
+        return false;
+    }
+
+    for (i = 0; i < numDateSegments; i += 1) {
+        var piece = originalMonthDayYearList[i];
+        if (i < 2 && piece.length === 1) {
+            newMonthDayYearList.push('0' + piece);
+        } else if ( (i < 2 && piece.length === 2) || (i == 2 && piece.length === 4) ) {
+            newMonthDayYearList.push(piece);
+        } else {
+            displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
+            return false;
+        }
+    }
+
+    newDate = newMonthDayYearList.join('/');
+
+    if (newDate !== originalDate) {
+        $($dateObj).val(newDate);
+    }
+    return true;
 }
