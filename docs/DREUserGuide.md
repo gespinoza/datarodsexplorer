@@ -250,9 +250,8 @@ To pick a model, click on the pulldown field directly below the **Product-Model*
 
 - Note the dates after Nov 17 in Figure 4 are grayed out; these are fenced off so the user cannot try to pick them for data (this was screen-captured on Nov 22).
 - Similarly, the user can&#39;t pick a date earlier than the model&#39;s begin date as reported in [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt).
-- **Tip**: You can edit the date directly, but the date bounds will not be enforced, so you can potentially enter a date outside the supported range.
+- **Tip**: You can edit the date directly, but if you enter a date that's out of range for the selected model, you will get an error message and the date will go blank; just click again to get the popup calendar.
 See [Quickly navigating the date picker](#nav-date-picker) below for more tips.
-
 
 
 Once the desired model, variable, date and time are all chosen, the user would click on the Display Map button. After 10-15 seconds while the NASA Giovanni server constructs the map, it is displayed.
@@ -456,6 +455,10 @@ Try hitting the **Reset** button, and retrying your requests. If this error pers
  ![Message 9](figs/msg09.png)
 
 If the condition persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:gespinoza@utexas.edu).
+
+**Message 10.** You can edit map and plot dates directly in the text field, but if you enter a date that's out of range for the selected model, you will get an error message and the date will go blank; just click again to get the popup calendar.
+
+ ![Message 10](figs/msg10.png)
 
 ---
 
