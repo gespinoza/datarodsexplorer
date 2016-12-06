@@ -307,7 +307,7 @@ For  many studies, it is useful to look at year-to-year comparisons for a partic
 - The checkbox &quot;**Overlay years**&quot; below the year-picker overlays the data values for each calendar year chosen. Unchecking this box allows you to see each year in series on a multi-year time scale, not as an overlay.
 - Note that you can show/hide individual years by clicking on them in the legend on the right.
 
-## <a name="dre-tools></a>Using the DRE user interface tools
+## <a name="dre-tools"></a>Using the DRE user interface tools
 
 ### <a name="nav-date-picker"></a>Quickly navigating the date picker
 
