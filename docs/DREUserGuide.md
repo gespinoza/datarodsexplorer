@@ -77,19 +77,19 @@ This user guide has the following main sections:
 
 - _[Browsing the NASA data sets](#browsing-data)_ 
 
-   - Starting the Data Rods Explorer
-   - Selecting and displaying gridded maps of model variables
-   - Plotting time series of one variable
-   - Comparing time series of two variables
-   - Plotting year-on-year changes in a model variable
+   - [Starting the Data Rods Explorer](#starting)
+   - [Selecting and displaying gridded maps of model variables](#mapping)
+   - [Plotting time series of one variable](#plot1)
+   - [Comparing time series of two variables](#plot2)
+   - [Plotting year-on-year changes in a model variable](#plot-yr-yr)
 
 - _[Using the DRE user interface tools](#dre-tools)_
 
    - [Quickly navigating the date picker](#nav-date-picker)
-   - Using the map controls panel
-   - Using the Reset button
-   - Downloading time series data and plot graphics
-   - Uploading time series query results to HydroShare
+   - [Using the map controls panel](#map-controls)
+   - [Using the Reset button](#reset)
+   - [Downloading time series data and plot graphics](#download)
+   - [Uploading time series query results to HydroShare](#upload)
 
 - _[Notifications and Testing](#notifs-testing)_
 
@@ -210,7 +210,7 @@ It&#39;s a good idea to first take the quick [tutorial](#demo-tutorial), then co
 
 ## <a name="browsing-data"></a>Browsing the NASA data sets
 
-### Starting the Data Rods Explorer
+### <a name="starting"></a>Starting the Data Rods Explorer
 
 When you first open **Data Rods Explorer**, it reads two text files: (1)  the model configuration file ([model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)) and (2) a file containing spatial and temporal bounds for each model ([dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)). These are further discussed in [Keeping DRE Up to Date](#keeping-dre-uptodate).
 
@@ -233,7 +233,7 @@ Because DRE populates all pull-down lists and date-time selection fields with va
 
 **Tip**: As you start exploring NASA data availability, you may notice that some models are no longer updated (static end date), while others are continually updated but lag the current date by a few days to several weeks. This lag or latency is due to differing workflows to process the incoming spatial data for time series indexing. NLDAS variables are usually available within a few days of the current date, while GLDAS variables may lag by a month, and TRMM by more than that. Due to these variations, a script is run nightly at 3am ET to update an external file listing all the products/models&#39; data availability. You can check this file at any time here: [dates\_and\_spatial\_range.txt (apps server)](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)
 
-### Selecting and displaying gridded maps of model variables
+### <a name="mapping"></a>Selecting and displaying gridded maps of model variables
 
 To pick a model, click on the pulldown field directly below the **Product-Model** heading in the left margin panel, see Figure 2 below. Once the model is chosen, the list of variables is updated to match, see Figure 3. Figure 4 shows picking the date and time.
 
@@ -267,7 +267,7 @@ Once the desired model, variable, date and time are all chosen, the user would c
 - You can stack multiple model-variable maps by selecting additional ones; use **Reset** button to clear map layers.
 - You can also hide/show and control transparency of model-variable layers; see Using the map controls panel below.
 
-### Plotting time series of one variable
+### <a name="plot1"></a>Plotting time series of one variable
 
 1. Display the map of a model-variable and zoom to area of interest.
 2. Click on the map for a point-location for the time series (data rod), or enter a lon-lat coordinate directly in the message field, and check the dates range.
@@ -280,7 +280,7 @@ Once the desired model, variable, date and time are all chosen, the user would c
  ![Figure 7](figs/fig07.png)
 <a name="fig07"></a>_Figure 7. Plot of TRMM Precipitation, November 2012-October 2013_
 
-### Comparing time series of two variables
+### <a name="plot2"></a>Comparing time series of two variables
 
 1. Pick a model &amp; variable in the lists just described, then click Compare two variables, and pick a second model &amp; variable. Note that **Model 2 extent** is represented by a red box on the map. Also note that the date-time pickers adjust to only allow valid times for both variables selected.
 2. Click Plot button to see both plots overlaid.
@@ -293,7 +293,7 @@ Once the desired model, variable, date and time are all chosen, the user would c
 
 <a name="fig09"></a>_Figure 9. Model 1 plot (blue) uses left y-axis; Model 2 plot (black) uses right y-axis_
 
-### Plotting year-on-year changes in a model variable
+### <a name="plot-yr-yr"></a>Plotting year-on-year changes in a model variable
 
 For  many studies, it is useful to look at year-to-year comparisons for a particular model-variable.  This time series plotting option allows you to do that. 1.	Pick the model and variable as shown above, then click Year-on-year changes in the Time Series options. 2.	In the blank field under “Select years:”, click the mouse to see a popup of years available for the chosen model & variable. Click on a year, then click on the blank field again to add a second year, and so on. 
 
@@ -397,7 +397,7 @@ Do not download a time series result just to upload it to HydroShare. Once it is
 
 ---
 
-## Notifications and Testing
+## <a name="notifs-testing"></a>Notifications and Testing
 
 This section lists the informational and error messages you might encounter during use.
 
