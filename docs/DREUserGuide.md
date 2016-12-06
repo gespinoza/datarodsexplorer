@@ -31,7 +31,7 @@ Questions on software development should be sent to [Gonzalo Espinoza](mailto:ge
 
 This user guide has the following main sections:
 
-- **[Poster from AGU 2016](#poster-for-agu)** – background on NASA Data Rods
+- **[Poster from AGU 2016](#poster-for-agu)** – background on NASA Data Rods technology
 - **[Demo / Tutorial](#demo-tutorial)** – a quick walkthrough of the DRE&#39;s main features
 - **[Features and Utilities](#dre-features)** – more detail and tips about choices and results
 - **[NASA References](#nasa-references)** – links to the relevant NASA reference pages and the Giovanni data server
@@ -295,7 +295,9 @@ Once the desired model, variable, date and time are all chosen, the user would c
 
 ### <a name="plot-yr-yr"></a>Plotting year-on-year changes in a model variable
 
-For  many studies, it is useful to look at year-to-year comparisons for a particular model-variable.  This time series plotting option allows you to do that. 1.	Pick the model and variable as shown above, then click Year-on-year changes in the Time Series options. 2.	In the blank field under “Select years:”, click the mouse to see a popup of years available for the chosen model & variable. Click on a year, then click on the blank field again to add a second year, and so on. 
+For  many studies, it is useful to look at year-to-year comparisons for a particular model-variable.  This time series plotting option allows you to do that. 
+1.	Pick the model and variable as shown above, then click Year-on-year changes in the Time Series options. 
+2.	In the blank field under “Select years:”, click the mouse to see a popup of years available for the chosen model & variable. Click on a year, then click on the blank field again to add a second year, and so on. 
 
  ![Figure 10](figs/fig10.png)
 <a name="fig10"></a>_Figure 10. Picking years for comparison_
