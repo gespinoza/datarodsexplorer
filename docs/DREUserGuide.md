@@ -488,7 +488,7 @@ The CMR is an earth science metadata repository for NASA EOSDIS data.
 
 ## References for models and variables
 
-<a name="table01"></a>Table 1. NASA Data Rods: Product / Model Characteristics
+<a name="tab01"></a>Table 1. NASA Data Rods: Product / Model Characteristics
 
 | **Data product** | **Spatial  resolution (deg)** | **Spatial coverage** | **Temporal resolution** | **Temporal coverage** | **# variables** |
 | --- | --- | --- | --- | --- | --- |
