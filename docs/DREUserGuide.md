@@ -2,6 +2,8 @@
 
 _Browse NASA data services for land surface model maps and time series_
 
+---
+
 ## <a name="about-dre"></a>About DRE
 
 The [Data Rods Explorer (DRE)](https://apps.hydroshare.org/apps/data-rods-explorer) is a web client app that enables users to browse several NASA-hosted data sets. The interface enables visualization and download of NASA observation retrievals and land surface model (LSM) outputs by variable, space and time. The key variables are precipitation, wind, temperature, surface downward radiation flux, heat flux, humidity, soil moisture, groundwater, runoff, and evapotranspiration. These variables describe the main components of the water cycle over land masses.
@@ -54,117 +56,119 @@ This user guide has the following main sections:
 
 
 
-
+---
 
 ## <a name="toc"></a>Table of Contents
 
-**[About DRE](#about-dre)**        1
+**[About DRE](#about-dre)**
 
-- App Outputs        1
-- Example Uses of the App        1
-- Credits, Authors, Contributors, Contacts        2
-- To learn more        2
-- Future changes expected        2
-- Revision History        2
+- App Outputs
+- Example Uses of the App
+- Credits, Authors, Contributors, Contacts
+- To learn more
+- Future changes expected
+- Revision History
 
-**[Poster for AGU 2016](#poster-for-agu)**        3
+**[Poster for AGU 2016](#poster-for-agu)**
+**[Demo / Tutorial](#demo-tutorial)**
+**[Features and Utilities](#dre-features)**
 
-**[Demo / Tutorial](#demo-tutorial)**        6
+- _[Browsing the NASA data sets](#browsing-data)_ 
 
-**[Features and Utilities](#dre-features)**        8
+   - Starting the Data Rods Explorer
+   - Selecting and displaying gridded maps of model variables
+   - Plotting time series of one variable
+   - Comparing time series of two variables
+   - Plotting year-on-year changes in a model variable
 
-- _[Browsing the NASA data sets](#browsing-data)_        8
+- _[Using the DRE user interface tools](#dre-tools)_
 
->- Starting the Data Rods Explorer        8
->- Selecting and displaying gridded maps of model variables        9
->- Plotting time series of one variable        11
->- Comparing time series of two variables        12
->- Plotting year-on-year changes in a model variable        14
+   - [Quickly navigating the date picker](#nav-date-picker)
+   - Using the map controls panel
+   - Using the Reset button
+   - Downloading time series data and plot graphics
+   - Uploading time series query results to HydroShare
 
-- _[Using the DRE user interface tools](#dre-tools)_        15
+- _[Notifications and Testing](#notifs-testing)_
 
->- [Quickly navigating the date picker](#nav-date-picker)        15
->- Using the map controls panel        16
->- Using the Reset button        17
->- Downloading time series data and plot graphics        17
->- Uploading time series query results to HydroShare        18
+**[NASA References](#nasa-references)** 
 
-- _[Notifications and Testing](#notifs-testing)_        20
+- 	_NASA Servers and Search Portals_ 
 
-**[NASA References](#nasa-references)**        22
+   - 	[NASA Giovanni](#giovanni) 
+   - 	NASA Global Change Master Directory (GCMD)
+   - 	NASA Common Metadata Repository (CMR)
 
-- 	_NASA Servers and Search Portals_        22
+- 	_References for models and variables_ 
 
->- 	[NASA Giovanni](#giovanni)        22
->- 	NASA Global Change Master Directory (GCMD)        22
->- 	NASA Common Metadata Repository (CMR)        22
+   - LDAS - Land Data Assimilation System 
+   - NLDAS - National Land Data Assimilation System
+   - GLDAS - Global Land Data Assimilation System
+   - GLDAS 2 - Global Land Data Assimilation System 
+   - GRACE - Gravity Recovery and Climate Experiment 
+   - LPRM - Land Parameter Retrieval Model
+   - TRMM - Tropical Rainfall Measuring Mission
+   - MERRA-Land (forthcoming)
 
-- 	_References for models and variables_        23
+**[Keeping DRE Up to Date](#keeping-dre-uptodate)** 
 
->- LDAS - Land Data Assimilation System        23
->- NLDAS - National Land Data Assimilation System        24
->- GLDAS - Global Land Data Assimilation System        24
->- GLDAS 2 - Global Land Data Assimilation System        24
->- GRACE - Gravity Recovery and Climate Experiment        25
->- LPRM - Land Parameter Retrieval Model        25
->- TRMM - Tropical Rainfall Measuring Mission        25
->- MERRA-Land (forthcoming)        26
+- Using the NASA Data Rods Variables Info spreadsheet
+- Reading and editing the model\_config.txt file
+- Running the enddate\_bounds.py script (cron job)
+- Synchronization issues between the NASA CMR metadata and actual Data Rods availability
 
-**[Keeping DRE Up to Date](#keeping-dre-uptodate)**        27
+**[DRE App Process Flow](#dre-app-flow)**
 
-- Using the NASA Data Rods Variables Info spreadsheet        27
-- Reading and editing the model\_config.txt file        27
-- Running the enddate\_bounds.py script (cron job)        28
-- Synchronization issues between the NASA CMR metadata and actual Data Rods availability        30
+- User opens the Data Rods Explorer app
+- User clicks on any of the Time Series plot options (Plot one variable, Compare two variables, or Year-on-year changes)
+- User chooses a different model from the model dropdown 
+- User chooses different variable/dates/time from a dropdown
+- User clicks on the map 
+- User clicks the &quot;Display Map&quot; button
+- User clicks the &quot;Plot&quot; button for &quot;Plot one variable&quot;
+- User clicks the &quot;Plot&quot; button for &quot;Compare two variables&quot;
+- User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;
+- [Testing NASA Data Services](#testing-services)
+- [DRE Regression Tests](#dre-regression-tests) 
 
-**[DRE App Process Flow](#dre-app-flow)**        31
-
-- User opens the Data Rods Explorer app        31
-- User clicks on any of the Time Series plot options (Plot one variable, Compare two variables, or Year-on-year changes)        32
-- User chooses a different model from the model dropdown        32
-- User chooses different variable/dates/time from a dropdown        32
-- User clicks on the map        32
-- User clicks the &quot;Display Map&quot; button        33
-- User clicks the &quot;Plot&quot; button for &quot;Plot one variable&quot;        33
-- User clicks the &quot;Plot&quot; button for &quot;Compare two variables&quot;        34
-- User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;        34
-- [Testing NASA Data Services](#testing-services)        34
-- [DRE Regression Tests](#dre-regression-tests)        35
-
-**[Web App Metadata](#app-meta)**        36
+**[Web App Metadata](#app-meta)** 
 
 **<a name="figures"></a>Figures**
 
-[Figure 1.](#fig01) DRE initial startup with defaults        8
-[Figure 2.](#fig02) DRE Product-Model List        9
-[Figure 3.](#fig03) DRE Variable List for NLDAS-Forcings        9
-[Figure 4.](#fig04) DRE Date and Time Pickers        10
-[Figure 5.](#fig05) Display Map of NLDAS Surface downward longwave radiation flux        11
-[Figure 6.](#fig06) Display map of TRMM Precipitation on Oct 31, 2013        12
-[Figure 7.](#fig07) Plot of TRMM Precipitation, November 2012-October 2013        12
-[Figure 8.](#fig08) Picking second model for comparison (NLDAS 0-100cm soil moisture)        13
-[Figure 9.](#fig09) Model 1 plot (blue) uses left y-axis; Model 2 plot (black) uses right y-axis        13
-[Figure 10.](#fig10) Picking years for comparison        14
-[Figure 11.](#fig11) Plotting Year-to-Year comparisons with GRACE soil moisture        14
-[Figure 12.](#fig12) Navigating Days-Months-Years in the Date Picker        15
-[Figure 13.](#fig13) LPRM-AMSRE-D Optical Depth C-band plotted over GLDAS2-Evapotranspiration        16
-[Figure 14.](#fig14) Making LPRM layer transparent enough to see GLDAS2-Evapotranspiration layer        16
-[Figure 15.](#fig15) Download Choices (NASA data services) for Time Series Data        17
-[Figure 16.](#fig16) Download Choices (chart only, no metadata) for Time Series Data and Plot Image        18
-[Figure 17.](#fig17) Choices for Uploading Time Series Data to HydroShare        18
-[Figure 18.](#fig18) Example Resource Description for Soil Moisture Time Series, 2011-2016        19
-[Figure 19.](#fig19) HydroShare Upload Progress Messages        19
-[Figure 20.](#fig20) Excerpt from HydroShare Resource Details for Uploaded Time Series        19
-[Figure 21.](#fig21) User information notices        20
+[Figure 1.](#fig01) DRE initial startup with defaults
+[Figure 2.](#fig02) DRE Product-Model List
+[Figure 3.](#fig03) DRE Variable List for NLDAS-Forcings
+[Figure 4.](#fig04) DRE Date and Time Pickers
+[Figure 5.](#fig05) Display Map of NLDAS Surface downward longwave radiation flux 
+[Figure 6.](#fig06) Display map of TRMM Precipitation on Oct 31, 2013
+[Figure 7.](#fig07) Plot of TRMM Precipitation, November 2012-October 2013
+[Figure 8.](#fig08) Picking second model for comparison (NLDAS 0-100cm soil moisture)
+[Figure 9.](#fig09) Model 1 plot (blue) uses left y-axis; Model 2 plot (black) uses right y-axis
+[Figure 10.](#fig10) Picking years for comparison
+[Figure 11.](#fig11) Plotting Year-to-Year comparisons with GRACE soil moisture
+[Figure 12.](#fig12) Navigating Days-Months-Years in the Date Picker
+[Figure 13.](#fig13) LPRM-AMSRE-D Optical Depth C-band plotted over GLDAS2-Evapotranspiration
+[Figure 14.](#fig14) Making LPRM layer transparent enough to see GLDAS2-Evapotranspiration layer
+[Figure 15.](#fig15) Download Choices (NASA data services) for Time Series Data
+[Figure 16.](#fig16) Download Choices (chart only, no metadata) for Time Series Data and Plot Image
+[Figure 17.](#fig17) Choices for Uploading Time Series Data to HydroShare
+[Figure 18.](#fig18) Example Resource Description for Soil Moisture Time Series, 2011-2016
+[Figure 19.](#fig19) HydroShare Upload Progress Messages
+[Figure 20.](#fig20) Excerpt from HydroShare Resource Details for Uploaded Time Series
+[Figure 21.](#fig21) User information notices
 
 **<a name="tables"></a>Tables**
 
-[Table 1.](#tab01) NASA Data Rods: Product / Model Characteristics        23
+[Table 1.](#tab01) NASA Data Rods: Product / Model Characteristics
+
+---
 
 ## <a name="poster-for-agu"></a>Poster for AGU 2016
 
  ![](figs/agu-poster.png)
 [_(download from DRE github repository)_](AGU2016_access_geoss_BT_120116_1908.pdf)
+
+---
 
 ## <a name="demo-tutorial"></a>Demo / Tutorial
 
@@ -193,6 +197,8 @@ _You can add more layers to the map by selecting them in the Product-Model &amp;
 _**Demo Step 9:**_ **With the year-on-year comparison still in the time series graph, click &quot;View Raw Data from NASA in New Tab…&quot; button below the map frame. Pick ASCII, Plot, or NetCDF** , _to see DRE open new tabs for each time series graph currently plotted_. **Click on the &quot;layer cake&quot; icon in upper-right of the plot frame**. _This shows the downloadable image and tabular formats. These latter outputs will not provide much, if any, metadata. Best to use View Raw Data &gt; ASCII if you need the metadata_. _ If you only see one new tab open instead of one for each time series plot, you may need to add apps.hydroshare.org as an exception to your browser&#39;s Popup Blocker._
 
 _**Demo Step 10:**_ _If you don&#39;t have a user account on HydroShare.org, you must create one before completing this step._ **With any plot in the graph display, click on &quot;Upload to HydroShare&quot; button above the graph. Select either ASCII or NetCDF**. _You will see a popup dialog for HydroShare, for entering a title, abstract, and keywords. The abstract and keywords are already started for you, but the title is left blank. You can finish editing this resource description here, or later in HydroShare._ **Click &quot;Upload&quot; if you have a HydroShare account, or &quot;Close&quot; to cancel the request** _. An informative message &quot;Creating HydroShare resource…&quot; will appear above the map frame, replaced by a later message &quot;The HydroShare resource was created successfully! View it_ _here __&quot; if all is well. Clicking the &quot;__ here__&quot; link will take you to the new resource created in HydroShare. If your plot was for multiple variables or years being compared, they will all be included as a single resource in HydroShare. The default filename assigned to each file identifies the model, variable, and lon-lat coordinates of the time series._
+
+---
 
 ## <a name="dre-features"></a>Features and Utilities
 
@@ -384,6 +390,8 @@ Clicking on the &quot;**here**&quot; link in the second message above will open 
 
 Do not download a time series result just to upload it to HydroShare. Once it is in the graph frame, it&#39;s ready to upload. ==Note==: DRE does not enable upload of the model-variable maps.
 
+---
+
 ## Notifications and Testing
 
 This section lists the informational and error messages you might encounter during use.
@@ -440,6 +448,8 @@ Try hitting the **Reset** button, and retrying your requests. If this error pers
  ![Message 9](figs/msg09.png)
 
 If the condition persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:gespinoza@utexas.edu).
+
+---
 
 ## <a name="nasa-references"></a>NASA References
 
@@ -574,6 +584,8 @@ Land Surface Model suite of surface hydrology variables, similar to LDAS
 
 [http://disc.sci.gsfc.nasa.gov/mdisc/documentation/MERRA-Land\_Documentation\_20120224.pdf](http://disc.sci.gsfc.nasa.gov/mdisc/documentation/MERRA-Land_Documentation_20120224.pdf)
 
+---
+
 ## <a name="keeping-dre-uptodate"></a>Keeping DRE Up to Date
 
 These two sections, **Keeping DRE Up to Date** and **[DRE App Process Flow](#dre-app-flow)** , are for NASA staff and other researchers/developers wanting to help maintain this app. This includes making changes in the model configurations, and understanding the program logic.
@@ -662,6 +674,8 @@ The NLDAS bounds found in the previous XML outputs appear on the second line of 
 Some of the NASA models accessible through DRE are in ongoing development (NLDAS, GLDAS, TRMM), while others are completed and won&#39;t continue to change. However, several more models and variables will be added by 2017, so we will be keeping up with those as well. The model datasets provided for DRE have all been specially organized for gridded map &amp; time series access via the NASA Giovanni data server. Whenever the data rods services for NLDAS, GLDAS and TRMM are being updated, there is a window of time from a few hours to a few days, in which the CMR metadata for the original gridded data is not in sync with the data rods services, ie, the data rods may lag the source data. During these times, when we run the enddates\_bounds.py cron job to update the dates\_and\_spatial\_range.txt file, the DRE can think it has more recent data for some models than it actually has.
 
 For this reason, before periods where you might conduct a significant level of browsing, plotting, downloads, or especially demonstrations for an audience, it is always a good idea to test and verify the data rods available date ranges and data service health using the DRE [unit\_tests.py](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/tests/unit_tests.py) utility developed by Shawn Crawley. See [Testing the NASA data services](#testing-services) section for details.
+
+---
 
 ## <a name="dre-app-flow"></a>DRE App Process Flow
 
@@ -778,12 +792,14 @@ Two important data files mentioned below are the [model\_config.txt](https://git
   1. Initializes/renders the time series plot view Tethys Gizmo with the HighCharts API
   2. If the user selected to overlap the years, then the x-axis labels are programmatically modified to only show the Month since years will all be set to &quot;2000&quot; for overlapping
 
+---
+
 ## <a name="testing-services"></a>Testing NASA Data Services
 
 DRE accesses NASA data in three main ways: (1) CMR metadata requests to establish temporal and spatial bounds; (2) web map service to obtain the model-variable grid maps; and (3) time series (data rods) service to obtain the data in tabular ascii, netCDF, and plot formats. DRE does not display the CMR bounds queries, but it does display the most recent map or time series query in the blue box below the map frame.
 
-Map request for TRMM Precipitation:   
-![URL01](figs/url01.png)
+Map request for TRMM Precipitation: 
+ ![URL01](figs/url01.png)
 
 Data rod request for GLDAS Evapotranspiration: 
 ![URL02](figs/url02.png)
@@ -805,7 +821,7 @@ This tests all map and data rods services, with the location of each time series
 
 If run in a browser window, the output will appear in the same browser window; if run from a console terminal, the output will appear in that console window. The output indicates the runtime required, and provides specific URLs that fail to respond. These can be tested again later and/or sent to NASA tech support.
 
-
+---
 
 ## <a name="dre-regression-tests"></a>DRE Regression Tests
 
@@ -813,7 +829,7 @@ A set of [DRE Regression Tests](https://github.com/gespinoza/datarodsexplorer/bl
 
 
 
-##
+---
 
 ## <a name="app-meta"></a>Web App Metadata
 
@@ -836,3 +852,5 @@ _This content is intended for the HydroShare apps registry._
 **Keywords** : NASA, time series, data rods, hydrometeorological, land surface model, data assimilation, LDAS, NLDAS, GLDAS, TRMM, LPRM, AMSRE, GRACE, downward radiation flux, precipitation, rain rate, snow rate, soil moisture, surface runoff, subsurface runoff, baseflow, evapotranspiration, soil temperature
 
 **App icons** :   ![logo-sm](figs/app-icon-sm.png) ![logo-balloon](figs/app-icon-balloon.png)  ![logo-lg](figs/app-icon-lg.png)
+
+---
