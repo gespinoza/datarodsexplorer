@@ -210,7 +210,7 @@ It&#39;s a good idea to first take the quick [tutorial](#demo-tutorial), then co
 
 ### Starting the Data Rods Explorer
 
-When you first open **Data Rods Explorer**, it reads two text files: (1)  the model configuration file ( [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)) and (2) a file containing spatial and temporal bounds for each model ( [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)). These are further discussed in [Keeping DRE Up to Date](#keeping-dre-uptodate).
+When you first open **Data Rods Explorer**, it reads two text files: (1)  the model configuration file ([model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)) and (2) a file containing spatial and temporal bounds for each model ([dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)). These are further discussed in [Keeping DRE Up to Date](#keeping-dre-uptodate).
 
 By default, DRE initially opens showing the first model listed in the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file, and with the first variable listed for this model. The default date is the latest date for which data is available with that model, see Figure 1 below. The blue rectangle is the map extent for the selected model in the Product-Model list.
 
@@ -236,7 +236,7 @@ Because DRE populates all pull-down lists and date-time selection fields with va
 To pick a model, click on the pulldown field directly below the **Product-Model** heading in the left margin panel, see Figure 2 below. Once the model is chosen, the list of variables is updated to match, see Figure 3. Figure 4 shows picking the date and time.
 
  ![Figure 2](figs/fig02-03.png)
- <a name="fig02"></a>_Figure 2. Product-Model List_
+ <a name="fig02"></a>_Figure 2. Product-Model List_ 
  <a name="fig03"></a>_Figure 3. Variable List (NLDAS-Forcing model)_
 
  ![Figure 4](figs/fig04.png)
