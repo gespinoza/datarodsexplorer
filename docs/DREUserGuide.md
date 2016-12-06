@@ -237,6 +237,7 @@ To pick a model, click on the pulldown field directly below the **Product-Model*
 
  ![Figure 2](figs/fig02-03.png)
  <a name="fig02"></a>_Figure 2. Product-Model List_ 
+ 
  <a name="fig03"></a>_Figure 3. Variable List (NLDAS-Forcing model)_
 
  ![Figure 4](figs/fig04.png)
