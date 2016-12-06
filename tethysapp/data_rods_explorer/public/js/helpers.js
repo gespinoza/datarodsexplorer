@@ -649,10 +649,8 @@ function updateTemporalFences(modelNum) {
 
     if (modelNum === '1') {
         $plotDate = $('#plot_date');
-        if (!$('#nav-plot').hasClass('hidden')) {
-            $endDate = $('#endDate1');
-            $startDate = $('#startDate1');
-        }
+        $endDate = $('#endDate1');
+        $startDate = $('#startDate1');
 
         var $datePickers = $plotDate.add($endDate);
 
@@ -665,6 +663,7 @@ function updateTemporalFences(modelNum) {
                 $(elem).val(earliestDateForModel1);
             }
         });
+
         if ($startDate && $startDate.length > 0) {
             $startDate.datepicker('setStartDate', earliestDateForModel1);
             $startDate.datepicker('setEndDate', $endDate.val());
@@ -717,8 +716,12 @@ function updateTemporalFences(modelNum) {
         }
     }
 
-    validateDateFormat($endDate);
-    validateDateFormat($startDate);
+    if ($endDate.val() !== '') {
+        validateDateFormat($endDate);
+    }
+    if ($startDate.val() !== '') {
+        validateDateFormat($startDate);
+    }
 }
 
 function updateSpatialFences(differentiator, model) {
@@ -992,10 +995,10 @@ function validateDateFormat($dateObj) {
     var invalidDateFlashMessageId = 'invalid-date';
     var invalidDateFlashMessageText = 'The date just entered is invalid. Please select a date, or type one with format mm/dd/yyyy';
     var originalDate = $($dateObj).val();
-    var originalMonthDayYearList = originalDate.split('/');
+    var originalMonthDayYearList;
     var newMonthDayYearList = [];
     var newDate;
-    var numDateSegments = originalMonthDayYearList.length;
+    var numDateSegments;
     var i;
 
     removeFlashMessage(invalidDateFlashMessageId);
@@ -1004,6 +1007,9 @@ function validateDateFormat($dateObj) {
         displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
         return false;
     }
+
+    originalMonthDayYearList = originalDate.split('/');
+    numDateSegments = originalMonthDayYearList.length;
 
     if (numDateSegments !== 3) {
         displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);
