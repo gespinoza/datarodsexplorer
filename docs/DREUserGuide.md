@@ -788,7 +788,7 @@ Two important data files mentioned below are the [model\_config.txt](https://git
   1. Initializes/renders the time series plot view Tethys Gizmo with the HighCharts API
   2. Calls a &quot;two\_axis\_plot&quot; function which modifies the time series plot to display two distinct axes for the separate time series
 
-### <a name="user-yr"></a>User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;
+### <a name="user-plot-yr"></a>User clicks the &quot;Plot&quot; button for &quot;Year-on-year changes&quot;
 
 1. Same as step 1 of &quot;Plot one variable &#39;Plot&#39; button is clicked&quot;
 2. Same as step 2 of &quot;Plot one variable &#39;Plot&#39; button is clicked&quot;, except steps 2b and 2c happen for now for multiple NASA URL endpoints, one for each year that the user selected. Thus, multiple time series will be parsed.
