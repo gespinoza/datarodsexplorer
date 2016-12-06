@@ -70,7 +70,9 @@ This user guide has the following main sections:
 - Revision History
 
 **[Poster for AGU 2016](#poster-for-agu)**
+
 **[Demo / Tutorial](#demo-tutorial)**
+
 **[Features and Utilities](#dre-features)**
 
 - _[Browsing the NASA data sets](#browsing-data)_ 
