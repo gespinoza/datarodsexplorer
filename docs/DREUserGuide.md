@@ -49,7 +49,7 @@ This user guide has the following main sections:
 
 | **Date** | **Authors, Editors** | **Notes** |
 | --- | --- | --- |
-| 4-Dec-16 | David Arctur, Bill Teng | Initial user guide final draft |
+| 6-Dec-16 | David Arctur, Bill Teng | Initial user guide final draft |
 |   |   |   |
 |   |   |   |
 
