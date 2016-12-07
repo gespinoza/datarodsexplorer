@@ -390,7 +390,7 @@ After you click the **Upload** button, you should see these two informative mess
 
 <a name="fig19"></a>_Figure 19. HydroShare Upload Progress Messages_
 
-Clicking on the &quot;**here**&quot; link in the second message above will open the HydroShare Resource Details. DRE assigns default filenames for uploaded time series, with the following information template: _model\_version:variablename\_LongitudeLatitude_, with filename extensions of _.nc_ for NetCDF, and _.txt_ for ASCII. This is similar to NASA&#39;s template for downloaded ASCII and NetCDF data.
+Clicking on the &quot;**here**&quot; link in the second message above will open the HydroShare Resource Details. DRE assigns default filenames for uploaded time series, with the following information template: _model\_version\_variablename\_LongitudeLatitude_, with filename extensions of _.nc_ for NetCDF, and _.txt_ for ASCII. This is similar to NASA&#39;s filename template for downloaded ASCII and NetCDF data.
 
  ![Figure 20](figs/fig20.png)
 <a name="fig20"></a>_Figure 20. Excerpt from HydroShare Resource Details for Uploaded Time Series_
