@@ -370,7 +370,7 @@ One other point to make regarding the View Raw Data choices: if your plots have 
 
 ### <a name="upload"></a>Uploading time series query results to HydroShare
 
-[HydroShare](https://www.hydroshare.org/) allows users to create, manage, and publish data resources of many types. DRE enables users to upload the results of a time series query (**plot one variable**, **compare two variables**, **year-on-year changes**) to the user&#39;s account on HydroShare. These time series results can be uploaded in either of two formats: ASCII (tabular text) or NetCDF.
+[HydroShare](https://www.hydroshare.org/) allows users to create, manage, and publish data resources of many types. DRE enables users to upload the results of a time series query (**plot one variable**, **compare two variables**, **year-on-year changes**) to the user&#39;s account on HydroShare (**note:** you must be logged into HydroShare while doing this). These time series results can be uploaded in either of two formats: ASCII (tabular text) or NetCDF.
 
  ![Figure 17](figs/fig17.png)
 <a name="fig17"></a>_Figure 17. Choices for Uploading Time Series Data to HydroShare_ 
@@ -421,11 +421,13 @@ When GLDAS is selected as the model, the Display Map button is disabled (grayed 
 
  ![Message 3](figs/msg03.png)
 
-**Message 4.** Two informative messages accompany requests for data upload to HydroShare:
+**Message 4.** Two informative messages and one warning might accompany requests for data upload to HydroShare:
 
  ![Message 4a](figs/msg04a.png)
 
  ![Message 4b](figs/msg04b.png)
+ 
+ ![Message 4c](figs/msg04c.png)
 
 **Message 5.** Error messages are displayed in brown text and background box, as shown below. The following message appears if the requested map service is down, or if a map is requested out of temporal or spatial bounds.
  ![Message 5](figs/msg05.png)
