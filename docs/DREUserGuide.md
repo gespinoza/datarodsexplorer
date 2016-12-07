@@ -431,8 +431,10 @@ When GLDAS is selected as the model, the Display Map button is disabled (grayed 
  
  ![Message 4c](figs/msg04c.png)
 
-**Message 5.** Error messages are displayed in brown text and background box, as shown below. The following message appears if the requested map service is down, or if a map is requested out of temporal or spatial bounds.
- ![Message 5](figs/msg05.png)
+**Message 5.** Warnings and errors are displayed in brown or red text and background box, as shown below. The following messages appear if the requested map service is down, or if a map is requested out of temporal or spatial bounds.
+ ![Message 5a](figs/msg05.png) 
+ ![Message 5b](figs/msg05b.png) 
+
 If this message persists for a map you expect to be available, try running the NASA Data Request URL displayed at the bottom of the DRE window (see [Testing the NASA Data Services](#testing-services) section below).
 
 **Message 6.** The following message appears when the user has clicked on the map outside the model extent.
