@@ -395,7 +395,7 @@ Clicking on the &quot;**here**&quot; link in the second message above will open 
  ![Figure 20](figs/fig20.png)  
 <a name="fig20"></a>_Figure 20. Excerpt from HydroShare Resource Details for Uploaded Time Series_
 
-**Note the longitude value in this example of -100E.** This is the same as 100 degrees west of the Prime Meridian, or what is typically written just &quot-100&quot. We chose this way to express west-longitude for simplicity of use within the DRE program.
+**Note the longitude value in this example of -100E.** This is the same as 100 degrees west of the Prime Meridian, or what is typically written just &quot;-100&quot;. We chose this way to express west-longitude for simplicity of use within the DRE program.
 
 Do not download a time series result just to upload it to HydroShare. Once it is in the graph frame, it&#39;s ready to upload. **Note**: DRE does not enable upload of the model-variable maps.
 
