@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from tethys_sdk.gizmos import SelectInput, Button, TimeSeries
-from model_objects import get_geoserver_url, get_wms_vars, get_datarods_png, get_datarods_tsb, \
-    get_model_fences, get_model_options, get_var_dict, init_model
+from model_objects import get_wms_vars, get_datarods_png, get_datarods_tsb, \
+    get_model_fences, get_model_options, get_var_dict, init_model, TiffLayerManager
 from utilities import create_map, create_select_model, create_plot_ctrls, create_map_date_ctrls, \
-    create_years_list, load_tiff_ly, get_data_rod_plot, get_data_rod_plot2, get_data_rod_years
+    create_years_list, get_data_rod_plot, get_data_rod_plot2, get_data_rod_years
 from json import dumps
 from tethys_services.backends.hs_restclient_helper import get_oauth_hs
 from requests import get
@@ -83,21 +83,27 @@ def home(request):
     return render(request, 'data_rods_explorer/app_base_dre.html', context)
 
 
-def get_map_layer(request):
-    context = {}
+def request_map_layer(request):
+    context = {
+        'success': False
+    }
     if request.is_ajax() and request.method == 'POST':
-        post_params = request.POST
-        # If 'Display map' is clicked, load layers
-        map_layers = load_tiff_ly(post_params)
-        if map_layers:
-            load_layer = map_layers[0]['options']['params']['LAYERS']
+        if TiffLayerManager.requested:
+            if TiffLayerManager.loaded:
+                context = {
+                    'success': True,
+                    'load_layer': TiffLayerManager.store_id,
+                    'geoserver_url': TiffLayerManager.geoserver_url
+                }
+                TiffLayerManager.reset()
+            elif TiffLayerManager.error:
+                context['error'] = TiffLayerManager.error
+                TiffLayerManager.reset()
         else:
-            load_layer = None
-
-        context = {
-            'load_layer': load_layer,
-            'geoserver_url': get_geoserver_url()
-        }
+            post_params = request.POST
+            # If 'Display map' is clicked, load layers
+            TiffLayerManager.request_tiff_layer(post_params)
+            context['success'] = True
 
     return JsonResponse(context)
 
