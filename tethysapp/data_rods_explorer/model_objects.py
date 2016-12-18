@@ -2,10 +2,15 @@ from os import path
 from datetime import datetime, timedelta
 from requests import get
 from tethys_sdk.services import get_spatial_dataset_engine
+import os
+from threading import Thread
+from tempfile import NamedTemporaryFile
+import urllib2
+import zipfile
+from math import copysign
 
 
 WORKSPACE = 'data_rods_explorer'
-GEOSERVER_URL = get_spatial_dataset_engine(name="default").endpoint.replace('rest', 'wms')
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
                 '&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
                 '&LAYERS=Time-Averaged.{5}'  # NLDAS_NOAH0125_M_002_soilm0_100cm
@@ -17,6 +22,177 @@ MODEL_FENCES = {}
 VAR_DICT = {}
 WMS_VARS = {}
 DATARODS_TSB = {}
+
+
+class TiffLayerManager:
+    loaded = False
+    requested = False
+    error = None
+    async_thread = None
+    zip_path = None
+    store_name = None
+    store_id = None
+    plot_time = None
+    model = None
+    variable = None
+    latlonbox = None
+    time_st = None
+    tiff_path = None
+    prj_path = None
+    tfw_path = None
+    tiff_file = None
+    geoserver_url = None
+
+    def __init__(self):
+        return
+
+    def __new__(cls, *args, **kwargs):
+        return
+
+    @classmethod
+    def reset(cls):
+        cls.loaded = False
+        cls.requested = False
+        cls.error = None
+        cls.async_thread = None
+        cls.zip_path = None
+        cls.store_name = None
+        cls.store_id = None
+        cls.plot_time = None
+        cls.model = None
+        cls.variable = None
+        cls.latlonbox = None
+        cls.time_st = None
+        cls.tiff_path = None
+        cls.prj_path = None
+        cls.tfw_path = None
+        cls.tiff_file = None
+        cls.geoserver_url = None
+
+    @classmethod
+    def request_tiff_layer(cls, post_params):
+        """
+        This function returns the previously loaded map or the new map layer
+        if the button on the page was clicked
+        """
+        if post_params.get('plotTime'):
+            cls.plot_time = post_params['plotTime']
+
+        if post_params.get('model'):
+            cls.model = post_params['model']
+
+        if post_params.get('variable'):
+            cls.variable = post_params['variable']
+
+        if cls.model and cls.variable and cls.plot_time:
+            # Data rods parameters
+            cls.latlonbox = [post_params['lonW'], post_params['latS'], post_params['lonE'], post_params['latN']]
+            cls.time_st = cls.plot_time + ':00:00Z/' + cls.plot_time + ':00:30Z'
+            cls.request_raster_zip()
+        else:
+            cls.error = 'Invalid parameters passed'
+
+    @classmethod
+    def request_raster_zip(cls):
+        try:
+            cls.requested = True
+            # Files, paths, and store name & store id
+            cls.tiff_file = NamedTemporaryFile(suffix=".tif", delete=False)
+            cls.tiff_path = cls.tiff_file.name
+            file_name = cls.tiff_file.name[:-4]
+            cls.store_name = os.path.basename(file_name)
+            cls.store_id = get_workspace() + ':' + cls.store_name
+            cls.tfw_path = file_name + '.tfw'
+            cls.prj_path = file_name + '.prj'
+            cls.zip_path = file_name + '.zip'
+
+            TiffLayerManager.async_thread = Thread(target=cls.download_raster_from_nasa,
+                                                   args=(),
+                                                   kwargs={})
+            TiffLayerManager.async_thread.start()
+        except Exception as e:
+            print e.message
+            cls.message = e.message
+
+    @classmethod
+    def download_raster_from_nasa(cls):
+        try:
+            minx, miny, maxx, maxy = cls.latlonbox
+            # Create tiff file
+            url_image = urllib2.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
+                                                                  cls.time_st,
+                                                                  get_wms_vars()[cls.model][cls.variable][0]))
+            cls.tiff_file.write(url_image.read())
+            cls.tiff_file.close()
+            # Create prj file
+            cls.create_prj_file()
+            # Create tfw file
+            cls.create_tfw_file()
+            # Create zipfile
+            cls.create_zip_file()
+
+            cls.upload_layer_to_geoserver()
+        except Exception as e:
+            print e.message
+            cls.message = e.message
+
+    @classmethod
+    def upload_layer_to_geoserver(cls):
+        # Geoserver parameters
+        geo_eng = get_spatial_dataset_engine(name='default')
+        # Create raster in geoserver
+        response = geo_eng.create_coverage_resource(store_id=cls.store_id,
+                                                    coverage_file=cls.zip_path,
+                                                    coverage_type='worldimage',
+                                                    overwrite=True,
+                                                    )
+        if not response['success']:
+            result = geo_eng.create_workspace(workspace_id=get_workspace(),
+                                              uri='tethys_app-%s' % get_workspace())
+            if result['success']:
+                cls.upload_layer_to_geoserver()
+        else:
+            cls.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
+            cls.loaded = True
+
+    @classmethod
+    def create_tfw_file(cls, h=256, w=512):
+        minx, miny, maxx, maxy = cls.latlonbox
+        hscx = copysign((float(maxx) - float(minx)) / w, 1)
+        hscy = copysign((float(maxy) - float(miny)) / h, 1)
+        tfw_file = open(cls.tfw_path, 'w')
+        tfw_file.write('{0}\n'.format(hscx))
+        tfw_file.write('0.0\n')
+        tfw_file.write('0.0\n')
+        tfw_file.write('{0}\n'.format(-hscy))
+        tfw_file.write('{0}\n'.format(float(minx) - hscx / 2, float(minx)))
+        tfw_file.write('{0}\n'.format(float(maxy) - hscy / 2, float(maxy)))
+        tfw_file.write('')
+        tfw_file.close()
+
+    @classmethod
+    def create_prj_file(cls):
+        """
+        This function creates the missing .prj file for the raster
+        """
+        prj_file = open(cls.prj_path, 'w')
+        prj_file.write(('GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
+                        'SPHEROID["WGS_1984",6378137,298.257223563]],'
+                        'PRIMEM["Greenwich",0],'
+                        'UNIT["Degree",0.017453292519943295]]'
+                        ))
+        prj_file.close()
+
+    @classmethod
+    def create_zip_file(cls):
+        """
+        this function zips the tiff and prj files into
+        """
+        zip_file = zipfile.ZipFile(cls.zip_path, "w")
+        zip_file.write(cls.tiff_path, arcname=os.path.basename(cls.tiff_path))
+        zip_file.write(cls.tfw_path, arcname=os.path.basename(cls.tfw_path))
+        zip_file.write(cls.prj_path, arcname=os.path.basename(cls.prj_path))
+        zip_file.close()
 
 
 def init_model():
@@ -54,11 +230,6 @@ def get_datarods_tsb():
 def get_workspace():
     global WORKSPACE
     return WORKSPACE
-
-
-def get_geoserver_url():
-    global GEOSERVER_URL
-    return GEOSERVER_URL
 
 
 def get_datarods_png():

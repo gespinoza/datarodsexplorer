@@ -1,3 +1,9 @@
+// Global flash messages
+var mapDisplayErrorFlashMessageID = 'map-error';
+var mapDisplayErrorFlashMessageText = 'A map could not be retrieved for the chosen parameters.';
+var ajaxErrorFlashMessageID = 'ajax-error';
+var ajaxErrorFlashMessageText = 'An unexpected error occured when retrieving map. The NASA server may be down.';
+
 function current_date(day_offset, hh) {
     var today = new Date();
     today.setDate(today.getDate() - day_offset);
@@ -5,7 +11,7 @@ function current_date(day_offset, hh) {
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
     if (hh === undefined) {
-        var hh = today.getHours();
+        hh = today.getHours();
     }
     if (dd<10) {
         dd = '0' + dd;
@@ -16,8 +22,8 @@ function current_date(day_offset, hh) {
     if (hh<10) {
         hh = '0' + hh;
     }
-    var date_st = yyyy + '-' + mm  + '-' + dd + 'T' + hh;
-    return date_st;
+
+    return yyyy + '-' + mm  + '-' + dd + 'T' + hh;
 }
 
 function getPrevRodsDate(date, days_before) {
@@ -92,7 +98,7 @@ function rodsDateToDateHourPickerDict(rodsDate) {
     var dd = rodsDate.replace('T','-').split('-');
     var mdy = dd[1] + '/' + dd[2] + '/' + dd[0];
     var hh = dd[3];
-    var datehour_dict = new Object();
+    var datehour_dict = {};
     datehour_dict['date'] = mdy;
     datehour_dict['hour'] = hh;
     return datehour_dict;
@@ -118,13 +124,9 @@ function load_map_post_parameters() {
 
 function load_map() {
     var urlVars = getUrlVars();
-    var mapDisplayErrorFlashMessageID = 'map-error';
-    var mapDisplayErrorFlashMessageText = 'A map could not be retrieved for the chosen parameters.';
-    var ajaxErrorFlashMessageID = 'ajax-error';
-    var ajaxErrorFlashMessageText = 'An unexpected error occured when retrieving map. The NASA server may be down.';
     var variaIndex = $('#variable').find(':selected').index();
-    var variaLyrName = VAR_DICT[getUrlVars()['model']][variaIndex].layerName;
-    var extent = load_map_post_parameters();
+    var layerName = VAR_DICT[getUrlVars()['model']][variaIndex].layerName;
+    var layerExtents = load_map_post_parameters();
     var data = $('#parametersForm').serialize();
 
     showMapLoading();
@@ -139,38 +141,65 @@ function load_map() {
 
     displayNasaMapRequestOutput(data);
 
+    requestMap(data, layerName, layerExtents)
+}
+
+function requestMap(data, layerName, layerExtents) {
+    var requestMapAgain = false;
+
     $.ajax({
-        url: '/apps/data-rods-explorer/get-map-layer/',
+        url: '/apps/data-rods-explorer/request-map-layer/',
         type: 'POST',
         dataType: 'json',
         data: data,
         success: function (response) {
-            $('#btnDisplayMap').prop('disabled', false);
-            hideMapLoading();
-            if (response.hasOwnProperty('load_layer')) {
-                if (response['load_layer']) {
-                    var map = TETHYS_MAP_VIEW.getMap();
-                    var lyrParams = {
-                        'LAYERS': response['load_layer'],
-                        'TILED': true
-                    };
-                    var newLayer = new ol.layer.Tile({
-                        source: new ol.source.TileWMS({
-                            url: response['geoserver_url'],
-                            params: lyrParams,
-                            serverType: 'geoserver'
-                        })
-                    });
-                    map.addLayer(newLayer);
-                    newLayer['tethys_legend_title'] = variaLyrName;
-                    newLayer['tethys_legend_extent'] = extent;
-                    newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
+            if (response.hasOwnProperty('success')) {
+                if (response.success) {
+                    if (response.hasOwnProperty('load_layer')) {
+                        if (response['load_layer']) {
+                            $('#btnDisplayMap').prop('disabled', false);
+                            hideMapLoading();
+                            var map = TETHYS_MAP_VIEW.getMap();
+                            var lyrParams = {
+                                'LAYERS': response['load_layer'],
+                                'TILED': true
+                            };
+                            var newLayer = new ol.layer.Tile({
+                                source: new ol.source.TileWMS({
+                                    url: response['geoserver_url'],
+                                    params: lyrParams,
+                                    serverType: 'geoserver'
+                                })
+                            });
+                            map.addLayer(newLayer);
+                            newLayer['tethys_legend_title'] = layerName;
+                            newLayer['tethys_legend_extent'] = layerExtents;
+                            newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
 
-                    update_legend();
+                            update_legend();
+                            return;
+                        }
+                    } else {
+                        requestMapAgain = true;
+                    }
                 } else {
-                    displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', mapDisplayErrorFlashMessageText);
+                    if (response.hasOwnProperty('error')) {
+                        if (!response.error) {
+                            requestMapAgain = true;
+                        }
+                    } else {
+                        requestMapAgain = true;
+                    }
                 }
+            }
+
+            if (requestMapAgain) {
+                window.setTimeout(function () {
+                    requestMap(data, layerName, layerExtents);
+                }, 3000);
             } else {
+                $('#btnDisplayMap').prop('disabled', false);
+                hideMapLoading();
                 displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', mapDisplayErrorFlashMessageText);
             }
         }, error: function () {

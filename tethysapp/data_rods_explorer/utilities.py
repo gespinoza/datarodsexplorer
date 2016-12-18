@@ -1,15 +1,10 @@
 # coding=utf-8
-from tethys_sdk.services import get_spatial_dataset_engine
-import os
-import zipfile
-from tempfile import NamedTemporaryFile
 import urllib2
-from math import copysign
 from datetime import datetime
 from dateutil import parser as dateparser
-from model_objects import get_workspace, get_geoserver_url, get_wms_vars, get_datarods_png, get_datarods_tsb, \
+from model_objects import get_wms_vars, get_datarods_tsb, \
     get_model_fences, get_model_options
-from tethys_sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button, MVLayer
+from tethys_sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button
 
 
 def create_select_model(modelname):
@@ -148,137 +143,6 @@ def create_years_list(first_year=1979):
     for yyyy in range(first_year, last_year):
         years_list.append((str(yyyy), str(yyyy)))
     return sorted(years_list, key=lambda year: year[0], reverse=True)
-
-
-def create_tfw_file(path, minx, miny, maxx, maxy, h=256, w=512):
-    hscx = copysign((maxx - minx) / w, 1)
-    hscy = copysign((maxy - miny) / h, 1)
-    tfw_file = open(path, 'w')
-    tfw_file.write('{0}\n'.format(hscx))
-    tfw_file.write('0.0\n')
-    tfw_file.write('0.0\n')
-    tfw_file.write('{0}\n'.format(-hscy))
-    tfw_file.write('{0}\n'.format(minx - hscx / 2, minx))
-    tfw_file.write('{0}\n'.format(maxy - hscy / 2, maxy))
-    tfw_file.write('')
-    tfw_file.close()
-
-
-def create_prj_file(path):
-    """
-    This function creates the missing .prj file for the raster
-    """
-    prj_file = open(path, 'w')
-    prj_file.write(('GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
-                    'SPHEROID["WGS_1984",6378137,298.257223563]],'
-                    'PRIMEM["Greenwich",0],'
-                    'UNIT["Degree",0.017453292519943295]]'
-                    ))
-    prj_file.close()
-
-
-def create_zip_file(zip_path, tiff_path, tfw_path, prj_path):
-    """
-    this function zips the tiff and prj files into
-    """
-    zip_file = zipfile.ZipFile(zip_path, "w")
-    zip_file.write(tiff_path, arcname=os.path.basename(tiff_path))
-    zip_file.write(tfw_path, arcname=os.path.basename(tfw_path))
-    zip_file.write(prj_path, arcname=os.path.basename(prj_path))
-    zip_file.close()
-
-
-def get_raster_zip(latlonbox, time_st, model, variable):
-    # Parameter
-    minx, miny, maxx, maxy = latlonbox
-
-    # Files, paths, and store name & store id
-    tiff_file = NamedTemporaryFile(suffix=".tif", delete=False)
-    tiff_path = tiff_file.name
-    file_name = tiff_file.name[:-4]
-    store_name = os.path.basename(file_name)
-    store_id = get_workspace() + ':' + store_name
-    tfw_path = file_name + '.tfw'
-    prj_path = file_name + '.prj'
-    zip_path = file_name + '.zip'
-
-    # Create tiff file
-    url_image = urllib2.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
-                                                          time_st, get_wms_vars()[model][variable][0]))
-    tiff_file.write(url_image.read())
-    tiff_file.close()
-    # Create prj file
-    create_prj_file(prj_path)
-    # Create tfw file
-    create_tfw_file(tfw_path, float(minx), float(miny), float(maxx), float(maxy))
-    create_zip_file(zip_path, tiff_path, tfw_path, prj_path)
-
-    # Return
-    return [zip_path, store_name, store_id]
-
-
-def load_tiff_ly(post_params):
-    """
-    This function returns the previously loaded map or the new map layer
-    if the button on the page was clicked
-    """
-    map_layers = None
-
-    if post_params.get('plotTime'):
-        plot_time = post_params['plotTime']
-    else:
-        plot_time = None
-
-    if post_params.get('model'):
-        model = post_params['model']
-    else:
-        model = None
-
-    if post_params.get('variable'):
-        variable = post_params['variable']
-    else:
-        variable = None
-
-    if model and variable and plot_time:
-        # Geoserver parameters
-        geo_eng = get_spatial_dataset_engine(name='default')
-        # Data rods parameters
-        latlonbox = [post_params['lonW'], post_params['latS'], post_params['lonE'], post_params['latN']]
-        time_st = plot_time + ':00:00Z/' + plot_time + ':00:30Z'
-        zip_file, store_name, store_id = get_raster_zip(latlonbox, time_st, model, variable)
-        # Create raster in geoserver
-        flag_add_layer = False
-        response = geo_eng.create_coverage_resource(store_id=store_id,
-                                                    coverage_file=zip_file,
-                                                    coverage_type='worldimage',
-                                                    overwrite=True,
-                                                    )
-        if not response['success']:
-            result = geo_eng.create_workspace(workspace_id=get_workspace(),
-                                              uri='tethys_app-%s' % get_workspace())
-            if result['success']:
-                response = geo_eng.create_coverage_resource(store_id=store_id,
-                                                            coverage_file=zip_file,
-                                                            coverage_type='worldimage',
-                                                            overwrite=True,
-                                                            )
-                if response['success']:
-                    flag_add_layer = True
-        else:
-            flag_add_layer = True
-
-        if flag_add_layer:
-            # Add raster to map
-            title = '{0} {1}'.format(variable, plot_time)
-            geoserver_layer = MVLayer(source='ImageWMS',
-                                      options={'url': get_geoserver_url(),
-                                               'params': {'LAYERS': store_id},
-                                               'serverType': 'geoserver'},
-                                      legend_title=title,
-                                      )
-            map_layers = [geoserver_layer]
-
-    return map_layers
 
 
 def get_data_from_nasa_server(link, overlap_years=False):
