@@ -11,13 +11,15 @@
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 
 {% block app_content %}
-    <div>{{ results_text |safe }}</div>
-    {% if failed_urls %}
-        <br>FAILED URLS:
-        {% for url in failed_urls %}
-            <br>
-            <a href="{{ url }}" target="_blank">{{ url }}</a>
-        {% endfor %}
-    {% endif %}
+    <h1 id="header">Running tests...</h1>
+    <div id="progressBar" style="background-color: dimgray; width: 100%; height: 20px; position: relative"></div>
+    <div id="progressTotal" style="background-color: blue; position: relative; height: 20px; top: -20px;"></div>
+    <div id="progressText" style="position: relative; height: 20px; top: -40px; text-align: center; color: white;">0%</div>
+    <div id="results"></div>
+    <div id="failedUrls"></div>
+{% endblock %}
 
+{% block scripts %}
+{{ block.super }}
+    <script src="{% static 'data_rods_explorer/js/test_results.js' %}?v1.00" type="text/javascript"></script>
 {% endblock %}
