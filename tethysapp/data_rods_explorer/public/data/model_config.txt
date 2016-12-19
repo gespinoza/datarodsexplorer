@@ -67,7 +67,7 @@ AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2 mm skin temperature AMSRE ascending|K|AMS
 TRMM (Retrieval)~TRMM~TRMM_3B42~7~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.7:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
 
-GRACE soil moisture~GRACE~GRACEDADM_CLSM025NA_7D~1.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+GRACE Data Assimilation~GRACE~GRACEDADM_CLSM025NA_7D~1.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM025NA_7D.1:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GRACE|sfsm_inst|GRACEDADM_CLSM025NA_7D_1_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
 GRACE|rtzsm_inst|GRACEDADM_CLSM025NA_7D_1_0_rtzsm_inst|0-100cm root zone soil moisture percentile|%|GRACE:100cmRootZoneSoilMoist%
 GRACE|gws_inst|GRACEDADM_CLSM025NA_7D_1_0_gws_inst|Shallow groundwater percentile|%|GRACE:GroundWater%
