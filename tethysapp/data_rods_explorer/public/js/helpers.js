@@ -144,8 +144,12 @@ function load_map() {
     requestMap(data, layerName, layerExtents)
 }
 
-function requestMap(data, layerName, layerExtents) {
+function requestMap(data, layerName, layerExtents, instanceId) {
     var requestMapAgain = false;
+    if (instanceId === undefined || instanceId === null) {
+        instanceId = Math.floor(Math.random() * 1000000000000000);
+    }
+    data += '&instance_id=' + instanceId;
 
     $.ajax({
         url: '/apps/data-rods-explorer/request-map-layer/',
@@ -195,7 +199,7 @@ function requestMap(data, layerName, layerExtents) {
 
             if (requestMapAgain) {
                 window.setTimeout(function () {
-                    requestMap(data, layerName, layerExtents);
+                    requestMap(data, layerName, layerExtents, instanceId);
                 }, 3000);
             } else {
                 $('#btnDisplayMap').prop('disabled', false);

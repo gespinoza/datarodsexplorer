@@ -88,21 +88,25 @@ def request_map_layer(request):
         'success': False
     }
     if request.is_ajax() and request.method == 'POST':
-        if TiffLayerManager.requested:
-            if TiffLayerManager.loaded:
-                context = {
-                    'success': True,
-                    'load_layer': TiffLayerManager.store_id,
-                    'geoserver_url': TiffLayerManager.geoserver_url
-                }
-                TiffLayerManager.reset()
-            elif TiffLayerManager.error:
-                context['error'] = TiffLayerManager.error
-                TiffLayerManager.reset()
+        post_params = request.POST
+        instance_id = post_params['instance_id']
+        tif_layer_manager = TiffLayerManager.get_instance(instance_id)
+        if tif_layer_manager:
+            if tif_layer_manager.requested:
+                if tif_layer_manager.loaded:
+                    context = {
+                        'success': True,
+                        'load_layer': tif_layer_manager.store_id,
+                        'geoserver_url': tif_layer_manager.geoserver_url
+                    }
+                    tif_layer_manager.trash()
+                elif tif_layer_manager.error:
+                    context['error'] = tif_layer_manager.error
+                    tif_layer_manager.trash()
         else:
-            post_params = request.POST
             # If 'Display map' is clicked, load layers
-            TiffLayerManager.request_tiff_layer(post_params)
+            tif_layer_manager = TiffLayerManager.create_instance(instance_id)
+            tif_layer_manager.request_tiff_layer(post_params)
             context['success'] = True
 
     return JsonResponse(context)

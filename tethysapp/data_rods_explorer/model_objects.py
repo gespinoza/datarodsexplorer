@@ -25,124 +25,117 @@ DATARODS_TSB = {}
 
 
 class TiffLayerManager:
-    loaded = False
-    requested = False
-    error = None
-    async_thread = None
-    zip_path = None
-    store_name = None
-    store_id = None
-    plot_time = None
-    model = None
-    variable = None
-    latlonbox = None
-    time_st = None
-    tiff_path = None
-    prj_path = None
-    tfw_path = None
-    tiff_file = None
-    geoserver_url = None
+    instances = {}
 
-    def __init__(self):
-        return
-
-    def __new__(cls, *args, **kwargs):
-        return
-
-    @classmethod
-    def reset(cls):
-        cls.loaded = False
-        cls.requested = False
-        cls.error = None
-        cls.async_thread = None
-        cls.zip_path = None
-        cls.store_name = None
-        cls.store_id = None
-        cls.plot_time = None
-        cls.model = None
-        cls.variable = None
-        cls.latlonbox = None
-        cls.time_st = None
-        cls.tiff_path = None
-        cls.prj_path = None
-        cls.tfw_path = None
-        cls.tiff_file = None
-        cls.geoserver_url = None
+    def __init__(self, instance_id):
+        self.instance_id = instance_id
+        self.loaded = False
+        self.requested = False
+        self.error = None
+        self.message = None
+        self.async_thread = None
+        self.zip_path = None
+        self.store_name = None
+        self.store_id = None
+        self.plot_time = None
+        self.model = None
+        self.variable = None
+        self.latlonbox = None
+        self.time_st = None
+        self.tiff_path = None
+        self.prj_path = None
+        self.tfw_path = None
+        self.tiff_file = None
+        self.geoserver_url = None
 
     @classmethod
-    def request_tiff_layer(cls, post_params):
+    def create_instance(cls, instance_id):
+        cls.instances[instance_id] = TiffLayerManager(instance_id)
+        return cls.get_instance(instance_id)
+
+    @classmethod
+    def get_instance(cls, instance_id):
+        if instance_id not in cls.instances:
+            return None
+
+        return cls.instances[instance_id]
+
+    def trash(self):
+        try:
+            del TiffLayerManager.instances[self.instance_id]
+        except (NameError, KeyError):
+            pass
+
+    def request_tiff_layer(self, post_params):
         """
         This function returns the previously loaded map or the new map layer
         if the button on the page was clicked
         """
         if post_params.get('plotTime'):
-            cls.plot_time = post_params['plotTime']
+            self.plot_time = post_params['plotTime']
 
         if post_params.get('model'):
-            cls.model = post_params['model']
+            self.model = post_params['model']
 
         if post_params.get('variable'):
-            cls.variable = post_params['variable']
+            self.variable = post_params['variable']
 
-        if cls.model and cls.variable and cls.plot_time:
+        if self.model and self.variable and self.plot_time:
             # Data rods parameters
-            cls.latlonbox = [post_params['lonW'], post_params['latS'], post_params['lonE'], post_params['latN']]
-            cls.time_st = cls.plot_time + ':00:00Z/' + cls.plot_time + ':00:30Z'
-            cls.request_raster_zip()
+            self.latlonbox = [post_params['lonW'], post_params['latS'], post_params['lonE'], post_params['latN']]
+            self.time_st = self.plot_time + ':00:00Z/' + self.plot_time + ':00:30Z'
+            self.request_raster_zip()
         else:
-            cls.error = 'Invalid parameters passed'
+            self.error = 'Invalid parameters passed'
 
-    @classmethod
-    def request_raster_zip(cls):
+    def request_raster_zip(self):
         try:
-            cls.requested = True
+            self.requested = True
             # Files, paths, and store name & store id
-            cls.tiff_file = NamedTemporaryFile(suffix=".tif", delete=False)
-            cls.tiff_path = cls.tiff_file.name
-            file_name = cls.tiff_file.name[:-4]
-            cls.store_name = os.path.basename(file_name)
-            cls.store_id = get_workspace() + ':' + cls.store_name
-            cls.tfw_path = file_name + '.tfw'
-            cls.prj_path = file_name + '.prj'
-            cls.zip_path = file_name + '.zip'
+            self.tiff_file = NamedTemporaryFile(suffix=".tif", delete=False)
+            self.tiff_path = self.tiff_file.name
+            file_name = self.tiff_file.name[:-4]
+            self.store_name = os.path.basename(file_name)
+            self.store_id = get_workspace() + ':' + self.store_name
+            self.tfw_path = file_name + '.tfw'
+            self.prj_path = file_name + '.prj'
+            self.zip_path = file_name + '.zip'
 
-            TiffLayerManager.async_thread = Thread(target=cls.download_raster_from_nasa,
+            TiffLayerManager.async_thread = Thread(target=self.download_raster_from_nasa,
                                                    args=(),
                                                    kwargs={})
             TiffLayerManager.async_thread.start()
         except Exception as e:
             print e.message
-            cls.message = e.message
+            self.message = e.message
 
-    @classmethod
-    def download_raster_from_nasa(cls):
+    def download_raster_from_nasa(self):
         try:
-            minx, miny, maxx, maxy = cls.latlonbox
+            minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
             url_image = urllib2.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
-                                                                  cls.time_st,
-                                                                  get_wms_vars()[cls.model][cls.variable][0]))
-            cls.tiff_file.write(url_image.read())
-            cls.tiff_file.close()
+                                                                  self.time_st,
+                                                                  get_wms_vars()[self.model][self.variable][0]))
+            self.tiff_file.write(url_image.read())
+            self.tiff_file.close()
             # Create prj file
-            cls.create_prj_file()
+            self.create_prj_file()
             # Create tfw file
-            cls.create_tfw_file()
+            self.create_tfw_file()
             # Create zipfile
-            cls.create_zip_file()
+            self.create_zip_file()
 
-            cls.upload_layer_to_geoserver()
+            self.upload_layer_to_geoserver()
         except Exception as e:
             print e.message
-            cls.message = e.message
+            self.message = e.message
 
-    @classmethod
-    def upload_layer_to_geoserver(cls):
+    def upload_layer_to_geoserver(self):
         # Geoserver parameters
         geo_eng = get_spatial_dataset_engine(name='default')
         # Create raster in geoserver
-        response = geo_eng.create_coverage_resource(store_id=cls.store_id,
-                                                    coverage_file=cls.zip_path,
+        response = geo_eng.create_coverage_resource(store_id=self.store_id,
+                                                    coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
                                                     )
@@ -150,17 +143,16 @@ class TiffLayerManager:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
                                               uri='tethys_app-%s' % get_workspace())
             if result['success']:
-                cls.upload_layer_to_geoserver()
+                self.upload_layer_to_geoserver()
         else:
-            cls.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
-            cls.loaded = True
+            self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
+            self.loaded = True
 
-    @classmethod
-    def create_tfw_file(cls, h=256, w=512):
-        minx, miny, maxx, maxy = cls.latlonbox
+    def create_tfw_file(self, h=256, w=512):
+        minx, miny, maxx, maxy = self.latlonbox
         hscx = copysign((float(maxx) - float(minx)) / w, 1)
         hscy = copysign((float(maxy) - float(miny)) / h, 1)
-        tfw_file = open(cls.tfw_path, 'w')
+        tfw_file = open(self.tfw_path, 'w')
         tfw_file.write('{0}\n'.format(hscx))
         tfw_file.write('0.0\n')
         tfw_file.write('0.0\n')
@@ -170,12 +162,11 @@ class TiffLayerManager:
         tfw_file.write('')
         tfw_file.close()
 
-    @classmethod
-    def create_prj_file(cls):
+    def create_prj_file(self):
         """
         This function creates the missing .prj file for the raster
         """
-        prj_file = open(cls.prj_path, 'w')
+        prj_file = open(self.prj_path, 'w')
         prj_file.write(('GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",'
                         'SPHEROID["WGS_1984",6378137,298.257223563]],'
                         'PRIMEM["Greenwich",0],'
@@ -183,15 +174,14 @@ class TiffLayerManager:
                         ))
         prj_file.close()
 
-    @classmethod
-    def create_zip_file(cls):
+    def create_zip_file(self):
         """
         this function zips the tiff and prj files into
         """
-        zip_file = zipfile.ZipFile(cls.zip_path, "w")
-        zip_file.write(cls.tiff_path, arcname=os.path.basename(cls.tiff_path))
-        zip_file.write(cls.tfw_path, arcname=os.path.basename(cls.tfw_path))
-        zip_file.write(cls.prj_path, arcname=os.path.basename(cls.prj_path))
+        zip_file = zipfile.ZipFile(self.zip_path, "w")
+        zip_file.write(self.tiff_path, arcname=os.path.basename(self.tiff_path))
+        zip_file.write(self.tfw_path, arcname=os.path.basename(self.tfw_path))
+        zip_file.write(self.prj_path, arcname=os.path.basename(self.prj_path))
         zip_file.close()
 
 
