@@ -33,11 +33,9 @@ class TiffLayerManager:
         self.requested = False
         self.error = None
         self.message = None
-        self.async_thread = None
         self.zip_path = None
         self.store_name = None
         self.store_id = None
-        self.plot_time = None
         self.model = None
         self.variable = None
         self.latlonbox = None
@@ -71,26 +69,25 @@ class TiffLayerManager:
         This function returns the previously loaded map or the new map layer
         if the button on the page was clicked
         """
-        if post_params.get('plotTime'):
-            self.plot_time = post_params['plotTime']
+        Thread(target=self.request_tiff_layer_async,
+               args=[post_params],
+               kwargs={}).start()
 
-        if post_params.get('model'):
-            self.model = post_params['model']
-
-        if post_params.get('variable'):
-            self.variable = post_params['variable']
-
-        if self.model and self.variable and self.plot_time:
-            # Data rods parameters
-            self.latlonbox = [post_params['lonW'], post_params['latS'], post_params['lonE'], post_params['latN']]
-            self.time_st = self.plot_time + ':00:00Z/' + self.plot_time + ':00:30Z'
-            self.request_raster_zip()
-        else:
-            self.error = 'Invalid parameters passed'
-
-    def request_raster_zip(self):
+    def request_tiff_layer_async(self, post_params):
         try:
             self.requested = True
+            plot_time = post_params.get('plotTime', None)
+            self.model = post_params.get('model', None)
+            self.variable = post_params.get('variable', None)
+
+            if self.model and self.variable and plot_time:
+                # Data rods parameters
+                self.latlonbox = [post_params['lonW'], post_params['latS'], post_params['lonE'], post_params['latN']]
+                self.time_st = plot_time + ':00:00Z/' + plot_time + ':00:30Z'
+            else:
+                self.error = 'Invalid parameters passed'
+                return
+
             # Files, paths, and store name & store id
             self.tiff_file = NamedTemporaryFile(suffix=".tif", delete=False)
             self.tiff_path = self.tiff_file.name
@@ -100,11 +97,7 @@ class TiffLayerManager:
             self.tfw_path = file_name + '.tfw'
             self.prj_path = file_name + '.prj'
             self.zip_path = file_name + '.zip'
-
-            TiffLayerManager.async_thread = Thread(target=self.download_raster_from_nasa,
-                                                   args=(),
-                                                   kwargs={})
-            TiffLayerManager.async_thread.start()
+            self.download_raster_from_nasa()
         except Exception as e:
             print e.message
             self.message = e.message
