@@ -837,7 +837,11 @@ This tests all map and data rods services, with the location of each time series
 2. A developer could execute &quot;python filepath/unit\_tests.py&quot; in a terminal window.
 3. A developer could run the unit\_tests.py script in the python SDE (eg, pycharms).
 
-If run in a browser window, the output will appear in the same browser window; if run from a console terminal, the output will appear in that console window. The output indicates the runtime required, and provides specific URLs that fail to respond. These can be tested again later and/or sent to NASA tech support.
+If run in a browser window, the output will appear in the same browser window; if run from a console terminal, the output will appear in that console window. The output indicates the runtime required, and provides specific URLs that fail to respond. These can be tested again later and/or sent to NASA tech support. See example screenshots below for running the tests, and seeing the results.  
+
+![runtest1](figs/runtests01.png)
+
+![runtest2](figs/runtests02.png)
 
 ---
 
