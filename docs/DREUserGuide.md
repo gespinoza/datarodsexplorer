@@ -24,7 +24,7 @@ This app is great for researching behaviors and interactions of hydrologic varia
 
 ### <a name="credits"></a>Credits, Authors, Contributors, Contacts
 
-DRE was developed in 2015-2016 by Dr. Gonzalo Espinoza as part of his PhD work at the University of Texas at Austin, and by Shawn Crawley, MS student at Brigham Young University, Provo UT. The development was directed by Dr. David Arctur at the University of Texas at Austin, and supported by NASA ROSES NNH11ZDA001N-ACCESS and NNH13ZDA001N-ACCESS, William Teng, PI.
+DRE was developed in 2015-2016 by Dr. Gonzalo Espinoza as part of his PhD work at the University of Texas at Austin, and by Shawn Crawley, MS student at Brigham Young University, Provo UT. The development was directed by Dr. David Arctur at the University of Texas at Austin, and supported by NASA ROSES NNH11ZDA001N-ACCESS and NNH13ZDA001N-ACCESS, William Teng, PI. David Arctur was lead author of this user guide.
 
 Questions on software development should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
 
