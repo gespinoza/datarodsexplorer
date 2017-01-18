@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Data Rods Explorer 1.0.0  ![](figs/app-icon-balloon.png) 
 
 _Browse NASA data services for land surface model maps and time series_
