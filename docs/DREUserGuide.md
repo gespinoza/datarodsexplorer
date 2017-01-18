@@ -25,7 +25,7 @@ This app is great for researching behaviors and interactions of hydrologic varia
 
 DRE was developed in 2015-2016 by Dr. Gonzalo Espinoza as part of his PhD work at the University of Texas at Austin, and by Shawn Crawley, MS student at Brigham Young University, Provo UT. Dr. David Arctur at the University of Texas at Austin was lead author of this user guide, and directed development of DRE, supported by NASA ROSES NNH11ZDA001N-ACCESS and NNH13ZDA001N-ACCESS, William Teng, PI. 
 
-Questions on software development should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
+All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov). Questions on DRE software should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). Contact HydroShare for apps development questions or issues at [dev@hydroshare.org](mailto:dev@hydroshare.org). 
 
 ### <a name="learn"></a>To learn more
 
