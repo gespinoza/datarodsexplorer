@@ -52,7 +52,7 @@ AMSRED|soil_moisture_x|LPRM_AMSRE_D_SOILM3_002_soil_moisture_x|Soil moisture X-b
 AMSRED|sm_c_error|LPRM_AMSRE_D_SOILM3_002_sm_c_error|Soil moisture uncertainty C-band descending|%|AMSRE-D:SoilMoistErrCbandDesc%
 AMSRED|sm_x_error|LPRM_AMSRE_D_SOILM3_002_sm_x_error|Soil moisture uncertainty X-band descending|%|AMSRE-D:SoilMoistErrXbandDesc%
 AMSRED|opt_depth_c|LPRM_AMSRE_D_SOILM3_002_opt_depth_c|Optical depth C-band descending|unitless|AMSRE-D:OptDepthCbandDesc
-AMSRED|opt_depth_x|LPRM_AMSRE_D_SOILM3_002_opt_depth_x|Optical depth X-band descending|unitless|AMSRE-D:OptDepthCbandDesc
+AMSRED|opt_depth_x|LPRM_AMSRE_D_SOILM3_002_opt_depth_x|Optical depth X-band descending|unitless|AMSRE-D:OptDepthXbandDesc
 AMSRED|Ts|LPRM_AMSRE_D_SOILM3_002_Ts|2 mm skin temperature AMSRE descending|K|AMSRE-D:2mmSkinTempDesc
 
 LPRM-AMSRE-A (Retrieval)~AMSREA~LPRM_AMSRE_A_SOILM3~002~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_A_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
@@ -61,7 +61,7 @@ AMSREA|soil_moisture_x|LPRM_AMSRE_A_SOILM3_002_soil_moisture_x|Soil moisture X-b
 AMSREA|sm_c_error|LPRM_AMSRE_A_SOILM3_002_sm_c_error|Soil moisture uncertainty C-band ascending|%|AMSRE-A:SoilMoistErrCbandAsc%
 AMSREA|sm_x_error|LPRM_AMSRE_A_SOILM3_002_sm_x_error|Soil moisture uncertainty X-band ascending|%|AMSRE-A:SoilMoistErrXbandAsc%
 AMSREA|opt_depth_c|LPRM_AMSRE_A_SOILM3_002_opt_depth_c|Optical depth C-band ascending|unitless|AMSRE-A:OptDepthCbandAsc
-AMSREA|opt_depth_x|LPRM_AMSRE_A_SOILM3_002_opt_depth_x|Optical depth X-band ascending|unitless|AMSRE-A:OptDepthCbandAsc
+AMSREA|opt_depth_x|LPRM_AMSRE_A_SOILM3_002_opt_depth_x|Optical depth X-band ascending|unitless|AMSRE-A:OptDepthXbandAsc
 AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2 mm skin temperature AMSRE ascending|K|AMSRE-A:2mmSkinTempAsc
 
 TRMM (Retrieval)~TRMM~TRMM_3B42~7~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.7:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
