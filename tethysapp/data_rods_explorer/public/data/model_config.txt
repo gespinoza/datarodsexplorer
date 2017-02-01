@@ -39,7 +39,7 @@ GLDAS|Tair|GLDAS_NOAH025_3H_001_tair|Near surface air temperature|K|GLDAS:NearSu
 GLDAS|TSOIL0-10cm|GLDAS_NOAH025_3H_001_tsoil0_10cm|0-10cm average soil temperature|K|GLDAS:0-10cmSoilTemp
 GLDAS|Wind|GLDAS_NOAH025_3H_001_wind|Near surface wind magnitude|m/s|GLDAS:NearSurfWindMag
 
-GLDAS 2-Noah (LSM)~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLSDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+GLDAS 2-Noah (LSM)~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.sci.gsfc.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 GLDAS2|Evap_tavg|GLDAS_NOAH025_3H_2_0_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS2:Evapotrans
 GLDAS2|Rainf_tavg|GLDAS_NOAH025_3H_2_0_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS2:RainRate
 GLDAS2|Snowf_tavg|GLDAS_NOAH025_3H_2_0_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS2:SnowRate
