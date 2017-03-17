@@ -37,9 +37,14 @@ This user guide has the following main sections:
 - **[NASA References](#nasa-references)** – links to the relevant NASA reference pages and the Giovanni data server
 - The last two sections, **[Keeping DRE Up to Date](#keeping-dre-uptodate)** and **[DRE App Process Flow](#dre-app-flow)** , are for NASA staff and other researchers/developers wanting to maintain this app. This includes making changes in the model configurations, understanding the program logic, and testing the NASA data services.
 
+For quick reference: 
+
+![Model-variable config file](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)
+![Dates and spatial range input file](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)
+
 ### <a name="future"></a>Future changes expected
 
-- GLDAS-1 to be removed 12/31/2016; GLDAS-2 to be expanded
+- GLDAS-2 to be expanded
 - MERRA-Land model and data layers to be added (by Spring 2017)
 - TRMM is now a static product. For RT precipitation, NASA will add GPM
 ( [Global Precipitation Measurement](http://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
@@ -49,7 +54,7 @@ This user guide has the following main sections:
 | **Date** | **Authors, Editors** | **Notes** |
 | --- | --- | --- |
 | 6-Dec-16 | David Arctur, Shawn Crawley, Bill Teng | Initial user guide final draft |
-|   |   |   |
+| 16-Mar-17 | David Arctur  | Minor updates and corrections  |
 |   |   |   |
 
 
