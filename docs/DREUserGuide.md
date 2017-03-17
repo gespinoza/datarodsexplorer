@@ -374,6 +374,8 @@ Note: Due to virtual memory limits, PNG files cannot exceed 20-month time period
 
 One other point to make regarding the View Raw Data choices: if your plots have two variables or year-to-year changes, then choosing to View Raw Data as ASCII, Plot or NetCDF will create multiple new browser tabs, one for each variable-time series. ****Tip****: IF YOU DON&#39;T SEE multiple new tabs, this could be due to your browser&#39;s pop-up blocker (depends on the browser). Check online for your browser&#39;s method of adding an exception to the pop-up blocker, and add an exception for the following sites:   **appsdev.hydroshare.org** , and **apps.hydroshare.org**.
 
+<a name="fig15b"></a>_Figure 15b. Resetting your browser's popup blocker to allow multiple time series tabs (Chrome shown)_
+
 ### <a name="upload"></a>Uploading time series query results to HydroShare
 
 [HydroShare](https://www.hydroshare.org/) allows users to create, manage, and publish data resources of many types. DRE enables users to upload the results of a time series query (**plot one variable**, **compare two variables**, **year-on-year changes**) to the user&#39;s account on HydroShare (**note:** you must be logged into HydroShare while doing this). These time series results can be uploaded in either of two formats: ASCII (tabular text) or NetCDF.
