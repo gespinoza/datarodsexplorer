@@ -37,9 +37,9 @@ This user guide has the following main sections:
 - **[NASA References](#nasa-references)** – links to the relevant NASA reference pages and the Giovanni data server
 - The last two sections, **[Keeping DRE Up to Date](#keeping-dre-uptodate)** and **[DRE App Process Flow](#dre-app-flow)** , are for NASA staff and other researchers/developers wanting to maintain this app. This includes making changes in the model configurations, understanding the program logic, and testing the NASA data services.
 
-For quick reference: 
+### <a name="inputfiles"></a>Input configuration files 
 
-- **[Model-variable config file](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)** (manually edited as needed)
+- **[Model-variable config file](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)** (manually edited via github as needed)
 - **[Dates and spatial range input file](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)** (updated by HydroShare nightly cron job)
 
 ### <a name="future"></a>Future changes expected
