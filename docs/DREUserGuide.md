@@ -157,6 +157,7 @@ This user guide has the following main sections:
    - [Figure 13.](#fig13) LPRM-AMSRE-D Optical Depth C-band plotted over GLDAS2-Evapotranspiration 
    - [Figure 14.](#fig14) Making LPRM layer transparent enough to see GLDAS2-Evapotranspiration layer 
    - [Figure 15.](#fig15) Download Choices (NASA data services) for Time Series Data 
+   - [Figure 15b.](#fig15b) Resetting your browser popup blocker to allow multiple time series tabs (Chrome browser shown) 
    - [Figure 16.](#fig16) Download Choices (chart only, no metadata) for Time Series Data and Plot Image 
    - [Figure 17.](#fig17) Choices for Uploading Time Series Data to HydroShare 
    - [Figure 18.](#fig18) Example Resource Description for Soil Moisture Time Series, 2011-2016 
@@ -373,6 +374,8 @@ These two approaches for downloading the plot data are both provided because the
 Note: Due to virtual memory limits, PNG files cannot exceed 20-month time periods. For instance, printing a PNG for the graph from Jan 2015 to Oct 2017 will result in an error message.
 
 One other point to make regarding the View Raw Data choices: if your plots have two variables or year-to-year changes, then choosing to View Raw Data as ASCII, Plot or NetCDF will create multiple new browser tabs, one for each variable-time series. ****Tip****: IF YOU DON&#39;T SEE multiple new tabs, this could be due to your browser&#39;s pop-up blocker (depends on the browser). Check online for your browser&#39;s method of adding an exception to the pop-up blocker, and add an exception for the following sites:   **appsdev.hydroshare.org** , and **apps.hydroshare.org**.
+
+![Figure 15b](figs/fig15b.png)
 
 <a name="fig15b"></a>_Figure 15b. Resetting your browser's popup blocker to allow multiple time series tabs (Chrome shown)_
 
