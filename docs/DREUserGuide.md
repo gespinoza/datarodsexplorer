@@ -39,8 +39,8 @@ This user guide has the following main sections:
 
 For quick reference: 
 
-- **[Model-variable config file](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)**
-- **[Dates and spatial range input file](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)**
+- **[Model-variable config file](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)** (manually edited as needed)
+- **[Dates and spatial range input file](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)** (updated by HydroShare nightly cron job)
 
 ### <a name="future"></a>Future changes expected
 
@@ -369,6 +369,8 @@ These two approaches for downloading the plot data are both provided because the
  ![Figure 16](figs/fig16.png)
 
 <a name="fig16"></a>_Figure 16. Download Choices (chart only, no metadata) for Time Series Data and Plot Image_
+
+Note: Due to virtual memory limits, PNG files cannot exceed 20-month time periods. For instance, printing a PNG for the graph from Jan 2015 to Oct 2017 will result in an error message.
 
 One other point to make regarding the View Raw Data choices: if your plots have two variables or year-to-year changes, then choosing to View Raw Data as ASCII, Plot or NetCDF will create multiple new browser tabs, one for each variable-time series. ****Tip****: IF YOU DON&#39;T SEE multiple new tabs, this could be due to your browser&#39;s pop-up blocker (depends on the browser). Check online for your browser&#39;s method of adding an exception to the pop-up blocker, and add an exception for the following sites:   **appsdev.hydroshare.org** , and **apps.hydroshare.org**.
 
