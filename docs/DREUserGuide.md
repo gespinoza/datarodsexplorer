@@ -39,8 +39,8 @@ This user guide has the following main sections:
 
 For quick reference: 
 
-![Model-variable config file](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)
-![Dates and spatial range input file](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)
+- **[Model-variable config file](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt)**
+- **[Dates and spatial range input file](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt)**
 
 ### <a name="future"></a>Future changes expected
 
