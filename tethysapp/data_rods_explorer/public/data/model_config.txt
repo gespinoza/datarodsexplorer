@@ -28,11 +28,25 @@ GLDAS 2-Noah (LSM)~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.gesdisc.eosdis.nasa
 GLDAS2|Evap_tavg|GLDAS_NOAH025_3H_2_0_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS2:Evapotrans
 GLDAS2|Rainf_tavg|GLDAS_NOAH025_3H_2_0_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS2:RainRate
 GLDAS2|Snowf_tavg|GLDAS_NOAH025_3H_2_0_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS2:SnowRate
+GLDAS2|Rainf_f_tavg|GLDAS_NOAH025_3H_2_0_Rainf_f_tavg|Precipitation rate|kg/m^2/s|GLDAS2:PrecipRate
 GLDAS2|Qs_acc|GLDAS_NOAH025_3H_2_0_Qs_acc|Surface runoff|kg/m^2|GLDAS2:SurfRunoff
 GLDAS2|Qsb_acc|GLDAS_NOAH025_3H_2_0_Qsb_acc|Subsurface runoff|kg/m^2|GLDAS2:SubsurfRunoff
+GLDAS2|Qsm_acc|GLDAS_NOAH025_3H_2_0_Qsm_acc|Snow melt|kg/m^2|GLDAS2:SnowMelt
+GLDAS2|RootMoist_inst|GLDAS_NOAH025_3H_2_0_RootMoist_inst|Rootzone soil moisture|kg/m^2|GLDAS2:RootSoilMoisture
+GLDAS2|SoilMoi0_10cm_inst|GLDAS_NOAH025_3H_2_0_SoilMoi0_10cm_inst|0-10cm soil moisture|kg/m^2|GLDAS2:0-10cmSoilMoisture
 GLDAS2|SoilMoi10_40cm_inst|GLDAS_NOAH025_3H_2_0_SoilMoi10_40cm_inst|10-40cm soil moisture|kg/m^2|GLDAS2:10-40cmSoilMoisture
 GLDAS2|SoilMoi40_100cm_inst|GLDAS_NOAH025_3H_2_0_SoilMoi40_100cm_inst|40-100cm soil moisture|kg/m^2|GLDAS2:40-100cmSoilMoisture
 GLDAS2|SoilMoi100_200cm_inst|GLDAS_NOAH025_3H_2_0_SoilMoi100_200cm_inst|100-200cm soil moisture|kg/m^2|GLDAS2:100-200cmSoilMoisture
+GLDAS2|SoilTMP0_10cm_inst|GLDAS_NOAH025_3H_2_0_SoilTMP0_10cm_inst|0-10cm soil temperature|K|GLDAS2:0-10cmSoilTemperature
+GLDAS2|SoilTMP10_40cm_inst|GLDAS_NOAH025_3H_2_0_SoilTMP10_40cm_inst|10-40cm soil temperature|K|GLDAS2:10-40cmSoilTemperature
+GLDAS2|Tair_f_inst|GLDAS_NOAH025_3H_2_0_Tair_f_inst|Air temperature|K|GLDAS2:AirTemperature
+GLDAS2|Wind_f_inst|GLDAS_NOAH025_3H_2_0_Wind_f_inst|Wind speed|m/s|GLDAS2:WindSpeed
+GLDAS2|Psurf_f_inst|GLDAS_NOAH025_3H_2_0_Psurf_f_inst|Air pressure|Pa|GLDAS2:AirPressure
+GLDAS2|Qair_f_inst|GLDAS_NOAH025_3H_2_0_Qair_f_inst|Specific humidity|kg/kg|GLDAS2:SpecificHumidity
+GLDAS2|ESoil_tavg|GLDAS_NOAH025_3H_2_0_ESoil_tavg|Bare soil evaporation|W/m^2|GLDAS2:BareSoilEvap
+GLDAS2|PotEvap_tavg|GLDAS_NOAH025_3H_2_0_PotEvap_tavg|Potential evaporation|W/m^2|GLDAS2:PotentialEvap
+GLDAS2|LWdown_f_tavg|GLDAS_NOAH025_3H_2_0_LWdown_f_tavg|LW down radiation flux|W/m^2|GLDAS2:LWdownRadFlux
+GLDAS2|SWdown_f_tavg|GLDAS_NOAH025_3H_2_0_SWdown_f_tavg|SW down radiation flux|W/m^2|GLDAS2:SWdownRadFlux
 
 LPRM-AMSRE-D (Retrieval)~AMSRED~LPRM_AMSRE_D_SOILM3~002~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_D_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSRED|soil_moisture_c|LPRM_AMSRE_D_SOILM3_002_soil_moisture_c|Soil moisture C-band descending|%|AMSRE-D:SoilMoistCbandDesc%
@@ -41,7 +55,7 @@ AMSRED|sm_c_error|LPRM_AMSRE_D_SOILM3_002_sm_c_error|Soil moisture uncertainty C
 AMSRED|sm_x_error|LPRM_AMSRE_D_SOILM3_002_sm_x_error|Soil moisture uncertainty X-band descending|%|AMSRE-D:SoilMoistErrXbandDesc%
 AMSRED|opt_depth_c|LPRM_AMSRE_D_SOILM3_002_opt_depth_c|Optical depth C-band descending|unitless|AMSRE-D:OptDepthCbandDesc
 AMSRED|opt_depth_x|LPRM_AMSRE_D_SOILM3_002_opt_depth_x|Optical depth X-band descending|unitless|AMSRE-D:OptDepthXbandDesc
-AMSRED|Ts|LPRM_AMSRE_D_SOILM3_002_Ts|2 mm skin temperature AMSRE descending|K|AMSRE-D:2mmSkinTempDesc
+AMSRED|Ts|LPRM_AMSRE_D_SOILM3_002_Ts|2mm skin temperature AMSRE descending|K|AMSRE-D:2mmSkinTempDesc
 
 LPRM-AMSRE-A (Retrieval)~AMSREA~LPRM_AMSRE_A_SOILM3~002~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_A_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSREA|soil_moisture_c|LPRM_AMSRE_A_SOILM3_002_soil_moisture_c|Soil moisture C-band ascending|%|AMSRE-A:SoilMoistCbandAsc%
@@ -50,7 +64,7 @@ AMSREA|sm_c_error|LPRM_AMSRE_A_SOILM3_002_sm_c_error|Soil moisture uncertainty C
 AMSREA|sm_x_error|LPRM_AMSRE_A_SOILM3_002_sm_x_error|Soil moisture uncertainty X-band ascending|%|AMSRE-A:SoilMoistErrXbandAsc%
 AMSREA|opt_depth_c|LPRM_AMSRE_A_SOILM3_002_opt_depth_c|Optical depth C-band ascending|unitless|AMSRE-A:OptDepthCbandAsc
 AMSREA|opt_depth_x|LPRM_AMSRE_A_SOILM3_002_opt_depth_x|Optical depth X-band ascending|unitless|AMSRE-A:OptDepthXbandAsc
-AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2 mm skin temperature AMSRE ascending|K|AMSRE-A:2mmSkinTempAsc
+AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2mm skin temperature AMSRE ascending|K|AMSRE-A:2mmSkinTempAsc
 
 TRMM (Retrieval)~TRMM~TRMM_3B42~7~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.7:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
