@@ -24,7 +24,7 @@ NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100cm soil moisture|kg
 NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200cm soil moisture|kg/m^2|NLDAS:100-200cmSoilMoisture
 NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10cm soil temperature|K|NLDAS:0-10cmSoilTemp
 
-GLDAS 2-Noah (LSM)~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+GLDAS 2.0-Noah (LSM) 1948-2010~GLDAS2~GLDAS_NOAH025_3H~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 GLDAS2|Evap_tavg|GLDAS_NOAH025_3H_2_0_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS2:Evapotrans
 GLDAS2|Rainf_tavg|GLDAS_NOAH025_3H_2_0_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS2:RainRate
 GLDAS2|Snowf_tavg|GLDAS_NOAH025_3H_2_0_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS2:SnowRate
@@ -47,6 +47,23 @@ GLDAS2|ESoil_tavg|GLDAS_NOAH025_3H_2_0_ESoil_tavg|Bare soil evaporation|W/m^2|GL
 GLDAS2|PotEvap_tavg|GLDAS_NOAH025_3H_2_0_PotEvap_tavg|Potential evaporation|W/m^2|GLDAS2:PotentialEvap
 GLDAS2|LWdown_f_tavg|GLDAS_NOAH025_3H_2_0_LWdown_f_tavg|LW down radiation flux|W/m^2|GLDAS2:LWdownRadFlux
 GLDAS2|SWdown_f_tavg|GLDAS_NOAH025_3H_2_0_SWdown_f_tavg|SW down radiation flux|W/m^2|GLDAS2:SWdownRadFlux
+
+GLDAS 2.1-Noah (LSM) 2000-Present~GLDAS2~GLDAS_NOAH025_3H~2.1~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.1:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+GLDAS2|Evap_tavg|GLDAS_NOAH025_3H_2_1_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS2:Evapotrans
+GLDAS2|Rainf_tavg|GLDAS_NOAH025_3H_2_1_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS2:RainRate
+GLDAS2|Snowf_tavg|GLDAS_NOAH025_3H_2_1_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS2:SnowRate
+GLDAS2|Rainf_f_tavg|GLDAS_NOAH025_3H_2_1_Rainf_f_tavg|Precipitation rate|kg/m^2/s|GLDAS2:PrecipRate
+GLDAS2|Qs_acc|GLDAS_NOAH025_3H_2_1_Qs_acc|Surface runoff|kg/m^2|GLDAS2:SurfRunoff
+GLDAS2|Qsb_acc|GLDAS_NOAH025_3H_2_1_Qsb_acc|Subsurface runoff|kg/m^2|GLDAS2:SubsurfRunoff
+GLDAS2|SoilMoi0_10cm_inst|GLDAS_NOAH025_3H_2_1_SoilMoi0_10cm_inst|0-10cm soil moisture|kg/m^2|GLDAS2:0-10cmSoilMoisture
+GLDAS2|SoilMoi10_40cm_inst|GLDAS_NOAH025_3H_2_1_SoilMoi10_40cm_inst|10-40cm soil moisture|kg/m^2|GLDAS2:10-40cmSoilMoisture
+GLDAS2|SoilMoi40_100cm_inst|GLDAS_NOAH025_3H_2_1_SoilMoi40_100cm_inst|40-100cm soil moisture|kg/m^2|GLDAS2:40-100cmSoilMoisture
+GLDAS2|SoilTMP0_10cm_inst|GLDAS_NOAH025_3H_2_1_SoilTMP0_10cm_inst|0-10cm soil temperature|K|GLDAS2:0-10cmSoilTemperature
+GLDAS2|AvgSurfT_inst|GLDAS_NOAH025_3H_2_1_AvgSurfT_inst|Avg surface skin temperature|K|GLDAS2:SkinTemperature
+GLDAS2|Tair_f_inst|GLDAS_NOAH025_3H_2_1_Tair_f_inst|Air temperature|K|GLDAS2:AirTemperature
+GLDAS2|Wind_f_inst|GLDAS_NOAH025_3H_2_1_Wind_f_inst|Wind speed|m/s|GLDAS2:WindSpeed
+GLDAS2|Psurf_f_inst|GLDAS_NOAH025_3H_2_1_Psurf_f_inst|Air pressure|Pa|GLDAS2:AirPressure
+GLDAS2|Qair_f_inst|GLDAS_NOAH025_3H_2_1_Qair_f_inst|Specific humidity|kg/kg|GLDAS2:SpecificHumidity
 
 LPRM-AMSRE-D (Retrieval)~AMSRED~LPRM_AMSRE_D_SOILM3~002~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_D_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSRED|soil_moisture_c|LPRM_AMSRE_D_SOILM3_002_soil_moisture_c|Soil moisture C-band descending|%|AMSRE-D:SoilMoistCbandDesc%
