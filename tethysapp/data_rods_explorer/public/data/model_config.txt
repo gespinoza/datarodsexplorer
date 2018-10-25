@@ -84,6 +84,30 @@ AMSREA|opt_depth_c|LPRM_AMSRE_A_SOILM3_002_opt_depth_c|Optical depth C-band asce
 AMSREA|opt_depth_x|LPRM_AMSRE_A_SOILM3_002_opt_depth_x|Optical depth X-band ascending|unitless|AMSRE-A:OptDepthXbandAsc
 AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2mm skin temperature AMSRE ascending|K|AMSRE-A:2mmSkinTempAsc
 
+LPRM-AMSR2-D 10km (Retrieval)~AMSR2D10~LPRM_AMSR2_DS_D_SOILM3~001~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+AMSR2D10|soil_moisture_c1|LPRM_AMSR2_DS_D_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Desc-10km|%|AMSR2D10:SoilMoistC1Desc%
+
+LPRM-AMSR2-A 10km (Retrieval)~AMSR2A10~LPRM_AMSR2_DS_D_SOILM3~001~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+AMSR2A10|soil_moisture_c1|LPRM_AMSR2_DS_A_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Asc-10km|%|AMSR2A10:SoilMoistC1Asc%
+
+LPRM-AMSR2-D 25km (Retrieval)~AMSR2D25~LPRM_AMSR2_DS_D_SOILM3~001~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+AMSR2D25|soil_moisture_c1|LPRM_AMSR2_DS_D_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Desc-25km|%|AMSR2D25:SoilMoistC1Desc%
+
+LPRM-AMSR2-A 25km (Retrieval)~AMSR2A25~LPRM_AMSR2_DS_D_SOILM3~001~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+AMSR2A25|soil_moisture_c1|LPRM_AMSR2_DS_A_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Asc-25km|%|AMSR2A25:SoilMoistC1Asc%
+
+LPRM-TMI-Day (Retrieval)~TMIDY~LPRM_TMI_DY_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_TMI_DY_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+TMIDY|soil_moisture_x|LPRM_TMI_DY_SOILM3_001_soil_moisture_x|Volumetric soil moisture X-band day|%|TMI-DY:SoilMoistXDay%
+TMIDY|sm_x_error|LPRM_TMI_DY_SOILM3_001_sm_x_error|Soil moisture uncertainty X-band day|m^3/m^3|TMI-DY:SoilMoistUncertXDay
+TMIDY|opt_depth_x|LPRM_TMI_DY_SOILM3_001_opt_depth_x|Optical depth X-band day|unitless|TMI-DY:OptDepthXDay
+TMIDY|Ts|LPRM_TMI_DY_SOILM3_001_ts|2mm skin temperature-day|m^3/m^3|TMI-DY:2mmSkinTempDay
+
+LPRM-TMI-Night (Retrieval)~TMINT~LPRM_TMI_NT_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_TMI_NT_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+TMINT|soil_moisture_x|LPRM_TMI_NT_SOILM3_001_soil_moisture_x|Volumetric soil moisture X-band day|%|TMI-NT:SoilMoistXDay%
+TMINT|sm_x_error|LPRM_TMI_NT_SOILM3_001_sm_x_error|Soil moisture uncertainty X-band day|m^3/m^3|TMI-NT:SoilMoistUncertXDay
+TMINT|opt_depth_x|LPRM_TMI_NT_SOILM3_001_opt_depth_x|Optical depth X-band day|unitless|TMI-NT:OptDepthXDay
+TMINT|Ts|LPRM_TMI_NT_SOILM3_001_ts|2mm skin temperature-day|m^3/m^3|TMI-NT:2mmSkinTempDay
+
 TRMM (Retrieval)~TRMM~TRMM_3B42~7~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.7:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
 
