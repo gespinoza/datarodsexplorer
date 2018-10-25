@@ -16,6 +16,7 @@ NLDAS|GFLUXsfc|NLDAS_NOAH0125_H_002_gfluxsfc|Ground heat flux|w/m^2|NLDAS:GrndHe
 NLDAS|LHTFLsfc|NLDAS_NOAH0125_H_002_lhtflsfc|Latent heat flux|w/m^2|NLDAS:LatentHeatFlux
 NLDAS|SHTFLsfc|NLDAS_NOAH0125_H_002_shtflsfc|Sensible heat flux|w/m^2|NLDAS:SensHeatFlux
 NLDAS|SSRUNsfc|NLDAS_NOAH0125_H_002_ssrunsfc|Surface runoff|kg/m^2|NLDAS:SurfRunoff
+NLDAS|BGRUNsfc|NLDAS_NOAH0125_H_002_bgrunsfc|Subsurface runoff|kg/m^2|NLDAS:SubsurfRunoff
 NLDAS|SOILM0-10cm|NLDAS_NOAH0125_H_002_soilm0_10cm|0-10cm soil moisture|kg/m^2|NLDAS:0-10cmSoilMoisture
 NLDAS|SOILM0-100cm|NLDAS_NOAH0125_H_002_soilm0_100cm|0-100cm soil moisture|kg/m^2|NLDAS:0-100cmSoilMoisture
 NLDAS|SOILM0-200cm|NLDAS_NOAH0125_H_002_soilm0_200cm|0-200cm soil moisture|kg/m^2|NLDAS:0-200cmSoilMoisture
