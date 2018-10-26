@@ -87,13 +87,13 @@ AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2mm skin temperature AMSRE ascending|K|AMSR
 LPRM-AMSR2-D 10km (Retrieval)~AMSR2D10~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSR2D10|soil_moisture_c1|LPRM_AMSR2_DS_D_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Desc-10km|%|AMSR2D10:SoilMoistC1Desc%
 
-LPRM-AMSR2-A 10km (Retrieval)~AMSR2A10~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSR2-A 10km (Retrieval)~AMSR2A10~LPRM_AMSR2_DS_A_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_A_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSR2A10|soil_moisture_c1|LPRM_AMSR2_DS_A_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Asc-10km|%|AMSR2A10:SoilMoistC1Asc%
 
-LPRM-AMSR2-D 25km (Retrieval)~AMSR2D25~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSR2-D 25km (Retrieval)~AMSR2D25~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSR2D25|soil_moisture_c1|LPRM_AMSR2_DS_D_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Desc-25km|%|AMSR2D25:SoilMoistC1Desc%
 
-LPRM-AMSR2-A 25km (Retrieval)~AMSR2A25~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSR2-A 25km (Retrieval)~AMSR2A25~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_A_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSR2A25|soil_moisture_c1|LPRM_AMSR2_DS_A_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Asc-25km|%|AMSR2A25:SoilMoistC1Asc%
 
 LPRM-TMI-Day (Retrieval)~TMIDY~LPRM_TMI_DY_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_TMI_DY_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
@@ -110,6 +110,17 @@ TMINT|Ts|LPRM_TMI_NT_SOILM3_001_ts|2mm skin temperature-day|m^3/m^3|TMI-NT:2mmSk
 
 TRMM (Retrieval)~TRMM~TRMM_3B42~7~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.7:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
+
+MERRA-Land~MERRA~MST1NXMLD~5.2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:MST1NXMLD.520:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA|PRECSNO|MST1NXMLD_520_PRECSNO|Surface snowfall|kg/m^2/s|MERRA:SurfaceSnowfall
+
+MERRA2-Flux~MERRA2X~M2T1NXFLX~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXFLX.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA2X|VLML|M2T1NXFLX_5124_VLML|Surface north wind t-avg|m/s|MERRA2X:SurfaceNorthWind
+MERRA2X|ULML|M2T1NXFLX_5124_ULML|Surface east wind t-avg|m/s|MERRA2X:SurfaceEastWind
+
+MERRA2-Forcing~MERRA2F~M2T1NXLFO~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXLFO.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA2F|LWGAB|M2T1NXLFO_5124_LWGAB|Surface absorbed LW t-avg|W/m^2|MERRA2F:SurfaceLWRad
+MERRA2F|SWGDN|M2T1NXLFO_5124_SWGDN|Incident SW t-avg|W/m^2|MERRA2F:IncidentSWRad
 
 GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.2:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_2_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
