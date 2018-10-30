@@ -1,4 +1,4 @@
-# Data Rods Explorer 1.0.0  ![](figs/app-icon-balloon.png) 
+# Data Rods Explorer 1.0.1  ![](figs/app-icon-balloon.png) 
 
 _Browse NASA data services for land surface model maps and time series_
 
@@ -55,7 +55,7 @@ This user guide has the following main sections:
 | --- | --- | --- |
 | 6-Dec-16 | David Arctur, Shawn Crawley, Bill Teng | Initial user guide final draft |
 | 16-Mar-17 | David Arctur  | Minor updates and corrections  |
-| 29-Oct-18 | David Arctur  | Revised model_config.txt to remove GLDAS 1.0, add GLDAS 2.1, AMSR2, TMI, MERRA variables   |
+| 29-Oct-18 | David Arctur  | Removed GLDAS 1.0, added GLDAS 2.1, AMSR2, TMI, MERRA |
 
 
 
