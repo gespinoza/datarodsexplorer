@@ -55,7 +55,7 @@ This user guide has the following main sections:
 | --- | --- | --- |
 | 6-Dec-16 | David Arctur, Shawn Crawley, Bill Teng | Initial user guide final draft |
 | 16-Mar-17 | David Arctur  | Minor updates and corrections  |
-|   |   |   |
+| 29-Oct-18 | David Arctur  | Revised model_config.txt to remove GLDAS 1.0, add GLDAS 2.1, AMSR2, TMI, MERRA variables   |
 
 
 
@@ -110,12 +110,12 @@ This user guide has the following main sections:
 
    - [LDAS - Land Data Assimilation System](#ldas) 
    - [NLDAS - National Land Data Assimilation System](#nldas)
-   - [GLDAS - Global Land Data Assimilation System](#gldas) 
-   - [GLDAS 2 - Global Land Data Assimilation System](#gldas2)
+   - [GLDAS 2.0 - Global Land Data Assimilation System 1948-2010](#gldas2)
+   - [GLDAS 2.1 - Global Land Data Assimilation System 2000-Present](#gldas) 
    - [GRACE - Gravity Recovery and Climate Experiment](#grace) 
    - [LPRM - Land Parameter Retrieval Model](#lprm)
    - [TRMM - Tropical Rainfall Measuring Mission](#trmm)
-   - [MERRA-Land (forthcoming)](#merra) 
+   - [MERRA-Land](#merra) 
 
 **[Keeping DRE Up to Date](#keeping-dre-uptodate)** 
 
