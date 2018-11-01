@@ -56,7 +56,7 @@ This user guide has the following main sections:
 | 6-Dec-16 | David Arctur, Shawn Crawley, Bill Teng | Initial user guide final draft |
 | 16-Mar-17 | David Arctur  | Minor updates and corrections  |
 | 26-Oct-18 | David Arctur  | Removed GLDAS 1.0, added GLDAS 2.1, AMSR2, TMI, MERRA |
-| 30-Oct-18 | David Arctur  | Updated DRE User Guide | 
+| 1-Nov-18 | David Arctur  | Updated DRE User Guide | 
 
 
 
@@ -546,7 +546,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 - [LDAS FAQ](http://ldas.gsfc.nasa.gov/faq), eg, &quot;is there a shapefile for the NLDAS grid?&quot; (yes)
 
-### <a name="nldas"></a>NLDAS - National Land Data Assimilation System
+### <a name="nldas"></a>NLDAS - National Land Data Assimilation System, 1979-Present
 
 **Reference URL** :
 
@@ -559,7 +559,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
-### <a name="gldas20"></a>GLDAS 2.0 - Global Land Data Assimilation System
+### <a name="gldas20"></a>GLDAS 2.0 - Global Land Data Assimilation System, 1948-2010
 
 **Reference URLs** :
 
@@ -572,7 +572,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 **Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
 
-### <a name="gldas21"></a>GLDAS 2.1 - Global Land Data Assimilation System
+### <a name="gldas21"></a>GLDAS 2.1 - Global Land Data Assimilation System, 2000-Present
 
 **Reference URLs** :
 
@@ -584,7 +584,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
 
-### <a name="grace"></a>GRACE - Gravity Recovery and Climate Experiment
+### <a name="grace"></a>GRACE - Gravity Recovery and Climate Experiment, 2002-2017
 
 **Reference URLs** :
 
@@ -597,15 +597,15 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **Readme (all LPRM products)** :[https://hydro1.gesdisc.eosdis.nasa.gov/data/WAOB/LPRM\_AMSR2\_A\_SOILM3.001/doc/README\_LPRM.pdf](https://hydro1.gesdisc.eosdis.nasa.gov/data/WAOB/LPRM_AMSR2_A_SOILM3.001/doc/README_LPRM.pdf)
 
-**AMSR-E Descending/Ascending variables** : soil moisture C-band percentile, soil moisture X-band percentile, soil moisture uncertainty C-band, soil moisture uncertainty X-band, optical depth C-band, optical depth X-band, 2mm skin temperature AMSRE.
+**AMSR-E Descending/Ascending variables, 2002-2011** : soil moisture C-band percentile, soil moisture X-band percentile, soil moisture uncertainty C-band, soil moisture uncertainty X-band, optical depth C-band, optical depth X-band, 2mm skin temperature AMSRE.
 
 This Level 3 (gridded) data set&#39;s land surface parameters, surface soil moisture, land surface (skin) temperature, and vegetation water content, are derived from passive microwave remote sensing data from the Advanced Microwave Scanning Radiometer-Earth Observing System (AMSR-E), using the Land Parameter Retrieval Model (LPRM). There are two files per day, one ascending (daytime) and one descending (nighttime), archived as two different products. The data set covers the period from June 2002 to October 2011 (when the AMSR-E on the NASA EOS Aqua satellite stopped producing data due to a problem with the rotation of its antenna), at a spatial resolution of 0.25 degree. The data are stored in netCDF format.
 
-**AMSR2 Descending/Ascending variables** : Volumetric soil moisture from 6.9 GHZ
-**TMI Day/Night variables** : Volumetric soil moisture, uncertainty, optical depth, and 2mm skin temperature from LPRM/TMI/TRMM X-band Day or Night### <a name="merra"></a> MERRA-Land and MERRA2
-Land Surface Model suite of surface hydrology variables, similar to LDAS. Many more MERRA variables are developed, but not yet as time-series data cubes. **MERRA-Land Readme** :[https://goldsmr2.gesdisc.eosdis.nasa.gov/data/MERRA/MST1NXMLD.5.2.0/doc/MERRA.README.pdf](https://goldsmr2.gesdisc.eosdis.nasa.gov/data/MERRA/MST1NXMLD.5.2.0/doc/MERRA.README.pdf)**MERRA-Land variables** : surface snowfall**MERRA2 Readme** :[https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2T1NXFLX.5.12.4/doc/MERRA2.README.pdf](https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2T1NXFLX.5.12.4/doc/MERRA2.README.pdf)**MERRA2 variables** : time-average surface northward wind, surface eastward wind, surface absorbed longwave radiation, incident shortwave radiation land.
+**AMSR2 Descending/Ascending variables, 2012-Present** : Volumetric soil moisture from 6.9 GHZ
+**TMI Day/Night variables, 1998-2015** : Volumetric soil moisture, uncertainty, optical depth, and 2mm skin temperature from LPRM/TMI/TRMM X-band Day or Night### <a name="merra"></a> MERRA-Land and MERRA2
+Land Surface Model suite of surface hydrology variables, similar to LDAS. Many more MERRA variables are developed, but not yet as time-series data cubes. **MERRA-Land Readme** :[https://goldsmr2.gesdisc.eosdis.nasa.gov/data/MERRA/MST1NXMLD.5.2.0/doc/MERRA.README.pdf](https://goldsmr2.gesdisc.eosdis.nasa.gov/data/MERRA/MST1NXMLD.5.2.0/doc/MERRA.README.pdf)**MERRA-Land variables, 1980-2016** : surface snowfall**MERRA2 Readme** :[https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2T1NXFLX.5.12.4/doc/MERRA2.README.pdf](https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2T1NXFLX.5.12.4/doc/MERRA2.README.pdf)**MERRA2 variables, 1980-Present** : time-average surface northward wind, surface eastward wind, surface absorbed longwave radiation, incident shortwave radiation land.
 
-### <a name="trmm"></a>TRMM - Tropical Rainfall Measuring Mission
+### <a name="trmm"></a>TRMM - Tropical Rainfall Measuring Mission, 1998-2018
 
 **Reference URL** : [http://trmm.gsfc.nasa.gov/](http://trmm.gsfc.nasa.gov/)
 
@@ -627,9 +627,11 @@ The [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/
 
 ### <a name="config"></a>Reading and editing the model\_config.txt file
 
-The [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file is manually constructed with care, based on content in the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0) mentioned above. This provides a configuration specification for each model and variable, which enables constructing queries to the NASA Common Metadata Repository (CMR) and to the Giovanni data server at the user&#39;s direction, for all purposes of the DRE. This only needs to be updated if something changes about the NASA CMR or data servers, or if there are more models and/or variables to be described. Any such changes from NASA should be communicated and confirmed by means of the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0).
+The [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file is manually constructed with care, based on content in the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0) mentioned above. This provides a configuration specification for each model and variable, which enables constructing queries to the NASA Common Metadata Repository (CMR) and to the Giovanni data server at the user&#39;s direction, for all purposes of the DRE. This only needs to be updated if something changes about the NASA CMR or data servers, or if there are more models and/or variables to be described. Any such changes from NASA should be communicated and confirmed by means of the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0). 
 
-We will look at the 2-line header block and the first model in the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file, as of Nov 20, 2016. The top line in the header block identifies the model-specific content needed for data requests (with &quot;~&quot; field separator character); the second line in the header block identifies the variable-specific details needed for each model (with &quot;|&quot; field separator character).
+**Note** there are two copies of model\_config.txt: [one in GitHub](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt), which the DRE app uses at runtime, and [a second one on the HydroShare apps server](https://apps.hydroshare.org/static/data_rods_explorer/data/model_config.txt), which is used in the nightly cron job to update the [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt) file (also on the HydroShare apps server). The benefit of having the runtime app use the model\_config.txt on GitHub is that the variables can be edited and tested without having to sync the server version with the GitHub version. But if there are changes to model parameters such as model name, version, or URL template for requests, then the GitHub and server versions of model\_config.txt must by sync'd.  
+
+We will look at the 2-line header block and the first model in the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file, as of Nov 1, 2018. The top line in the header block identifies the model-specific content (with &quot;~&quot; field separator character), such as to generate the dates\_and\_spatial\_range.txt content. The second line in the header block identifies the variable-specific details (with &quot;|&quot; field separator character) needed for run-time data queries with each model. 
 
     Model_Display_Name~Model_Key_Name~Official_Model_Short_Name~Model_Version~Model_Data_Url_Pattern
     Model_Key|Data_Rods_Variable_ID|WMS_Layer_Name|Variable_Dropdown_Name|Units|Variable_Layer_Name
@@ -650,9 +652,9 @@ The remaining lines for each model block define each variable, using the vertica
 
 ### <a name="fences"></a>Running the enddate\_bounds.py script (cron job)
 
-Each night at 3am US Eastern Time, a cron job executes [enddate\_bounds.py](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/enddate_bounds.py), which parses the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file, and builds URLs to query the NASA Common Metadata Repository (CMR) for the spatial and temporal bounds for each model&#39;s datasets. This is a multi-step procedure:
+Each night at 3am US Eastern Time, a cron job executes [enddate\_bounds.py](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/enddate_bounds.py), which parses the [model\_config.txt on HydroShare apps server](https://apps.hydroshare.org/static/data_rods_explorer/data/model_config.txt) file, and builds URLs to query the NASA Common Metadata Repository (CMR) for the spatial and temporal bounds for each model&#39;s datasets. This is a multi-step procedure:
 
-**Step 1.** Read the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file and construct two CMR requests (begin date &amp; end date) for each model. Here are the current initial queries to CMR for the end dates of each model. Note that **&amp;sort\_key=start\_date** gets the begin date, and **&amp;sort\_key=-start\_date** gets the end date. Here are the end-date requests for all current models:
+**Step 1.** Read the [model\_config.txt on HydroShare apps server](https://apps.hydroshare.org/static/data_rods_explorer/data/model_config.txt) file and construct two CMR requests (begin date &amp; end date) for each model. Here are the current initial queries to CMR for the end dates of each model. Note that **&amp;sort\_key=start\_date** gets the begin date, and **&amp;sort\_key=-start\_date** gets the end date. Here are the end-date requests for all current models:
 
 - NLDAS Forcings: [https://cmr.earthdata.nasa.gov/search/granules?short\_name=NLDAS\_FORA0125\_H&amp;version=002&amp;page\_size=1&amp;sort\_key=-start\_date](https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=-start_date)
     
