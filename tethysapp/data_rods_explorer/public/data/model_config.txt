@@ -5,6 +5,7 @@ NLDAS-Forcing (LSM)~NLDASF~NLDAS_FORA0125_H~002~https://hydro1.gesdisc.eosdis.na
 NLDASF|APCPsfc|NLDAS_FORA0125_H_002_apcpsfc|Precipitation hourly|kg/m^2|NLDASF:PrecipHourly
 NLDASF|DLWRFsfc|NLDAS_FORA0125_H_002_dlwrfsfc|Surface DW longwave radiation flux|W/m^2|NLDASF:SurfDWLongWaveRadFlux
 NLDASF|DSWRFsfc|NLDAS_FORA0125_H_002_dswrfsfc|Surface DW shortwave radiation flux|W/m^2|NLDASF:SurfDWShrtWaveRadFlux
+NLDASF|PEVAPsfc|NLDAS_FORA0125_H_002_pevapsfc|Potential evaporation|kg/m^2|NLDASF:PotentialEvaporation
 NLDASF|SPFH2m|NLDAS_FORA0125_H_002_spfh2m|2-m above ground specific humidity|kg/kg|NLDASF:2mAbvGrndSpecifHumid
 NLDASF|TMP2m|NLDAS_FORA0125_H_002_tmp2m|2-m above ground temperature|K|NLDASF:2mAbvGrndTemp
 NLDASF|UGRD10m|NLDAS_FORA0125_H_002_ugrd10m|10-m above ground zonal wind|m/s|NLDASF:10mAbvGrndZonalWind
