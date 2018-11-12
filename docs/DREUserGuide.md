@@ -25,7 +25,7 @@ This app is great for researching behaviors and interactions of hydrologic varia
 
 DRE was developed in 2015-2016 by Dr. Gonzalo Espinoza as part of his PhD work at the University of Texas at Austin, and by Shawn Crawley, MS student at Brigham Young University, Provo UT. Dr. David Arctur at the University of Texas at Austin was lead author of this user guide, and directed development of DRE, supported by NASA ROSES NNH11ZDA001N-ACCESS and NNH13ZDA001N-ACCESS, William Teng, PI. 
 
-All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov). Questions on DRE software should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). Contact HydroShare for apps development questions or issues at [dev@hydroshare.org](mailto:dev@hydroshare.org). 
+All general questions related to data rods should go to <gsfc-help-disc@lists.nasa.gov>. Questions on DRE software should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). Contact HydroShare for apps development questions or issues at <dev@hydroshare.org>. 
 
 ### <a name="learn"></a>To learn more
 
@@ -47,7 +47,7 @@ This user guide has the following main sections:
 
 - More MERRA-Land and MERRA2 data layers to be added 
 - TRMM is now a static product. For RT precipitation, NASA will add GPM
-([Global Precipitation Measurement](http://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
+([Global Precipitation Measurement](https://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
 
 ### <a name="revs"></a>Revision History
 
@@ -56,7 +56,7 @@ This user guide has the following main sections:
 | 6-Dec-16 | David Arctur, Shawn Crawley, Bill Teng | Initial user guide final draft |
 | 16-Mar-17 | David Arctur  | Minor updates and corrections  |
 | 26-Oct-18 | David Arctur  | Removed GLDAS 1.0, added GLDAS 2.1, AMSR2, TMI, MERRA |
-| 1-Nov-18 | David Arctur  | Updated DRE User Guide | 
+| 11-Nov-18 | David Arctur, Carlee Loeser, Bill Teng  | Updated DRE User Guide | 
 
 
 
@@ -266,7 +266,7 @@ Once the desired model, variable, date and time are all chosen, the user would c
 <a name="fig05"></a>_Figure 5. Display Map of NLDAS Surface downward longwave radiation flux_
 
 - Notice the URL at bottom of screen; this is the raw data service request sent to NASA server; you can copy/paste it into a browser tab in case you have any questions about results.
-- Note the lack of color legend; see discussion and instructions for getting legend from [Giovanni](http://giovanni.gsfc.nasa.gov/giovanni).
+- Note the lack of color legend; see discussion and instructions for getting legend from [Giovanni](https://giovanni.gsfc.nasa.gov/giovanni).
 - You can zoom into a desired area by holding down the shift key while dragging the mouse across the area of interest.
 - If you zoom in or out, and want to return to the model bounds, click the mouse once on &quot;**Model 1 Extents**&quot; or &quot;**NLDASF:SurfDWLongWaveRadFlux**&quot; (or other chosen model-variable) in the map control panel in the lower-right corner of the map window.
 - You can stack multiple model-variable maps by selecting additional ones; use **Reset** button to clear map layers.
@@ -484,23 +484,23 @@ If the condition persists, take note of the conditions in which it occurred and 
 
 ## <a name="nasa-servers"></a>NASA Servers and Search Portals
 
-Initial point of contact for NASA data-related questions is [William Teng](mailto:william.l.teng@nasa.gov). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
+Initial point of contact for NASA data-related questions is [William Teng](mailto:william.l.teng@nasa.gov). All general questions related to data rods should go to <gsfc-help-disc@lists.nasa.gov>.
 
 ### <a name="giovanni"></a>NASA Giovanni
 
-**Giovanni** is the reference data server for all data rods: [http://giovanni.gsfc.nasa.gov/giovanni](http://giovanni.gsfc.nasa.gov/giovanni)
+**Giovanni** is the reference data server for all data rods: [https://giovanni.gsfc.nasa.gov/giovanni](https://giovanni.gsfc.nasa.gov/giovanni)
 
 **Note about map legends** : It is not yet practical to request and receive a usable map legend for each model variable as it displayed in the DRE map pane. However, users can use Giovanni if it becomes important to know the meanings of the color choices in the DRE grid map displayed for each variable. For example, when you click on the link below, you are taken to a new window showing Giovanni&#39;s faceted search screen. If you click &quot;Plot&quot; at the bottom-right of the UI, you should get the same map as the displayed WMS map in DRE but with legend:
 
-[http://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&amp;starttime=2016-11-14T00:00:00Z&amp;endtime=2016-11-14T00:00:00Z&amp;data=NLDAS\_NOAH0125\_H\_002\_soilm0\_100cm&amp;dataKeyword=nldas\_noah\_0125\_h](http://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&amp;starttime=2016-11-14T00:00:00Z&amp;endtime=2016-11-14T00:00:00Z&amp;data=NLDAS_NOAH0125_H_002_soilm0_100cm&amp;dataKeyword=nldas_noah_0125_h)   (tested Nov 22, 2016)
+[https://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&amp;starttime=2016-11-14T00:00:00Z&amp;endtime=2016-11-14T00:00:00Z&amp;data=NLDAS\_NOAH0125\_H\_002\_soilm0\_100cm&amp;dataKeyword=nldas\_noah\_0125\_h](https://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&amp;starttime=2016-11-14T00:00:00Z&amp;endtime=2016-11-14T00:00:00Z&amp;data=NLDAS_NOAH0125_H_002_soilm0_100cm&amp;dataKeyword=nldas_noah_0125_h)   (tested Nov 22, 2016)
 
 ### <a name="gcmd"></a>NASA Global Change Master Directory (GCMD)
 
-The [Global Change Master Directory (GCMD)](http://gcmd.nasa.gov/) is a catalog to search for Earth science data and services.
+The [Global Change Master Directory (GCMD)](https://gcmd.nasa.gov/) is a catalog to search for Earth science data and services.
 
 **Note**: the GCMD catalog content is being migrated to the newer CMR, see next link:
 
-- [GCMD Portal search for datasets](http://gcmd.nasa.gov/search/Titles.do?search=#titles)
+- [GCMD Portal search for datasets](https://gcmd.nasa.gov/search/Titles.do?search=#titles)
 
 ### <a name="cmr"></a>NASA Common Metadata Repository (CMR)
 
@@ -520,75 +520,75 @@ The CMR is an earth science metadata repository for NASA EOSDIS data.
 | NLDAS-2 Noah | 1/8 | N. America 53N-25N | 1 hour | 1979-present | 13 |
 | GLDAS-2.0 Noah | 1/4 | Global 90N-60S | 3 hour | 1948-2010 | 22 |
 | GLDAS-2.1 Noah | 1/4 | Global 90N-60S | 3 hour | 2000-present | 15 |
-| LPRM-AMSRE soil moisture | 1/4 | Global | 1 day | 2002-2011 | 7 |
-| LPRM-AMSR2 soil moisture | 10km; 25km | Global | 1 day | 2012-present | 1 |
-| LPRM-TMI soil moisture | 1/4 | Global | 1 day | 1998-2015 | 4 |
-| MERRA-Land snowfall | 0.5x0.625; 1.25x1.25 | Global | 1 hour | 1980-2016 | 1 |
-| MERRA2 wind, forcing | 0.5x0.625; 1.25x1.25 | Global | 1 hour | 1980-present | 4 |
-| TRMM precipitation | 1/4 | Global 50N-50S | 3 hour | 1998-2018 | 1 |
-| GRACE soil moisture | 1/4 | N. America | 7 day | 2002-2017 | 3 |
+| LPRM-AMSRE soil moisture | 1/4 | Global | 1 day | 2002-2011 | 7-asc, 7-desc |
+| LPRM-AMSR2 soil moisture | 10km; 25km | Global | 1 day | 2012-present | 1-asc, 1-desc, each resolution |
+| LPRM-TMI soil moisture | 1/4 | Global | 1 day | 1997-2015 | 4-day, 4-night |
+| MERRA-Land snowfall | 0.5x0.667 | Global | 1 hour | 1980-2016 | 1 |
+| MERRA2 wind, radiation, forcing | 0.5x0.625 | Global | 1 hour | 1980-present | 4 |
+| TRMM precipitation | 1/4 | Global 50N-50S | 3 hour | 1997-2018 | 1 |
+| GRACE soil moisture | 1/4 | N.America 53N-25N | 7 day | 2002-2017 | 3 |
 
-**For details on data rods, see** : Teng, W., H. Rui, R. Strub, and B. Vollmer, 2016. Optimal reorganization of NASA earth science data for enhanced accessibility and usability for the hydrology community, _Journal of the American Water Resources Association (JAWRA),_ 52(4), 825-835, [doi:10.1111/1752-1688.12405](http://onlinelibrary.wiley.com/doi/10.1111/1752-1688.12405/abstract).
+**For details on data rods, see** : Teng, W., H. Rui, R. Strub, and B. Vollmer, 2016. Optimal reorganization of NASA earth science data for enhanced accessibility and usability for the hydrology community, _Journal of the American Water Resources Association (JAWRA),_ 52(4), 825-835, [doi:10.1111/1752-1688.12405](https://onlinelibrary.wiley.com/doi/10.1111/1752-1688.12405).
 
 Further online references:
 
-- [GES DISC Documentation](https://disc.gsfc.nasa.gov/information?keywords=hydrology&page=1&subject=Atmospheric%20Pressure,Atmospheric%20Radiation,Atmospheric%20Temperature,Atmospheric%20Water%20Vapor,Atmospheric%20Winds,Precipitation,Soils,Surface%20Thermal%20Properties,Surface%20Water,Land%20Surface%2FAgriculture%20Indicators,Snow%2FIce,Surface%20Radiative%20Properties,Solid%20Precipitation&project=GRACE-DA-DM,GLDAS,NLDAS,TRMM,MERRA-2,NCA-LDAS,NEWS)  and [FAQ](https://disc.gsfc.nasa.gov/information?keywords=hydrology&page=1&project=GRACE-DA-DM,FLDAS,GLDAS,NEWS,NLDAS,NCA-LDAS&contentType=faqs)
-- [Data Rods Time Series Reference](http://disc.sci.gsfc.nasa.gov/hydrology/data-rods-time-series-data) (web)
+- [GES DISC Documentation](https://disc.gsfc.nasa.gov/information/documents?title=Hydrology%20Documentation) and [FAQ](https://disc.gsfc.nasa.gov/information/faqs?page=1&keywords=Hydrology)
+- [Data Rods Time Series Reference](https://disc.gsfc.nasa.gov/information/tools?title=Hydrology%20Data%20Rods) (web)
 - [Data Rods Variables Info (spreadsheet)](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0)
 
 **Note** that most model outputs are updated on a regular basis, though not synchronized with each other. For the exact and most current availability dates for these models, see [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt) which is updated by cron job nightly at 3am US ET. See related section for more details.
 
 ### <a name="ldas"></a>LDAS - Land Data Assimilation System
 
-**Reference URL** : [http://ldas.gsfc.nasa.gov/index.php](http://ldas.gsfc.nasa.gov/index.php)
+**Reference URL** : [https://ldas.gsfc.nasa.gov/index.php](https://ldas.gsfc.nasa.gov/index.php)
 
 The Land Data Assimilation System (LDAS) is a methodology for compiling hydrologic Land-Surface Models (LSMs) and forcing them with observations to remove National Weather Prediction (NWP) forcing biases. Forcings consist of precipitation gauge observations, satellite data, radar precipitation measurements, and output from numerical prediction models derived from existing Surface Vegetation Atmosphere Transfer Schemes (SVATS).
 
-- [LDAS FAQ](http://ldas.gsfc.nasa.gov/faq), eg, &quot;is there a shapefile for the NLDAS grid?&quot; (yes)
+- [LDAS FAQ](https://ldas.gsfc.nasa.gov/faq), eg, &quot;is there a shapefile for the NLDAS grid?&quot; (yes)
 
 ### <a name="nldas"></a>NLDAS - National Land Data Assimilation System, 1979-Present
 
 **Reference URL** :
 
-- General info: [http://ldas.gsfc.nasa.gov/nldas/](http://ldas.gsfc.nasa.gov/nldas/)
-- Readme: [http://hydro1.gesdisc.eosdis.nasa.gov/data/NLDAS/README.NLDAS2.pdf](http://hydro1.gesdisc.eosdis.nasa.gov/data/NLDAS/README.NLDAS2.pdf)
+- General info: [https://ldas.gsfc.nasa.gov/nldas/](https://ldas.gsfc.nasa.gov/nldas/)
+- Readme: [https://hydro1.gesdisc.eosdis.nasa.gov/data/NLDAS/README.NLDAS2.pdf](https://hydro1.gesdisc.eosdis.nasa.gov/data/NLDAS/README.NLDAS2.pdf)
 
 **NLDAS-Forcing variables** : hourly precipitation, surface downward (DW) shortwave and longwave radiation flux, 2-m above ground specific humidity, 2-m above ground temperature, 10-m above ground zonal wind, 10-m above ground meridional wind.
 
 **NLDAS-Noah v2 variables** : evapotranspiration, ground heat flux, latent heat flux, sensible heat flux, surface runoff, subsurface runoff, 0-10cm soil moisture, 10-40cm soil moisture, 40-100cm soil moisture, 0-100cm soil moisture, 100-200cm soil moisture, 0-10cm soil temperature.
 
-**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
+**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](https://disc.gsfc.nasa.gov/information/faqs?keywords=Hydrology&title=How%20to%20convert%20the%20rainfall%20unit%20of%20kg%2Fm%5E2%20to%20mm%3F) for details about this conversion.
 
 ### <a name="gldas20"></a>GLDAS 2.0 - Global Land Data Assimilation System, 1948-2010
 
 **Reference URLs** :
 
-- General info: [http://ldas.gsfc.nasa.gov/gldas/](http://ldas.gsfc.nasa.gov/gldas/)
-- Readme: [http://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS\_NOAH025\_3H.2.0/doc/README\_GLDAS2.pdf](http://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_3H.2.0/doc/README_GLDAS2.pdf)
+- General info: [https://ldas.gsfc.nasa.gov/gldas/](https://ldas.gsfc.nasa.gov/gldas/)
+- Readme: [https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS\_NOAH025\_3H.2.0/doc/README\_GLDAS2.pdf](https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_3H.2.0/doc/README_GLDAS2.pdf)
 - [FAQ comparison of GLDAS 2.0 and 2.1](https://disc.gsfc.nasa.gov/information/faqs?keywords=gldas%202.1&title=Should%20I%20use%20GLDAS%20Version%202.0%20(GLDAS-2.0)%20or%20GLDAS%20Version%202.1%20(GLDAS-2.1)%3F)
 
 **GLDAS-Noah v2.0 variables** : evapotranspiration, rain rate, snow rate, total precipitation rate, surface runoff, subsurface runoff, 0-10cm soil moisture, 10-40cm soil moisture, 40-100cm soil moisture, 100-200cm soil moisture, air temperature, 0-10cm soil temperature, 10-40cm soil temperature, bare soil evaporation, wind speed, air pressure, specific humidity, downward longwave radiation flux, downward shortwave radiation flux.
 
-**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
+**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](https://disc.gsfc.nasa.gov/information/faqs?keywords=Hydrology&title=How%20to%20convert%20the%20rainfall%20unit%20of%20kg%2Fm%5E2%20to%20mm%3F) for details about this conversion.
 
 
 ### <a name="gldas21"></a>GLDAS 2.1 - Global Land Data Assimilation System, 2000-Present
 
 **Reference URLs** :
 
-- General info: [http://ldas.gsfc.nasa.gov/gldas/](http://ldas.gsfc.nasa.gov/gldas/)
-- Readme: [http://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS\_NOAH025\_3H.2.1/doc/README\_GLDAS2.pdf](http://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_3H.2.1/doc/README_GLDAS2.pdf)
+- General info: [https://ldas.gsfc.nasa.gov/gldas/](https://ldas.gsfc.nasa.gov/gldas/)
+- Readme: [https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS\_NOAH025\_3H.2.1/doc/README\_GLDAS2.pdf](https://hydro1.gesdisc.eosdis.nasa.gov/data/GLDAS/GLDAS_NOAH025_3H.2.1/doc/README_GLDAS2.pdf)
 - [FAQ comparison of GLDAS 2.0 and 2.1](https://disc.gsfc.nasa.gov/information/faqs?keywords=gldas%202.1&title=Should%20I%20use%20GLDAS%20Version%202.0%20(GLDAS-2.0)%20or%20GLDAS%20Version%202.1%20(GLDAS-2.1)%3F)
 
 **GLDAS-Noah v2.1 variables** : evapotranspiration, precipitation rate, rain rate, snow rate, surface runoff, subsurface runoff, 0-10cm soil moisture, 10-40cm soil moisture, 40-100cm soil moisture, 0-10cm soil temperature, average surface skin temperature, near-surface air temperature, near-surface wind speed, air pressure, specific humidity.
 
-**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](http://disc.sci.gsfc.nasa.gov/hydrology/additional/faq/hydrology-disc-faq#rain-unit) for details about this conversion.
+**Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](https://disc.gsfc.nasa.gov/information/faqs?keywords=Hydrology&title=How%20to%20convert%20the%20rainfall%20unit%20of%20kg%2Fm%5E2%20to%20mm%3F) for details about this conversion.
 
 ### <a name="grace"></a>GRACE - Gravity Recovery and Climate Experiment, 2002-2017
 
 **Reference URLs** :
 
-- General info: [http://drought.unl.edu/MonitoringTools/NASAGRACEDataAssimilation.aspx](http://drought.unl.edu/MonitoringTools/NASAGRACEDataAssimilation.aspx)
+- General info: [https://nasagrace.unl.edu/](https://nasagrace.unl.edu/)
 - Readme: [https://hydro1.gesdisc.eosdis.nasa.gov/data/GRACEDA/GRACEDADM\_CLSM0125US\_7D.2.0/doc/README\_GRACEDADM2.pdf](https://hydro1.gesdisc.eosdis.nasa.gov/data/GRACEDA/GRACEDADM_CLSM0125US_7D.2.0/doc/README_GRACEDADM2.pdf)
 
 **GRACE variables** : 0-2 cm surface soil moisture percentile, 0-100 cm root zone soil moisture percentile, shallow groundwater percentile. Percentile values are based on the period 1948-2012.
@@ -601,17 +601,17 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 This Level 3 (gridded) data set&#39;s land surface parameters, surface soil moisture, land surface (skin) temperature, and vegetation water content, are derived from passive microwave remote sensing data from the Advanced Microwave Scanning Radiometer-Earth Observing System (AMSR-E), using the Land Parameter Retrieval Model (LPRM). There are two files per day, one ascending (daytime) and one descending (nighttime), archived as two different products. The data set covers the period from June 2002 to October 2011 (when the AMSR-E on the NASA EOS Aqua satellite stopped producing data due to a problem with the rotation of its antenna), at a spatial resolution of 0.25 degree. The data are stored in netCDF format.
 
-**AMSR2 Descending/Ascending variables, 2012-Present** : Volumetric soil moisture from 6.9 GHZ
-**TMI Day/Night variables, 1998-2015** : Volumetric soil moisture, uncertainty, optical depth, and 2mm skin temperature from LPRM/TMI/TRMM X-band Day or Night### <a name="merra"></a> MERRA-Land and MERRA2
+**AMSR2 Descending/Ascending variables, 2012-Present** : AMSR2/GCOM-W1 surface soil moisture (LPRM) L3 1 day 25 km x 25 km and 10 km x 10 km V001 are Level 3 (gridded) data sets. Their land surface parameters, surface soil moisture, land surface (skin) temperature, and vegetation water content, are derived from passive microwave remote sensing data from the Advanced Microwave Scanning Radiometer 2 (AMSR2), using the Land Parameter Retrieval Model (LPRM). There are two files per day for each spatial resolution, one ascending (daytime) and one descending (nighttime), archived as two different products. The data set covers the period from May 2012, when the Japan Aerospace Exploration Agency (JAXA) Global Change Observation Mission-1st Water GCOM-W1 satellite was launched, to the present.The LPRM is based on a forward radiative transfer model to retrieve surface soil moisture and vegetation optical depth. The land surface temperature is derived separately from the AMSR2's Ka-band (36.5 GHz). A unique feature of this method is that it can be applied at any microwave frequency, making it very suitable to exploit all the available passive microwave data from various satellites.
+**TMI Day/Night variables, 1998-2015** : TMI/TRMM surface soil moisture (LPRM) L3 1 day 25 km x 25 km daytime and nighttime V001 are Level 3 (gridded) data sets. Their land surface parameters, surface soil moisture, land surface (skin) temperature, and vegetation water content, are derived from passive microwave remote sensing data from the Tropical Rainfall Measuring Mission (TRMM) Microwave Imager (TMI), using the Land Parameter Retrieval Model (LPRM). There are two files per day, one daytime and one nighttime, archived as two different products. The data set covers the period from December 1997 to April 2015 (when the instruments on the TRMM satellite were shut down in preparation for its reentry into the earth's atmosphere).The LPRM is based on a forward radiative transfer model to retrieve surface soil moisture and vegetation optical depth. The land surface temperature is derived separately from TMI's Ka-band (37 GHz). A unique feature of this method is that it can be applied at any microwave frequency, making it very suitable to exploit all the available passive microwave data from various satellites.### <a name="merra"></a> MERRA-Land and MERRA2
 Land Surface Model suite of surface hydrology variables, similar to LDAS. Many more MERRA variables are developed, but not yet as time-series data cubes. **MERRA-Land Readme** :[https://goldsmr2.gesdisc.eosdis.nasa.gov/data/MERRA/MST1NXMLD.5.2.0/doc/MERRA.README.pdf](https://goldsmr2.gesdisc.eosdis.nasa.gov/data/MERRA/MST1NXMLD.5.2.0/doc/MERRA.README.pdf)**MERRA-Land variables, 1980-2016** : surface snowfall**MERRA2 Readme** :[https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2T1NXFLX.5.12.4/doc/MERRA2.README.pdf](https://goldsmr4.gesdisc.eosdis.nasa.gov/data/MERRA2/M2T1NXFLX.5.12.4/doc/MERRA2.README.pdf)**MERRA2 variables, 1980-Present** : time-average surface northward wind, surface eastward wind, surface absorbed longwave radiation, incident shortwave radiation land.
 
 ### <a name="trmm"></a>TRMM - Tropical Rainfall Measuring Mission, 1998-2018
 
-**Reference URL** : [http://trmm.gsfc.nasa.gov/](http://trmm.gsfc.nasa.gov/)
+**Reference URL** : [https://trmm.gsfc.nasa.gov/](https://trmm.gsfc.nasa.gov/)
 
 The TRMM satellite, a joint mission between the National Aeronautics and Space Administration (NASA) and the Japan Aerospace Exploration Agency (JAXA), collected 17 years of global tropical rainfall and lightning data since December 1997 and April 2015. While the satellite came down in April 2015, the TRMM product 3B42, from which data rods are generated, continues. 3B42 v7 is a merged product, so, even without TRMM inputs, the product continues with other inputs.
 
-TRMM is now a static product. For RT precipitation, we will add GPM ( [Global Precipitation Measurement](http://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
+TRMM is now a static product. For RT precipitation, we will add GPM ([Global Precipitation Measurement](https://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
 
 
 
@@ -623,13 +623,13 @@ These two sections, **Keeping DRE Up to Date** and **[DRE App Process Flow](#dre
 
 ### <a name="datarods-vars"></a>Using the NASA Data Rods Variables Info spreadsheet
 
-The [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0) is maintained by NASA GES-DISC staff, and provides the basic information to be used within DRE for all data server requests. Initial point of contact for NASA data-related questions is [William Teng](mailto:william.l.teng@nasa.gov). All general questions related to data rods should go to [gsfc-help-disc@lists.nasa.gov](mailto:gsfc-help-disc@lists.nasa.gov).
+The [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0) is maintained by NASA GES-DISC staff, and provides the basic information to be used within DRE for all data server requests. Initial point of contact for NASA data-related questions is [William Teng](mailto:william.l.teng@nasa.gov). All general questions related to data rods should go to <gsfc-help-disc@lists.nasa.gov>.
 
 ### <a name="config"></a>Reading and editing the model\_config.txt file
 
 The [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file is manually constructed with care, based on content in the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0) mentioned above. This provides a configuration specification for each model and variable, which enables constructing queries to the NASA Common Metadata Repository (CMR) and to the Giovanni data server at the user&#39;s direction, for all purposes of the DRE. This only needs to be updated if something changes about the NASA CMR or data servers, or if there are more models and/or variables to be described. Any such changes from NASA should be communicated and confirmed by means of the [NASA Data Rods Variables spreadsheet](https://docs.google.com/spreadsheets/d/1Djq_djFupHoPnBR9NOuDYmVPwTuWmWewo8wddl6qofs/edit?ts=581ca0ca#gid=0). 
 
-**Note** there are two copies of model\_config.txt: [one in GitHub](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt), which the DRE app uses at runtime, and [a second one on the HydroShare apps server](https://apps.hydroshare.org/static/data_rods_explorer/data/model_config.txt), which is used in the nightly cron job to update the [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt) file (also on the HydroShare apps server). The benefit of having the runtime app use the model\_config.txt on GitHub is that the variables can be edited and tested without having to sync the server version with the GitHub version. But if there are changes to model parameters such as model name, version, or URL template for requests, then the GitHub and server versions of model\_config.txt must by sync'd. This is done by a request to [dev@hydroshare.org](mailto:dev@hydroshare.org). 
+**Note** there are two copies of model\_config.txt: [one in GitHub](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt), which the DRE app uses at runtime, and [a second one on the HydroShare apps server](https://apps.hydroshare.org/static/data_rods_explorer/data/model_config.txt), which is used in the nightly cron job to update the [dates\_and\_spatial\_range.txt](https://apps.hydroshare.org/static/data_rods_explorer/data/dates_and_spatial_range.txt) file (also on the HydroShare apps server). The benefit of having the runtime app use the model\_config.txt on GitHub is that the variables can be edited and tested without having to sync the server version with the GitHub version. But if there are changes to model parameters such as model name, version, or URL template for requests, then the GitHub and server versions of model\_config.txt must by sync'd. This is done by a request to <dev@hydroshare.org>. 
 
 We will look at the 2-line header block and the first model in the [model\_config.txt](https://github.com/gespinoza/datarodsexplorer/blob/master/tethysapp/data_rods_explorer/public/data/model_config.txt) file, as of Nov 1, 2018. The top line in the header block identifies the model-specific content (with &quot;~&quot; field separator character), such as to generate the dates\_and\_spatial\_range.txt content. The second line in the header block identifies the variable-specific details (with &quot;|&quot; field separator character) needed for run-time data queries with each model. 
 
