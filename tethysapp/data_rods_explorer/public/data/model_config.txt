@@ -116,14 +116,22 @@ TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
 
 MERRA-Land~MERRA~MST1NXMLD~5.2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:MST1NXMLD.520:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 MERRA|PRECSNO|MST1NXMLD_5_2_0_PRECSNO|Surface snowfall|kg/m^2/s|MERRA:SurfaceSnowfall
-
-MERRA2-Flux~MERRA2X~M2T1NXFLX~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXFLX.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
-MERRA2X|VLML|M2T1NXFLX_5_12_4_VLML|Surface north wind t-avg|m/s|MERRA2X:SurfaceNorthWind
-MERRA2X|ULML|M2T1NXFLX_5_12_4_ULML|Surface east wind t-avg|m/s|MERRA2X:SurfaceEastWind
+MERRA|SFMC|MST1NXMLD_5_2_0_SFMC|Top layer soil moisture|m^3/m^3|MERRA:TopLayerSoilMoisture
+MERRA|LHLAND|MST1NXMLD_5_2_0_LHLAND|Latent heat flux from land|W/m^2|MERRA:LatentHeatFluxLand
+MERRA|PRECTOT|MST1NXMLD_5_2_0_PRECTOT|Total surface precip|kg/m^2/s|MERRA:SurfacePrecip
+MERRA|SHLAND|MST1NXMLD_5_2_0_SHLAND|Sensible heat flux from land|W/m^2|MERRA:SensibleHeatFluxLand
+MERRA|BASEFLOW|MST1NXMLD_5_2_0_PRECSNO|Baseflow|kg/m^2/s|MERRA:Baseflow
+MERRA|RUNOFF|MST1NXMLD_5_2_0_RUNOFF|Overland runoff|kg/m^2/s|MERRA:OverlandRunoff
+MERRA|TSOIL1|MST1NXMLD_5_2_0_TSOIL1|Layer 1 soil temp|K|MERRA:SoilTempLayer1
 
 MERRA2-Forcing~MERRA2F~M2T1NXLFO~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXLFO.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 MERRA2F|LWGAB|M2T1NXLFO_5_12_4_LWGAB|Surface absorbed LW t-avg|W/m^2|MERRA2F:SurfaceLWRad
 MERRA2F|SWGDN|M2T1NXLFO_5_12_4_SWGDN|Incident SW t-avg|W/m^2|MERRA2F:IncidentSWRad
+
+MERRA2-ForcingInst~MERRA2F~M2I1NXLFO~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2I1NXLFO.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA2FI|QLML|M2I1NXLFO_5_12_4_QLML|Surface specific humidity-inst|kg/kg|MERRA2FI:SurfSpecifHumid
+MERRA2FI|TLML|M2I1NXLFO_5_12_4_TLML|Surf air temp over land-inst|K|MERRA2FI:SurfAirTemp
+MERRA2FI|SPEEDLML|M2I1NXLFO_5_12_4_SPEEDLML|Surface wind speed-inst|m/s|MERRA2FI:SurfWindSpeed
 
 GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.2:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_2_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
