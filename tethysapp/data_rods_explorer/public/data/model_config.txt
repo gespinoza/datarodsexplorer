@@ -41,12 +41,14 @@ GLDAS20|SoilMoi40_100cm_inst|GLDAS_NOAH025_3H_2_0_SoilMoi40_100cm_inst|40-100cm 
 GLDAS20|SoilMoi100_200cm_inst|GLDAS_NOAH025_3H_2_0_SoilMoi100_200cm_inst|100-200cm soil moisture|kg/m^2|GLDAS20:100-200cmSoilMoisture
 GLDAS20|SoilTMP0_10cm_inst|GLDAS_NOAH025_3H_2_0_SoilTMP0_10cm_inst|0-10cm soil temperature|K|GLDAS20:0-10cmSoilTemperature
 GLDAS20|SoilTMP10_40cm_inst|GLDAS_NOAH025_3H_2_0_SoilTMP10_40cm_inst|10-40cm soil temperature|K|GLDAS20:10-40cmSoilTemperature
+GLDAS20|SoilTMP100_200cm_inst|GLDAS_NOAH025_3H_2_0_SoilTMP100_200cm_inst|100-200cm soil temperature|K|GLDAS20:100-200cmSoilTemperature
 GLDAS20|Tair_f_inst|GLDAS_NOAH025_3H_2_0_Tair_f_inst|Air temperature|K|GLDAS20:AirTemperature
 GLDAS20|Wind_f_inst|GLDAS_NOAH025_3H_2_0_Wind_f_inst|Wind speed|m/s|GLDAS20:WindSpeed
 GLDAS20|Psurf_f_inst|GLDAS_NOAH025_3H_2_0_Psurf_f_inst|Air pressure|Pa|GLDAS20:AirPressure
 GLDAS20|Qair_f_inst|GLDAS_NOAH025_3H_2_0_Qair_f_inst|Specific humidity|kg/kg|GLDAS20:SpecificHumidity
 GLDAS20|ESoil_tavg|GLDAS_NOAH025_3H_2_0_ESoil_tavg|Bare soil evaporation|W/m^2|GLDAS20:BareSoilEvap
 GLDAS20|PotEvap_tavg|GLDAS_NOAH025_3H_2_0_PotEvap_tavg|Potential evaporation|W/m^2|GLDAS20:PotentialEvap
+GLDAS20|AvgSurfT_inst|GLDAS_NOAH025_3H_2_0_AvgSurfT_inst|Average Surface Skin temperature|K|GLDAS20:AvgSurfaceSkinTemp
 GLDAS20|LWdown_f_tavg|GLDAS_NOAH025_3H_2_0_LWdown_f_tavg|LW down radiation flux|W/m^2|GLDAS20:LWdownRadFlux
 GLDAS20|SWdown_f_tavg|GLDAS_NOAH025_3H_2_0_SWdown_f_tavg|SW down radiation flux|W/m^2|GLDAS20:SWdownRadFlux
 
