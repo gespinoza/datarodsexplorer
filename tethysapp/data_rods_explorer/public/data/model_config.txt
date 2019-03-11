@@ -26,6 +26,10 @@ NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100cm soil moisture|kg
 NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200cm soil moisture|kg/m^2|NLDAS:100-200cmSoilMoisture
 NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10cm soil temperature|K|NLDAS:0-10cmSoilTemp
 
+Smerge-Noah-CCI Root Zone~SMERGE~SMERGE_RZSM0_40CM~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=SMERGE:SMERGE_RZSM0_40CM_2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+SMERGE|RZSM|SMERGE_RZSM0_40CM_2.0_RZSM|0-40cm avg soil moisture|m^3/m^3|SMERGE:0-40cmSoilMoisture
+SMERGE|CCI_ano|SMERGE_RZSM0_40CM_2.0_CCI_ano|0-40cm CCI-based soil moisture anomalies|m^3/m^3|SMERGE:0-40cmCCISoilMoistureAnomalies
+
 GLDAS 2.0-Noah (LSM) 1948-2010~GLDAS20~GLDAS_NOAH025_3H~2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 GLDAS20|Evap_tavg|GLDAS_NOAH025_3H_2_0_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS20:Evapotrans
 GLDAS20|Rainf_tavg|GLDAS_NOAH025_3H_2_0_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS20:RainRate
@@ -137,7 +141,3 @@ GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~2.0~http://hydro1.gesdisc.
 GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_2_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
 GRACE|rtzsm_inst|GRACEDADM_CLSM0125US_7D_2_0_rtzsm_inst|0-100cm root zone soil moisture percentile|%|GRACE:100cmRootZoneSoilMoist%
 GRACE|gws_inst|GRACEDADM_CLSM0125US_7D_2_0_gws_inst|Shallow groundwater percentile|%|GRACE:GroundWater%
-
-Smerge-Noah-CCI Root Zone~SMERGE~SMERGE_RZSM0_40CM~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=SMERGE:SMERGE_RZSM0_40CM_2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-SMERGE|RZSM|SMERGE_RZSM0_40CM_2.0_RZSM|0-40cm avg soil moisture|m^3/m^3|SMERGE:0-40cmSoilMoisture
-SMERGE|CCI_ano|SMERGE_RZSM0_40CM_2.0_CCI_ano|0-40cm CCI-based soil moisture anomalies|m^3/m^3|SMERGE:0-40cmCCISoilMoistureAnomalies
