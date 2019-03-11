@@ -45,7 +45,6 @@ This user guide has the following main sections:
 
 ### <a name="future"></a>Future changes expected
 
-- More MERRA-Land and MERRA2 data layers to be added 
 - TRMM is now a static product. For RT precipitation, NASA will add GPM
 ([Global Precipitation Measurement](https://www.nasa.gov/mission_pages/GPM/main/index.html)) (TBD)
 
