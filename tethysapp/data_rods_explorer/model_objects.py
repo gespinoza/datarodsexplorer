@@ -12,7 +12,7 @@ from math import copysign
 
 WORKSPACE = 'data_rods_explorer'
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
-                '&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
+                '&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
                 '&LAYERS=Time-Averaged.{5}'  # NLDAS_NOAH0125_M_002_soilm0_100cm
                 '&STYLES=default&TRANSPARENT=TRUE&FORMAT=image/tiff'
                 '&time={4}'  # 2008-01-01T00:00:00Z/2008-01-01T00:00:00Z
