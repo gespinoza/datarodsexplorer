@@ -1,4 +1,4 @@
-# Data Rods Explorer 1.0.2  ![](figs/app-icon-balloon.png) 
+# Data Rods Explorer 1.0.3  ![](figs/app-icon-balloon.png) 
 
 _Browse NASA data services for land surface model maps and time series_
 
@@ -58,7 +58,7 @@ This user guide has the following main sections:
 | 11-Nov-18 | David Arctur, Carlee Loeser, Bill Teng  | Updated DRE User Guide | 
 | 22-Feb-19 | David Arctur  | Added vars for GLDAS 2, GLDAS 2.1, MERRA-2, MERRA-Land, SMERGE |
 | 11-Mar-19 | David Arctur  | Updated DRE User Guide | 
-
+| 25-Jun-19 | David Arctur  | SMERGE, GRACE corrections  | 
 
 
 
@@ -111,6 +111,7 @@ This user guide has the following main sections:
 
    - [LDAS - Land Data Assimilation System](#ldas) 
    - [NLDAS - National Land Data Assimilation System](#nldas)
+   - [SMERGE - NLDAS land surface model output merged with surface satellite retrievals from the European Space Agency Climate Change Initiative, 1979-2016](#smerge) 
    - [GLDAS 2.0 - Global Land Data Assimilation System 1948-2010](#gldas20)
    - [GLDAS 2.1 - Global Land Data Assimilation System 2000-Present](#gldas21) 
    - [GRACE - Gravity Recovery and Climate Experiment](#grace) 
@@ -517,18 +518,18 @@ The CMR is an earth science metadata repository for NASA EOSDIS data.
 
 | **Data product** | **Spatial  resolution (deg)** | **Spatial coverage** | **Temporal resolution** | **Temporal coverage** | **# variables** |
 | --- | --- | --- | --- | --- | --- |
-| NLDAS-2 forcing | 1/8 | N. America 53N-25N | 1 hour | 1979-present | 8 |
-| NLDAS-2 Noah | 1/8 | N. America 53N-25N | 1 hour | 1979-present | 13 |
+| NLDAS-2 forcing | 1/8 | N.America 53N-25N | 1 hour | 1979-present | 8 |
+| NLDAS-2 Noah | 1/8 | N.America 53N-25N | 1 hour | 1979-present | 13 |
+| SMERGE root zone | 1/8 | N.America 53N-25N | 1 day | 1979-2016 | 2 |
 | GLDAS-2.0 Noah | 1/4 | Global 90N-60S | 3 hour | 1948-2010 | 24 |
 | GLDAS-2.1 Noah | 1/4 | Global 90N-60S | 3 hour | 2000-present | 15 |
+| GRACE soil moisture | 1/4 | N.America 53N-25N | 7 day | 2002-present | 3 |
 | LPRM-AMSRE soil moisture | 1/4 | Global | 1 day | 2002-2011 | 7-asc, 7-desc |
 | LPRM-AMSR2 soil moisture | 10km; 25km | Global | 1 day | 2012-present | 1-asc, 1-desc, each resolution |
 | LPRM-TMI soil moisture | 1/4 | Global | 1 day | 1997-2015 | 4-day, 4-night |
 | MERRA-Land snowfall | 0.5x0.667 | Global | 1 hour | 1980-2016 | 8 |
 | MERRA2 wind, radiation, forcing | 0.5x0.625 | Global | 1 hour | 1980-present | 4 |
 | TRMM precipitation | 1/4 | Global 50N-50S | 3 hour | 1997-2018 | 1 |
-| GRACE soil moisture | 1/4 | N.America 53N-25N | 7 day | 2002-2017 | 3 |
-| SMERGE root zone | 1/8 | N.America 53N-25N | 1 day | 1979-2016 | 2 |
 
 **For details on data rods, see** : Teng, W., H. Rui, R. Strub, and B. Vollmer, 2016. Optimal reorganization of NASA earth science data for enhanced accessibility and usability for the hydrology community, _Journal of the American Water Resources Association (JAWRA),_ 52(4), 825-835, [doi:10.1111/1752-1688.12405](https://onlinelibrary.wiley.com/doi/10.1111/1752-1688.12405).
 
@@ -561,7 +562,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 
 **Tip**: Note that many of these variables have volume units of (kg/m^2) or rates like (kg/m^2/s). This is a convenience unit for water equivalence variables, which is the same as &quot;mm water equivalent&quot; for volumes, and mm/s for rates. See [FAQ on rain-unit](https://disc.gsfc.nasa.gov/information/faqs?keywords=Hydrology&title=How%20to%20convert%20the%20rainfall%20unit%20of%20kg%2Fm%5E2%20to%20mm%3F) for details about this conversion.
 
-### <a name="nldas"></a>SMERGE - NLDAS land surface model output merged with surface satellite retrievals from the European Space Agency Climate Change Initiative, 1979-2016
+### <a name="smerge"></a>SMERGE - NLDAS land surface model output merged with surface satellite retrievals from the European Space Agency Climate Change Initiative, 1979-2016
 
 **Reference URL** :
 
