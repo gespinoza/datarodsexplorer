@@ -276,9 +276,9 @@ function createPlot(plotType) {
                     initHighChartsPlot($('.highcharts-plot'), hcPlotType);
                     $('#plot-loading').addClass('hidden');
 
-                    $('.option-uploadToHS').on('click', function () {
+                    /*$('.option-uploadToHS').on('click', function () {
                         prepareAndOpenHSUploadModal(this);
-                    });
+                    });*/
                     if (plotType === 'plot') {
                         modifyYAxis();
                     } else if (plotType === 'plot2') {
@@ -985,6 +985,7 @@ function addNewPoint(lon, lat, centerOnPoint) {
     }
 }
 
+/*
 function prepareAndOpenHSUploadModal(clickedObj) {
     var rodsEndpointsListStr = $(clickedObj).data('rodsendpoints');
     var rodsEndpointsList = eval(rodsEndpointsListStr);
@@ -1023,6 +1024,7 @@ function prepareAndOpenHSUploadModal(clickedObj) {
     $('#resAbstract').val(abstractDefault);
     $('#resKeywords').val(keyWords.join(', '));
 }
+*/
 
 function validateDateFormat($dateObj) {
     var invalidDateFlashMessageId = 'invalid-date';

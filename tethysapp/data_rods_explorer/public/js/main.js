@@ -70,6 +70,7 @@ $(function() {
         location.href = location.origin + location.pathname;
     });
 
+    /*
     $('#btn-uploadToHS').on('click', function () {
         var uploadToHSFlashMessageID = 'hs-res-upload';
         var data = {
@@ -109,4 +110,5 @@ $(function() {
             }
         });
     });
+    */
 });
