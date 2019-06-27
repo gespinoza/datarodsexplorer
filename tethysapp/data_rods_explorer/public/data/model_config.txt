@@ -73,6 +73,11 @@ GLDAS21|Wind_f_inst|GLDAS_NOAH025_3H_2_1_Wind_f_inst|Wind speed|m/s|GLDAS21:Wind
 GLDAS21|Psurf_f_inst|GLDAS_NOAH025_3H_2_1_Psurf_f_inst|Air pressure|Pa|GLDAS21:AirPressure
 GLDAS21|Qair_f_inst|GLDAS_NOAH025_3H_2_1_Qair_f_inst|Specific humidity|kg/kg|GLDAS21:SpecificHumidity
 
+GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.2:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_2_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
+GRACE|rtzsm_inst|GRACEDADM_CLSM0125US_7D_2_0_rtzsm_inst|0-100cm root zone soil moisture percentile|%|GRACE:100cmRootZoneSoilMoist%
+GRACE|gws_inst|GRACEDADM_CLSM0125US_7D_2_0_gws_inst|Shallow groundwater percentile|%|GRACE:GroundWater%
+
 LPRM-AMSRE-D (Retrieval)~AMSRED~LPRM_AMSRE_D_SOILM3~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_D_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSRED|soil_moisture_c|LPRM_AMSRE_D_SOILM3_002_soil_moisture_c|Soil moisture C-band descending|%|AMSRE-D:SoilMoistCbandDesc%
 AMSRED|soil_moisture_x|LPRM_AMSRE_D_SOILM3_002_soil_moisture_x|Soil moisture X-band descending|%|AMSRE-D:SoilMoistXbandDesc%
@@ -81,6 +86,9 @@ AMSRED|sm_x_error|LPRM_AMSRE_D_SOILM3_002_sm_x_error|Soil moisture uncertainty X
 AMSRED|opt_depth_c|LPRM_AMSRE_D_SOILM3_002_opt_depth_c|Optical depth C-band descending|unitless|AMSRE-D:OptDepthCbandDesc
 AMSRED|opt_depth_x|LPRM_AMSRE_D_SOILM3_002_opt_depth_x|Optical depth X-band descending|unitless|AMSRE-D:OptDepthXbandDesc
 AMSRED|Ts|LPRM_AMSRE_D_SOILM3_002_Ts|2mm skin temperature AMSRE descending|K|AMSRE-D:2mmSkinTempDesc
+
+LPRM-AMSRE-D-Palmer~AMSREDRZSM~LPRM_AMSRE_D_RZSM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_D_RZSM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+AMSREDRZSM|soilMoisture|LPRM_AMSRE_D_RZSM3_001_soilMoisture|Root Zone Soil Moisture-Palmer|%|AMSRE-D-Palmer:RootZoneSoilMoisture%
 
 LPRM-AMSRE-A (Retrieval)~AMSREA~LPRM_AMSRE_A_SOILM3~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_A_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 AMSREA|soil_moisture_c|LPRM_AMSRE_A_SOILM3_002_soil_moisture_c|Soil moisture C-band ascending|%|AMSRE-A:SoilMoistCbandAsc%
@@ -136,8 +144,3 @@ MERRA2-ForcingInst~MERRA2FI~M2I1NXLFO~5.12.4~https://hydro1.gesdisc.eosdis.nasa.
 MERRA2FI|QLML|M2I1NXLFO_5_12_4_QLML|Surface specific humidity-inst|kg/kg|MERRA2FI:SurfSpecifHumid
 MERRA2FI|TLML|M2I1NXLFO_5_12_4_TLML|Surf air temp over land-inst|K|MERRA2FI:SurfAirTemp
 MERRA2FI|SPEEDLML|M2I1NXLFO_5_12_4_SPEEDLML|Surface wind speed-inst|m/s|MERRA2FI:SurfWindSpeed
-
-GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.2:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_2_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
-GRACE|rtzsm_inst|GRACEDADM_CLSM0125US_7D_2_0_rtzsm_inst|0-100cm root zone soil moisture percentile|%|GRACE:100cmRootZoneSoilMoist%
-GRACE|gws_inst|GRACEDADM_CLSM0125US_7D_2_0_gws_inst|Shallow groundwater percentile|%|GRACE:GroundWater%
