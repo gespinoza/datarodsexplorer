@@ -63,9 +63,10 @@ GLDAS21|Snowf_tavg|GLDAS_NOAH025_3H_2_1_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS21:Sn
 GLDAS21|Rainf_f_tavg|GLDAS_NOAH025_3H_2_1_Rainf_f_tavg|Precipitation rate|kg/m^2/s|GLDAS21:PrecipRate
 GLDAS21|Qs_acc|GLDAS_NOAH025_3H_2_1_Qs_acc|Surface runoff|kg/m^2|GLDAS21:SurfRunoff
 GLDAS21|Qsb_acc|GLDAS_NOAH025_3H_2_1_Qsb_acc|Subsurface runoff|kg/m^2|GLDAS21:SubsurfRunoff
-GLDAS21|SoilMoi0_10cm_inst|GLDAS_NOAH025_3H_2_1_SoilMoi0_10cm_inst|0-10cm soil moisture|kg/m^2|GLDAS21:0-10cmSoilMoisture
+GLDAS21|RootMoist_inst|GLDAS_NOAH025_3H_2_1_RootMoist_inst|Rootzone soil moisture|kg/m^2|GLDAS21:RootZoneSoilMoisture
 GLDAS21|SoilMoi10_40cm_inst|GLDAS_NOAH025_3H_2_1_SoilMoi10_40cm_inst|10-40cm soil moisture|kg/m^2|GLDAS21:10-40cmSoilMoisture
 GLDAS21|SoilMoi40_100cm_inst|GLDAS_NOAH025_3H_2_1_SoilMoi40_100cm_inst|40-100cm soil moisture|kg/m^2|GLDAS21:40-100cmSoilMoisture
+GLDAS21|SoilMoi100_200cm_inst|GLDAS_NOAH025_3H_2_1_SoilMoi100_200cm_inst|100-200cm soil moisture|kg/m^2|GLDAS21:100-200cmSoilMoisture
 GLDAS21|SoilTMP0_10cm_inst|GLDAS_NOAH025_3H_2_1_SoilTMP0_10cm_inst|0-10cm soil temperature|K|GLDAS21:0-10cmSoilTemperature
 GLDAS21|AvgSurfT_inst|GLDAS_NOAH025_3H_2_1_AvgSurfT_inst|Avg surface skin temperature|K|GLDAS21:SkinTemperature
 GLDAS21|Tair_f_inst|GLDAS_NOAH025_3H_2_1_Tair_f_inst|Air temperature|K|GLDAS21:AirTemperature
