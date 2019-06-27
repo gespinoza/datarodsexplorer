@@ -136,6 +136,10 @@ MERRA|BASEFLOW|MST1NXMLD_5_2_0_PRECSNO|Baseflow|kg/m^2/s|MERRA:Baseflow
 MERRA|RUNOFF|MST1NXMLD_5_2_0_RUNOFF|Overland runoff|kg/m^2/s|MERRA:OverlandRunoff
 MERRA|TSOIL1|MST1NXMLD_5_2_0_TSOIL1|Layer 1 soil temp|K|MERRA:SoilTempLayer1
 
+MERRA2-Diagnostic~MERRA2FD~M2T1NXFLX~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXFLX.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA2FD|VLML|M2T1NXFLX_5_12_4_VLML|Surface northward wind t-avg|m/s|MERRA2FD:SurfNorthWind
+MERRA2FD|ULML|M2T1NXFLX_5_12_4_ULML|Surface eastward wind t-avg|m/s|MERRA2FD:SurfEastWind
+
 MERRA2-Forcing~MERRA2F~M2T1NXLFO~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXLFO.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 MERRA2F|LWGAB|M2T1NXLFO_5_12_4_LWGAB|Surface absorbed LW t-avg|W/m^2|MERRA2F:SurfaceLWRad
 MERRA2F|SWGDN|M2T1NXLFO_5_12_4_SWGDN|Incident SW t-avg|W/m^2|MERRA2F:IncidentSWRad
