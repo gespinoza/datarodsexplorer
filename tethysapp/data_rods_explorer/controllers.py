@@ -210,7 +210,7 @@ def years(request):
 
         return render(request, 'data_rods_explorer/plot.html', context)
 
-
+'''
 def upload_to_hs(request):
     if request.is_ajax() and request.method == 'GET':
         res_id = None
@@ -294,3 +294,4 @@ def upload_to_hs(request):
             'success': True,
             'res_id': res_id
         })
+'''

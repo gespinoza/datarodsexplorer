@@ -37,9 +37,9 @@ class DataRodsExplorer(TethysAppBase):
                     UrlMap(name='run_tests',
                            url='data-rods-explorer/run-tests',
                            controller='data_rods_explorer.tests.unit_tests.test_nasa_endpoints'),
-                    UrlMap(name='ajax_upload_to_hs',
-                           url='data-rods-explorer/upload-to-hs',
-                           controller='data_rods_explorer.controllers.upload_to_hs'),
+                    #UrlMap(name='ajax_upload_to_hs',
+                    #       url='data-rods-explorer/upload-to-hs',
+                    #       controller='data_rods_explorer.controllers.upload_to_hs'),
                     )
 
         return url_maps
