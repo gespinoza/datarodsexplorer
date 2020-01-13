@@ -1,4 +1,4 @@
-# Data Rods Explorer 1.0.3  ![](figs/app-icon-balloon.png) 
+# Data Rods Explorer 1.0.4  ![](figs/app-icon-balloon.png) 
 
 _Browse NASA data services for land surface model maps and time series_
 
@@ -25,7 +25,7 @@ This app is great for researching behaviors and interactions of hydrologic varia
 
 DRE was developed in 2015-2016 by Dr. Gonzalo Espinoza as part of his PhD work at the University of Texas at Austin, and by Shawn Crawley, MS student at Brigham Young University, Provo UT. Dr. David Arctur at the University of Texas at Austin was lead author of this user guide, and directed development of DRE, supported by NASA ROSES NNH11ZDA001N-ACCESS and NNH13ZDA001N-ACCESS, William Teng, PI. 
 
-All general questions related to data rods should go to <gsfc-help-disc@lists.nasa.gov>. Questions on DRE software should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). Contact HydroShare for apps development questions or issues at <dev@hydroshare.org>. 
+All general questions related to data rods should go to <gsfc-help-disc@lists.nasa.gov>. Questions on DRE software should be sent to [Gonzalo Espinoza](mailto:esdaco.ic@gmail.com). Contact HydroShare for apps development questions or issues at <dev@hydroshare.org>. 
 
 ### <a name="learn"></a>To learn more
 
@@ -57,9 +57,9 @@ This user guide has the following main sections:
 | 26-Oct-18 | David Arctur  | Removed GLDAS 1.0, added GLDAS 2.1, AMSR2, TMI, MERRA |
 | 11-Nov-18 | David Arctur, Carlee Loeser, Bill Teng  | Updated DRE User Guide | 
 | 22-Feb-19 | David Arctur  | Added vars for GLDAS 2, GLDAS 2.1, MERRA-2, MERRA-Land, SMERGE |
-| 11-Mar-19 | David Arctur  | Updated DRE User Guide | 
+| 11-Mar-19 | David Arctur  | Updated DRE User Guide for new var's| 
 | 25-Jun-19 | David Arctur  | SMERGE, GRACE corrections; added vars for GLDAS 2.1, AMSRE, AMSR2; added NASA ref links | 
-
+| 13-Jan-20 | David Arctur  | removed section on uploading time series data to HydroShare | 
 
 
 ---
@@ -95,7 +95,6 @@ This user guide has the following main sections:
    - [Using the map controls panel](#map-controls)
    - [Using the Reset button](#reset)
    - [Downloading time series data and plot graphics](#download)
-   - [Uploading time series query results to HydroShare](#upload)
 
 - _[Notifications and Testing](#notifs-testing)_
 
@@ -158,14 +157,10 @@ This user guide has the following main sections:
    - [Figure 12.](#fig12) Navigating Days-Months-Years in the Date Picker 
    - [Figure 13.](#fig13) LPRM-AMSRE-D Optical Depth C-band plotted over GLDAS2-Evapotranspiration 
    - [Figure 14.](#fig14) Making LPRM layer transparent enough to see GLDAS2-Evapotranspiration layer 
-   - [Figure 15.](#fig15) Download Choices (NASA data services) for Time Series Data 
-   - [Figure 15b.](#fig15b) Resetting your browser popup blocker to allow multiple time series tabs 
+   - [Figure 15.](#fig15) Download Choices (NASA data services) for Time Series Data
    - [Figure 16.](#fig16) Download Choices (chart only, no metadata) for Time Series Data and Plot Image 
-   - [Figure 17.](#fig17) Choices for Uploading Time Series Data to HydroShare 
-   - [Figure 18.](#fig18) Example Resource Description for Soil Moisture Time Series, 2011-2016 
-   - [Figure 19.](#fig19) HydroShare Upload Progress Messages 
-   - [Figure 20.](#fig20) Excerpt from HydroShare Resource Details for Uploaded Time Series 
-   - [Figure 21.](#fig21) User information notices 
+   - [Figure 17.](#fig17) Resetting your browser popup blocker to allow multiple time series tabs
+   - [Figure 18.](#fig18) User information notices
 
 **<a name="tables"></a>Tables**
 
@@ -243,7 +238,7 @@ Because DRE populates all pull-down lists and date-time selection fields with va
 
 ### <a name="mapping"></a>Selecting and displaying gridded maps of model variables
 
-To pick a model, click on the pulldown field directly below the **Product-Model** heading in the left margin panel, see Figure 2 below (actual list may differ from this figure). Once the model is chosen, the list of variables is updated to match, see Figure 3. Figure 4 shows picking the date and time.
+To pick a model, click on the pulldown field directly below the **Product-Model** heading in the left margin panel, see Figure 2 below *(actual list may differ from this figure)*. Once the model is chosen, the list of variables is updated to match, see Figure 3. Figure 4 shows picking the date and time.
 
  ![Figure 2](figs/fig02-03.png)
  
@@ -282,17 +277,17 @@ Once the desired model, variable, date and time are all chosen, the user would c
 4. Notice the URL at bottom of screen; this is the raw data service request sent to NASA server; you can copy/paste it into a browser tab in case you have any questions about results.
 
  ![Figure 6](figs/fig06.png)
-<a name="fig06"></a>_Figure 6. TRMM Precipitation Map, Oct 31, 2013_ 
+<a name="fig06"></a>_Figure 6. TRMM Precipitation Map, Oct 30, 2013_ 
 
  ![Figure 7](figs/fig07.png)
-<a name="fig07"></a>_Figure 7. Plot of TRMM Precipitation, November 2012-October 2013_
+<a name="fig07"></a>_Figure 7. Plot of TRMM Precipitation Time Series near Austin TX, October 2012-2013_
 
 ### <a name="plot2"></a>Comparing time series of two variables
 
 1. Pick a model &amp; variable in the lists just described, then click Compare two variables, and pick a second model &amp; variable. Note that **Model 2 extent** is represented by a red box on the map. Also note that the date-time pickers adjust to only allow valid times for both variables selected.
 2. Click Plot button to see both plots overlaid.
 
- ![Figure 8](figs/fig08.png)
+ ![Figure 8](figs/fig08.png) 
 
 <a name="fig08"></a>_Figure 8. Picking second model for comparison (NLDAS 0-100cm soil moisture)_
 
@@ -300,7 +295,7 @@ Once the desired model, variable, date and time are all chosen, the user would c
 
 <a name="fig09"></a>_Figure 9. Model 1 plot (blue) uses left y-axis; Model 2 plot (black) uses right y-axis_
 
-### <a name="plot-yr-yr"></a>Plotting year-on-year changes in a model variable
+### <a name="plot-yr-yr"></a>Plotting year-on-year changes in a model variable 
 
 For  many studies, it is useful to look at year-to-year comparisons for a particular model-variable.  This time series plotting option allows you to do that. 
 1.	Pick the model and variable as shown above, then click Year-on-year changes in the Time Series options. 
@@ -311,7 +306,7 @@ For  many studies, it is useful to look at year-to-year comparisons for a partic
 
 
  ![Figure 11](figs/fig11.png)
-<a name="fig11"></a>_Figure 11. Plotting Year-to-Year comparisons with GRACE soil moisture_
+<a name="fig11"></a>_Figure 11. Plotting Year-to-Year comparisons with GRACE soil moisture_ 
 
 - The checkbox &quot;**Overlay years**&quot; below the year-picker overlays the data values for each calendar year chosen. Unchecking this box allows you to see each year in series on a multi-year time scale, not as an overlay.
 - Note that you can show/hide individual years by clicking on them in the legend on the right.
@@ -367,50 +362,20 @@ These two approaches for downloading the plot data are both provided because the
 
  ![Figure 15](figs/fig15.png)
 
-<a name="fig15"></a>_Figure 15. Download Choices (NASA data services) for Time Series Data_
+<a name="fig15"></a>_Figure 15. Download Choices (NASA data services with metadata) for Time Series Data_
 
  ![Figure 16](figs/fig16.png)
 
 <a name="fig16"></a>_Figure 16. Download Choices (chart only, no metadata) for Time Series Data and Plot Image_
 
-Note: Due to virtual memory limits, PNG files cannot exceed 20-month time periods. For instance, printing a PNG for the graph from Jan 2015 to Oct 2017 will result in an error message.
+Note: Due to virtual memory limits, PNG download files cannot exceed 20-month time periods. For instance, printing a PNG for the graph from Jan 2015 to Oct 2017 will result in an error message.
 
 One other point to make regarding the View Raw Data choices: if your plots have two variables or year-to-year changes, then choosing to View Raw Data as ASCII, Plot or NetCDF will create multiple new browser tabs, one for each variable-time series. ****Tip****: IF YOU DON&#39;T SEE multiple new tabs, this could be due to your browser&#39;s pop-up blocker (depends on the browser). Check online for your browser&#39;s method of adding an exception to the pop-up blocker, and add an exception for the following sites:   **appsdev.hydroshare.org** , and **apps.hydroshare.org**.
 
-![Figure 15b](figs/fig15b.png)
+![Figure 17](figs/fig17.png)
 
-<a name="fig15b"></a>_Figure 15b. Resetting your browser's popup blocker to allow multiple time series tabs (Chrome shown)_
+<a name="fig17"></a>_Figure 17. Resetting your browser's popup blocker to allow multiple time series tabs (Chrome shown)_
 
-### <a name="upload"></a>Uploading time series query results to HydroShare
-
-[HydroShare](https://www.hydroshare.org/) allows users to create, manage, and publish data resources of many types. DRE enables users to upload the results of a time series query (**plot one variable**, **compare two variables**, **year-on-year changes**) to the user&#39;s account on HydroShare (**note:** you must be logged into HydroShare while doing this). These time series results can be uploaded in either of two formats: ASCII (tabular text) or NetCDF.
-
- ![Figure 17](figs/fig17.png)
-<a name="fig17"></a>_Figure 17. Choices for Uploading Time Series Data to HydroShare_ 
-
-After selecting either ASCII or NetCDF, you will see a popup dialog for HydroShare, for entering a title, abstract, and keywords for this time series. The abstract and keywords are already started for you, but the title is left blank. You can finish editing this resource description here, or later in HydroShare. 
-
- ![Figure 18](figs/fig18.png)
-<a name="fig18"></a>_Figure 18. Example Resource Description for Soil Moisture Time Series, 2011-2016_
-
-Figure 18 provides an example of the HydroShare resource description dialog, with initial content auto-generated by DRE. This includes the location, model, variable, and time range of the data rod. When your query results include multiple time series (ie, **compare two variables**, or **year-on-year changes**) then all the related time series will be described and uploaded together as a single resource in HydroShare. You can edit the descriptive content in this dialog before uploading, or later in HydroShare.
-
-After you click the **Upload** button, you should see these two informative messages above the map frame, assuming all goes well.
-
- ![Figure 19a](figs/fig19a.png)
-
- ![Figure 19b](figs/fig19b.png)
-
-<a name="fig19"></a>_Figure 19. HydroShare Upload Progress Messages_
-
-Clicking on the &quot;**here**&quot; link in the second message above will open the HydroShare Resource Details. DRE assigns default filenames for uploaded time series, with the following information template: _model\_version\_variablename\_LongitudeLatitude_, with filename extensions of _.nc_ for NetCDF, and _.txt_ for ASCII. This is similar to NASA&#39;s filename template for downloaded ASCII and NetCDF data.  
-
- ![Figure 20](figs/fig20.png)  
-<a name="fig20"></a>_Figure 20. Excerpt from HydroShare Resource Details for Uploaded Time Series_
-
-**Note the longitude value in this example of -100E.** This is the same as 100 degrees west of the Prime Meridian, or what is typically written just &quot;-100&quot;. We chose this way to express west-longitude for simplicity of use within the DRE program.
-
-Do not download a time series result just to upload it to HydroShare. Once it is in the graph frame, it&#39;s ready to upload. **Note**: DRE does not enable upload of the model-variable maps.
 
 ---
 
@@ -422,9 +387,9 @@ This section lists the informational and error messages you might encounter duri
 
 **Message 1.** Messages are displayed between the Data Rods Explorer title bar and the map frame. These are either informative instructions, or explanatory about error conditions. Informative messages are displayed with blue text against a blue background box. The following example shows the most common informative message: &quot;Click on the map to define data query location, or enter a coordinate:&quot; You don&#39;t need to define a location for mapping, just for plots.
 
- ![Figure 21](figs/fig21.png)
+ ![Figure 18](figs/fig18.png)
 
-<a name="fig21"></a>_Figure 21. User information notices_
+<a name="fig18"></a>_Figure 18. User information notices_
 
 **Message 2.** At the time of DRE development, the GLDAS model-variables were only available as time series data and plots, not as grid maps, thus the following message was displayed upon picking the GLDAS model:
 
@@ -468,13 +433,13 @@ This may also happen during brief periods (usually no more than a few hours) bet
 
  ![Message 8](figs/msg08.png)
 
-Try hitting the **Reset** button, and retrying your requests. If this error persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:gespinoza@utexas.edu).
+Try hitting the **Reset** button, and retrying your requests. If this error persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:esdaco.ic@gmail.com).
 
 **Message 9.** Another unusual condition can arise if the temporal or spatial bounds read from the NASA CMR in the nightly **enddate\_bounds.py** cron job does not match the actual data availability at the time you try to plot a variable&#39;s time series. This is more likely when you are trying to explore the latest available data. First, try backing up a day or more on your **End date** selection for the comparison.
 
  ![Message 9](figs/msg09.png)
 
-If the condition persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:gespinoza@utexas.edu).
+If the condition persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:esdaco.ic@gmail.com).
 
 **Message 10.** You can edit map and plot dates directly in the text field, but if you enter a date that's out of range for the selected model, you will get an error message and the date will go blank; just click again to get the popup calendar.
 
