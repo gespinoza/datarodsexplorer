@@ -25,7 +25,7 @@ This app is great for researching behaviors and interactions of hydrologic varia
 
 DRE was developed in 2015-2016 by Dr. Gonzalo Espinoza as part of his PhD work at the University of Texas at Austin, and by Shawn Crawley, MS student at Brigham Young University, Provo UT. Dr. David Arctur at the University of Texas at Austin was lead author of this user guide, and directed development of DRE, supported by NASA ROSES NNH11ZDA001N-ACCESS and NNH13ZDA001N-ACCESS, William Teng, PI. 
 
-All general questions related to data rods should go to <gsfc-help-disc@lists.nasa.gov>. Questions on DRE software should be sent to [Gonzalo Espinoza](mailto:esdaco.ic@gmail.com). Contact HydroShare for apps development questions or issues at <dev@hydroshare.org>. 
+All general questions related to data rods should go to <gsfc-help-disc@lists.nasa.gov>. Questions on DRE software should be sent to [Gonzalo Espinoza](mailto:gespinoza@utexas.edu). Contact HydroShare for apps development questions or issues at <dev@hydroshare.org>. 
 
 ### <a name="learn"></a>To learn more
 
@@ -59,7 +59,7 @@ This user guide has the following main sections:
 | 22-Feb-19 | David Arctur  | Added vars for GLDAS 2, GLDAS 2.1, MERRA-2, MERRA-Land, SMERGE |
 | 11-Mar-19 | David Arctur  | Updated DRE User Guide for new var's| 
 | 25-Jun-19 | David Arctur  | SMERGE, GRACE corrections; added vars for GLDAS 2.1, AMSRE, AMSR2; added NASA ref links | 
-| 13-Jan-20 | David Arctur  | removed section on uploading time series data to HydroShare | 
+| 13-Jan-20 | David Arctur  | removed section on uploading time series data to HydroShare, updated regression tests | 
 
 
 ---
@@ -433,13 +433,13 @@ This may also happen during brief periods (usually no more than a few hours) bet
 
  ![Message 8](figs/msg08.png)
 
-Try hitting the **Reset** button, and retrying your requests. If this error persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:esdaco.ic@gmail.com).
+Try hitting the **Reset** button, and retrying your requests. If this error persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:gespinoza@utexas.edu).
 
 **Message 9.** Another unusual condition can arise if the temporal or spatial bounds read from the NASA CMR in the nightly **enddate\_bounds.py** cron job does not match the actual data availability at the time you try to plot a variable&#39;s time series. This is more likely when you are trying to explore the latest available data. First, try backing up a day or more on your **End date** selection for the comparison.
 
  ![Message 9](figs/msg09.png)
 
-If the condition persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:esdaco.ic@gmail.com).
+If the condition persists, take note of the conditions in which it occurred and contact [Gonzalo Espinoza](mailto:gespinoza@utexas.edu).
 
 **Message 10.** You can edit map and plot dates directly in the text field, but if you enter a date that's out of range for the selected model, you will get an error message and the date will go blank; just click again to get the popup calendar.
 
