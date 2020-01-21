@@ -44,7 +44,7 @@ GLDAS21|Wind_f_inst|GLDAS_NOAH025_3H_2_1_Wind_f_inst|Wind speed|m/s|GLDAS21:Wind
 GLDAS21|Psurf_f_inst|GLDAS_NOAH025_3H_2_1_Psurf_f_inst|Air pressure|Pa|GLDAS21:AirPressure
 GLDAS21|Qair_f_inst|GLDAS_NOAH025_3H_2_1_Qair_f_inst|Specific humidity|kg/kg|GLDAS21:SpecificHumidity
 
-GLDAS 2.0-Noah (LSM) 1948-2010~GLDAS20~GLDAS_NOAH025_3H~2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+GLDAS 2.0-Noah (LSM) 1948-2014~GLDAS20~GLDAS_NOAH025_3H~2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 GLDAS20|Evap_tavg|GLDAS_NOAH025_3H_2_0_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS20:Evapotrans
 GLDAS20|Rainf_tavg|GLDAS_NOAH025_3H_2_0_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS20:RainRate
 GLDAS20|Snowf_tavg|GLDAS_NOAH025_3H_2_0_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS20:SnowRate
