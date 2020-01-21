@@ -536,7 +536,7 @@ The Land Data Assimilation System (LDAS) is a methodology for compiling hydrolog
 **Smerge-Noah-CCI variables** : 0-40cm soil moisture, CCI derived soil moisture anomalies of 0-40 cm layer.
 
 
-### <a name="gldas20"></a>GLDAS 2.0 - Global Land Data Assimilation System, 1948-2010
+### <a name="gldas20"></a>GLDAS 2.0 - Global Land Data Assimilation System, 1948-2014
 
 **Reference URLs** :
 
