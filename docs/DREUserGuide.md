@@ -459,7 +459,7 @@ Initial point of contact for NASA data-related questions is [William Teng](mailt
 
 **Note about map legends** : It is not yet practical to request and receive a usable map legend for each model variable as it displayed in the DRE map pane. However, users can use Giovanni if it becomes important to know the meanings of the color choices in the DRE grid map displayed for each variable. For example, when you click on the link below, you are taken to a new window showing Giovanni&#39;s faceted search screen. If you click &quot;Plot&quot; at the bottom-right of the UI, you should get the same map as the displayed WMS map in DRE but with legend:
 
-[https://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&starttime=2016-11-14T00:00:00Z&endtime=2016-11-14T00:00:59Z&data=NLDAS_NOAH0125_H_002_soilm0_10cm&variableFacets=dataFieldDiscipline%3AHydrology%3BdataFieldMeasurement%3ASoil%20Moisture%3B](https://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&starttime=2016-11-14T00:00:00Z&endtime=2016-11-14T00:00:59Z&data=NLDAS_NOAH0125_H_002_soilm0_10cm&variableFacets=dataFieldDiscipline%3AHydrology%3BdataFieldMeasurement%3ASoil%20Moisture%3B)    (tested June 25, 2019)
+[https://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&starttime=2020-01-14T00:00:00Z&endtime=2020-01-14T00:00:59Z&data=NLDAS_NOAH0125_H_002_soilm0_10cm&variableFacets=dataFieldDiscipline%3AHydrology%3BdataFieldMeasurement%3ASoil%20Moisture%3B](https://giovanni.gsfc.nasa.gov/giovanni/#service=TmAvMp&starttime=2020-01-14T00:00:00Z&endtime=2020-01-14T00:00:59Z&data=NLDAS_NOAH0125_H_002_soilm0_10cm&variableFacets=dataFieldDiscipline%3AHydrology%3BdataFieldMeasurement%3ASoil%20Moisture%3B)    (tested January 20, 2020)
 
 ### <a name="gcmd"></a>NASA Global Change Master Directory (GCMD)
 
@@ -486,7 +486,7 @@ The CMR is an earth science metadata repository for NASA EOSDIS data.
 | NLDAS-2 forcing | 1/8 | N.America 53N-25N | 1 hour | 1979-present | 8 |
 | NLDAS-2 Noah | 1/8 | N.America 53N-25N | 1 hour | 1979-present | 13 |
 | SMERGE root zone | 1/8 | N.America 53N-25N | 1 day | 1979-2016 | 2 |
-| GLDAS-2.0 Noah | 1/4 | Global 90N-60S | 3 hour | 1948-2010 | 24 |
+| GLDAS-2.0 Noah | 1/4 | Global 90N-60S | 3 hour | 1948-2014 | 24 |
 | GLDAS-2.1 Noah | 1/4 | Global 90N-60S | 3 hour | 2000-present | 15 |
 | GRACE soil moisture | 1/4 | N.America 53N-25N | 7 day | 2002-present | 3 |
 | LPRM-AMSRE soil moisture | 1/4 | Global | 1 day | 2002-2011 | 7-asc, 7-desc |
