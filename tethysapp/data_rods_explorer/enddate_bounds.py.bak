@@ -1,4 +1,4 @@
-from urllib.request import urlopen
+from urllib2 import urlopen
 from os import path
 from sys import path as syspath
 syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found
@@ -70,7 +70,7 @@ def write_fences_file(model_list):
 
         for model in model_list:
             middleman_url1 = url_pattern.format(model['short_name'], model['version'], 'start_date')
-            print(middleman_url1)
+            print middleman_url1
             middleman_url2 = url_pattern.format(model['short_name'], model['version'], '-start_date')
             url1 = get_url2(middleman_url1)
             url2 = get_url2(middleman_url2)

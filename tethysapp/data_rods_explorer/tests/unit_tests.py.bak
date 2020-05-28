@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from tethysapp.data_rods_explorer.model_objects import init_model, get_datarods_tsb, get_var_dict, get_model_fences
 from datetime import datetime, timedelta
-from urllib.request import urlopen
+from urllib2 import urlopen
 from django.http import JsonResponse
 from json import dumps
 from threading import Thread

@@ -5,7 +5,7 @@ from tethys_sdk.services import get_spatial_dataset_engine
 import os
 from threading import Thread
 from tempfile import NamedTemporaryFile
-import urllib.request, urllib.error, urllib.parse
+import urllib2
 import zipfile
 from math import copysign
 
@@ -99,14 +99,14 @@ class TiffLayerManager:
             self.zip_path = file_name + '.zip'
             self.download_raster_from_nasa()
         except Exception as e:
-            print(e.message)
+            print e.message
             self.message = e.message
 
     def download_raster_from_nasa(self):
         try:
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
-            url_image = urllib.request.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
+            url_image = urllib2.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
                                                                   self.time_st,
                                                                   get_wms_vars()[self.model][self.variable][0]))
             self.tiff_file.write(url_image.read())
@@ -120,7 +120,7 @@ class TiffLayerManager:
 
             self.upload_layer_to_geoserver()
         except Exception as e:
-            print(e.message)
+            print e.message
             self.message = e.message
 
     def upload_layer_to_geoserver(self):
@@ -284,7 +284,6 @@ def parse_model_database_from_file():
     datarods_tsb = {}
 
     for line in lines:
-        line=line.decode()
         if line == '\n' or line == '':
             new_model_switch = True
             continue
