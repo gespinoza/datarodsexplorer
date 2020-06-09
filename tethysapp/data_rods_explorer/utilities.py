@@ -45,8 +45,9 @@ def create_map():
         minZoom=1
     )
     draw_options = MVDraw(
-        controls=["Point", "Pan"],
-        feature_selection=True,
+        controls=["Pan"],
+        feature_selection=False,
+        point_color='yellow',
 
     )
     # Define map view options

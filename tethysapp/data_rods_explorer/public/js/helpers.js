@@ -790,7 +790,8 @@ function updateSpatialFences(differentiator, model) {
     var layer = differentiator === '1' ? MODEL1_LAYER : MODEL2_LAYER;
 
     layer.getSource().clear();
-    layer.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojsonObject));
+    var newLayer=(new ol.format.GeoJSON()).readFeatures(geojsonObject);
+    layer.getSource().addFeatures(newLayer);
     layer['tethys_legend_extent'] = [minX, minY, maxX, maxY];
     layer['tethys_legend_extent_projection'] = 'EPSG:4326';
 }
@@ -948,6 +949,7 @@ function removeExistingPoint(pointAddedBefore) {
     if (pointAddedBefore) {
         numExistingPts = 1;
     }
+
     var map = TETHYS_MAP_VIEW.getMap();
     var pointSource = map.getLayers().item(1).getSource();
 

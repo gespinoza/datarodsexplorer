@@ -26,7 +26,7 @@ $(function() {
         var lon = $('#lon').val();
         var lat = $('#lat').val();
 
-        removeExistingPoint();
+        removeExistingPoint(false);
         addNewPoint(lon, lat, true);
     });
 
