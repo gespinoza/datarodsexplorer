@@ -944,18 +944,9 @@ function modifyYAxis() {
         .css('transform', 'matrix3d(0,-1,0.00,0,1.00,0,0.00,0,0,0,1,0,-100,135,0,1)');
 }
 
-function removeExistingPoint(pointAddedBefore) {
-    var numExistingPts = 0;
-    if (pointAddedBefore) {
-        numExistingPts = 1;
-    }
-
+function removeExistingPoint() {
     var map = TETHYS_MAP_VIEW.getMap();
-    var pointSource = map.getLayers().item(1).getSource();
-
-    while (pointSource.getFeatures().length > numExistingPts) {
-        pointSource.removeFeature(pointSource.getFeatures()[0]);
-    }
+    map.getLayers().item(1).getSource().clear(false);
 }
 
 function addToURL(lon, lat) {
