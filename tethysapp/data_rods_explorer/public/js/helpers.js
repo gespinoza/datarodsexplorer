@@ -108,8 +108,8 @@ function load_map_post_parameters() {
     var map = TETHYS_MAP_VIEW.getMap();
     var view = map.getView();
     var extent = view.calculateExtent(map.getSize());
-    var topleft = ol.proj.toLonLat([extent[0], extent[3]]);
-    var bottomright = ol.proj.toLonLat([extent[2], extent[1]]);
+    var topleft = ol.proj.toLonLat(ol.extent.getTopLeft(extent));
+    var bottomright = ol.proj.toLonLat(ol.extent.getBottomRight(extent));
     var zoom = view.getZoom();
     var center = ol.proj.toLonLat(view.getCenter());
     document.getElementById('lonW').value = topleft[0];
@@ -136,21 +136,18 @@ function load_map() {
     data += '&plotTime=' + urlVars['plotTime'];
     data += '&variable=' + urlVars['variable'];
     data += '&model=' + urlVars['model'];
-
     $('#btnDisplayMap').prop('disabled', true);
 
     displayNasaMapRequestOutput(data);
-
     requestMap(data, layerName, layerExtents)
 }
 
-function requestMap(data, layerName, layerExtents, instanceId) {
+function requestMap(data, layerName, layerExtents, instanceId=undefined) {
     var requestMapAgain = false;
     if (instanceId === undefined || instanceId === null) {
         instanceId = Math.floor(Math.random() * 1000000000000000);
     }
     data += '&instance_id=' + instanceId;
-
     $.ajax({
         url: '/apps/data-rods-explorer/request-map-layer/',
         type: 'POST',
@@ -183,7 +180,7 @@ function requestMap(data, layerName, layerExtents, instanceId) {
                             update_legend();
                             return;
                         }
-                    } else {
+                    } else {// Error
                         requestMapAgain = true;
                     }
                 } else {
@@ -191,16 +188,13 @@ function requestMap(data, layerName, layerExtents, instanceId) {
                         if (!response.error) {
                             requestMapAgain = true;
                         }
-                    } else {
+                    }else {// Error
                         requestMapAgain = true;
                     }
                 }
             }
-
             if (requestMapAgain) {
-                window.setTimeout(function () {
-                    requestMap(data, layerName, layerExtents, instanceId);
-                }, 3000);
+                window.setTimeout(function () {requestMap(data, layerName, layerExtents, instanceId);}, 3000);
             } else {
                 $('#btnDisplayMap').prop('disabled', false);
                 hideMapLoading();
