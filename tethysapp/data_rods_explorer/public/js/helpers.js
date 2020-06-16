@@ -407,10 +407,8 @@ var update_legend = function() {
 var initHighChartsPlot = function($element, plot_type) {
     if ($element.attr('data-json')) {
         var json_string, json;
-
         // Get string from data-json attribute of element
         json_string = $element.attr('data-json');
-
         // Parse the json_string with special reviver
         json = JSON.parse(json_string, functionReviver);
         $element.highcharts(json);
