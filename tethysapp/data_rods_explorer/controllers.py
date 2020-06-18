@@ -7,11 +7,6 @@ from .utilities import create_map, create_select_model, create_plot_ctrls, creat
     create_years_list, get_data_rod_plot, get_data_rod_plot2, get_data_rod_years
 from json import dumps
 
-from tethys_services.backends.hs_restclient_helper import get_oauth_hs
-from requests import get
-from tempfile import TemporaryFile
-from ast import literal_eval
-from urllib.parse import parse_qs, urlsplit
 
 
 def home(request):
@@ -210,6 +205,7 @@ def years(request):
         }
 
         return render(request, 'data_rods_explorer/plot.html', context)
+
 
 '''
 def upload_to_hs(request):

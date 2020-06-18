@@ -1,5 +1,4 @@
 setup.py
-tethysapp/__init__.py
 tethysapp/data_rods_explorer/__init__.py
 tethysapp/data_rods_explorer/app.py
 tethysapp/data_rods_explorer/controllers.py
@@ -7,7 +6,6 @@ tethysapp/data_rods_explorer/enddate_bounds.py
 tethysapp/data_rods_explorer/handoff.py
 tethysapp/data_rods_explorer/model_objects.py
 tethysapp/data_rods_explorer/utilities.py
-tethysapp/data_rods_explorer/templates/data_rods_explorer/__init__.py
 tethysapp/data_rods_explorer/tests/__init__.py
 tethysapp/data_rods_explorer/tests/unit_tests.py
 tethysapp_data_rods_explorer.egg-info/PKG-INFO
