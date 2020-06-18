@@ -31,7 +31,6 @@
 {% block styles %}
     {{ block.super }}
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="{% static 'tethys_apps/public/css/app_base.css' %}" rel="stylesheet" />            <!--???????????????-->
     <link href="{% static 'data_rods_explorer/css/main.css' %}" rel="stylesheet"/>
 {% endblock %}
 
@@ -107,7 +106,6 @@
 
                 {% block app_navigation_override %}
                     <div id="app-navigation">
-                        <div id="Test"></div>                                                           <!------------------------------>
                         {% block app_navigation %}
                             <ul class="nav nav-pills nav-stacked">
                                 {% block app_navigation_items %}

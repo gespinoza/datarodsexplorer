@@ -152,7 +152,7 @@ def plot(request):
                 }
             else:
                 context = {
-                    'error': 'An unknown error occured.'
+                    'error': 'An unknown error occurred.'
                 }
 
     return render(request, 'data_rods_explorer/plot.html', context)

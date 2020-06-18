@@ -9,6 +9,9 @@ requirements:
   conda:
     channels:
     packages:
+      - django
+      - bs4
+      - python-dateutil
 
   pip:
 
