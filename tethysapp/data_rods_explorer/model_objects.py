@@ -120,8 +120,8 @@ class TiffLayerManager:
 
             self.upload_layer_to_geoserver()
         except Exception as e:
-            print(e.message)
-            self.message = e.message
+            print(str(e))
+            self.message = str(e)
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters

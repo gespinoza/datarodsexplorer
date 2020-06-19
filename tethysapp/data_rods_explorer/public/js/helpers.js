@@ -146,14 +146,17 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
     var requestMapAgain = false;
     if (instanceId === undefined || instanceId === null) {
         instanceId = Math.floor(Math.random() * 1000000000000000);
+            data += '&instance_id=' + instanceId;
     }
-    data += '&instance_id=' + instanceId;
     $.ajax({
         url: '/apps/data-rods-explorer/request-map-layer/',
         type: 'POST',
         dataType: 'json',
         data: data,
         success: function (response) {
+            for (var temp in response) {
+                document.getElementById("nav-title-wrapper").innerHTML = document.getElementById("nav-title-wrapper").innerHTML + "| " +temp+": "+ response[temp];
+            }
             if (response.hasOwnProperty('success')) {
                 if (response.success) {
                     if (response.hasOwnProperty('load_layer')) {
@@ -193,7 +196,7 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                     }
                 }
             }
-            if (requestMapAgain) {
+            if (requestMapAgain) {// Remove Infinite Loop
                 window.setTimeout(function () {requestMap(data, layerName, layerExtents, instanceId);}, 3000);
             } else {
                 $('#btnDisplayMap').prop('disabled', false);
@@ -226,6 +229,7 @@ function createPlot(plotType) {
     removeFlashMessage(pointOutBoundsFlashMessageID);
     removeFlashMessage(error999FlashMessageID);
 
+
     load_map_post_parameters();
     var data = {};
     var formParams = $('#parametersForm').serializeArray();
@@ -233,6 +237,7 @@ function createPlot(plotType) {
     Object.keys(urlParams).forEach(function (param) {
         data[param] = urlParams[param];
     });
+
     $(formParams).each(function (index, obj) {
         data[obj.name] = obj.value;
     });
@@ -247,9 +252,7 @@ function createPlot(plotType) {
         displayFlashMessage(pointOutBoundsFlashMessageID, 'warning', pointOutBoundsFlashMessageText);
     } else {
         $('#plot-loading').removeClass('hidden');
-
         displayNasaPlotRequestOutput(plotType, data);
-
         $.ajax({
             url: '/apps/data-rods-explorer/' + plotType + '/',
             type: 'POST',

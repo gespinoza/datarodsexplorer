@@ -8,7 +8,6 @@ from .utilities import create_map, create_select_model, create_plot_ctrls, creat
 from json import dumps
 
 
-
 def home(request):
     """
     Controller for the app 'home' page.
@@ -90,6 +89,7 @@ def request_map_layer(request):
         if tif_layer_manager:
             if tif_layer_manager.requested:
                 if tif_layer_manager.loaded:
+                    print("#1")
                     context = {
                         'success': True,
                         'load_layer': tif_layer_manager.store_id,
@@ -97,14 +97,19 @@ def request_map_layer(request):
                     }
                     tif_layer_manager.trash()
                 elif tif_layer_manager.error:
+                    print("#3")
                     context['error'] = tif_layer_manager.error
                     tif_layer_manager.trash()
+                else:
+                    print("#4")
+            else:
+                print("#5")
         else:
+            print("#2")
             # If 'Display map' is clicked, load layers
             tif_layer_manager = TiffLayerManager.create_instance(instance_id)
             tif_layer_manager.request_tiff_layer(post_params)
             context['success'] = True
-
     return JsonResponse(context)
 
 

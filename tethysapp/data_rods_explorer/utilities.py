@@ -173,12 +173,12 @@ def get_data_from_nasa_server(link, overlap_years=False):
         s_file = urllib.request.urlopen(link)
 
         for line in s_file.readlines():
-            if data_flag_text in line:
+            if data_flag_text.encode() in line:
                 found_data = True
                 error_found = False
                 continue
 
-            if not found_data and error_flag_text in line:
+            if not found_data and error_flag_text.encode() in line:
                 nasa_error_message = line
                 link = link[:-2] + "%02d" % time
                 time -= 1
@@ -195,7 +195,9 @@ def get_data_from_nasa_server(link, overlap_years=False):
         raise Exception(nasa_error_message)
 
     for row in s_lines:
-        row_ls = row.strip().replace(' ', '-', 1).split()
+        row_ls = row.strip()
+        row_ls = row_ls.decode().replace(' ', '-', 1)
+        row_ls = row_ls.split()
         try:
             date = '2000' + row_ls[0][4:] if overlap_years else row_ls[0]
             val = row_ls[1]
