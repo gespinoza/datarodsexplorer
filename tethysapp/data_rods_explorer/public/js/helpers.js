@@ -183,7 +183,7 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                             update_legend();
                             return;
                         }
-                    } else {// Error
+                    } else {
                         requestMapAgain = true;
                     }
                 } else {
