@@ -154,13 +154,12 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
         dataType: 'json',
         data: data,
         success: function (response) {
-            for (var temp in response) {
-                document.getElementById("nav-title-wrapper").innerHTML = document.getElementById("nav-title-wrapper").innerHTML + "| " +temp+": "+ response[temp];
-            }
             if (response.hasOwnProperty('success')) {
                 if (response.success) {
                     if (response.hasOwnProperty('load_layer')) {
                         if (response['load_layer']) {
+                            for (var temp in response) {
+                            }
                             $('#btnDisplayMap').prop('disabled', false);
                             hideMapLoading();
                             var map = TETHYS_MAP_VIEW.getMap();
@@ -172,18 +171,22 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                                 source: new ol.source.TileWMS({
                                     url: response['geoserver_url'],
                                     params: lyrParams,
-                                    serverType: 'geoserver'
-                                })
+                                    serverType: 'geoserver',
+                                }),
+                                visible:true,
+                                extent:layerExtents,
+                                zIndex: 0,
+
                             });
                             map.addLayer(newLayer);
                             newLayer['tethys_legend_title'] = layerName;
-                            newLayer['tethys_legend_extent'] = layerExtents;
+                            //newLayer['tethys_legend_extent'] = layerExtents;
                             newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
-
+                            document.getElementById("nav-title-wrapper").innerHTML = "Layer Added";
                             update_legend();
                             return;
                         }
-                    } else {
+                    } else {//
                         requestMapAgain = true;
                     }
                 } else {

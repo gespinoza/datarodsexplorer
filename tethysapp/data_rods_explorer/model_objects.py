@@ -100,7 +100,7 @@ class TiffLayerManager:
             self.zip_path = file_name + '.zip'
             self.download_raster_from_nasa()
         except Exception as e:
-            print("#A "+str(e))
+            print(str(e))
             self.message = str(e)
 
     def download_raster_from_nasa(self):
@@ -121,7 +121,7 @@ class TiffLayerManager:
 
             self.upload_layer_to_geoserver() #error
         except Exception as e:
-            print("#B "+str(e))
+            print(str(e))
             self.message = str(e)
 
     def upload_layer_to_geoserver(self):
@@ -133,18 +133,19 @@ class TiffLayerManager:
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
-                                                    #debug=True,
+                                                    debug=False,
                                                     )
         if not response['success']:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
                                               uri='tethys_app-%s' % get_workspace(),
-                                              #debug=True,
+                                              debug=False,
                                               )
             if result['success']:
                 self.upload_layer_to_geoserver() #infinate loop potential double check
         else:
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
+
 
     def create_tfw_file(self, h=256, w=512):
         minx, miny, maxx, maxy = self.latlonbox
