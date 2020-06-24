@@ -158,8 +158,6 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                 if (response.success) {
                     if (response.hasOwnProperty('load_layer')) {
                         if (response['load_layer']) {
-                            for (var temp in response) {
-                            }
                             $('#btnDisplayMap').prop('disabled', false);
                             hideMapLoading();
                             var map = TETHYS_MAP_VIEW.getMap();
@@ -173,10 +171,6 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                                     params: lyrParams,
                                     serverType: 'geoserver',
                                 }),
-                                visible:true,
-                                extent:layerExtents,
-                                zIndex: 0,
-
                             });
                             map.addLayer(newLayer);
                             newLayer['tethys_legend_title'] = layerName;
