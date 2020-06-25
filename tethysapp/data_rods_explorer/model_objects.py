@@ -141,7 +141,7 @@ class TiffLayerManager:
                                               debug=False,
                                               )
             if result['success']:
-                self.upload_layer_to_geoserver() #infinate loop potential double check
+                self.upload_layer_to_geoserver()
         else:
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True

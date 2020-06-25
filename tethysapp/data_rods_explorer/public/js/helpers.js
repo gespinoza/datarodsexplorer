@@ -168,15 +168,16 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                             var newLayer = new ol.layer.Tile({
                                 source: new ol.source.TileWMS({
                                     url: response['geoserver_url'],
-                                    params: lyrParams,
+                                    params: lyrParams,//
                                     serverType: 'geoserver',
+                                    projection:'EPSG:3857',
+                                    crossOrigin: 'anonymous',
                                 }),
                             });
                             map.addLayer(newLayer);
                             newLayer['tethys_legend_title'] = layerName;
-                            //newLayer['tethys_legend_extent'] = layerExtents;
-                            newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
-                            document.getElementById("nav-title-wrapper").innerHTML = "Layer Added";
+                            //newLayer['tethys_legend_extent'] = layerExtents; //no longerworks due to ol update
+                            //newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
                             update_legend();
                             return;
                         }
@@ -195,6 +196,7 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
             }
             if (requestMapAgain) {// Remove Infinite Loop
                 window.setTimeout(function () {requestMap(data, layerName, layerExtents, instanceId);}, 3000);
+
             } else {
                 $('#btnDisplayMap').prop('disabled', false);
                 hideMapLoading();
