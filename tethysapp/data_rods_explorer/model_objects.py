@@ -143,7 +143,15 @@ class TiffLayerManager:
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            print(geo_eng.endpoint)
+            # geo_eng.update_layer(layer_id=self.store_id, #code attempting to add SRS to layer does not work
+            #                      debug=True,
+            #                      srs='EPSG:4326',
+            #                      Native_SRS='EPSG:4326',
+            #                      native_srs='EPSG:4326',
+            #                      Declared_SRS='EPSG:4326',
+            #                      declared_srs='EPSG:4326',
+            #                      enabled=True,
+            #                      )
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
 

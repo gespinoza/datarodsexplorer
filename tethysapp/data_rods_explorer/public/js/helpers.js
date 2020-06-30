@@ -154,14 +154,13 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
         dataType: 'json',
         data: data,
         success: function (response) {
+      //      for (var i in response){ //print ajax request
+      //          document.getElementById("nav-title-wrapper").innerHTML=document.getElementById("nav-title-wrapper").innerHTML+" |  "+i+": "+response[i];
+      //      }
             if (response.hasOwnProperty('success')) {
                 if (response.success) {
                     if (response.hasOwnProperty('load_layer')) {
                         if (response['load_layer']) {
-                            for (var i in response){
-                                document.getElementById("nav-title-wrapper").innerHTML=document.getElementById("nav-title-wrapper").innerHTML+" |  "+i+": "+response[i];
-                            }
-                            document.getElementById("nav-title-wrapper").innerHTML=document.getElementById("nav-title-wrapper").innerHTML+" |  "+layerExtents+" !";
                             $('#btnDisplayMap').prop('disabled', false);
                             hideMapLoading();
                             var map = TETHYS_MAP_VIEW.getMap();
@@ -170,14 +169,13 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                                 'TILED': true
                             };
                             var newLayer = new ol.layer.Tile({
-                                extent: layerExtents,
                                 source: new ol.source.TileWMS({
                                     url: response['geoserver_url'],
                                     params: lyrParams,//
                                     serverType: 'geoserver',
-                                    projection:'EPSG:3857',
+                                    //projection:'EPSG:3857',
                                     crossOrigin: 'anonymous',
-                                    transition:0,
+                                    //transition:0,
                                 }),
                             });
                             map.addLayer(newLayer);
