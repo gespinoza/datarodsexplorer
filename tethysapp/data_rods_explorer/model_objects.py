@@ -100,8 +100,8 @@ class TiffLayerManager:
             self.zip_path = file_name + '.zip'
             self.download_raster_from_nasa()
         except Exception as e:
-            print(str(e))
-            self.message = str(e)
+             print(str(e))
+             self.message = str(e)
 
     def download_raster_from_nasa(self):
         try:
@@ -121,8 +121,8 @@ class TiffLayerManager:
 
             self.upload_layer_to_geoserver() #error
         except Exception as e:
-            print(str(e))
-            self.message = str(e)
+             print(str(e))
+             self.message = str(e)
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
@@ -143,7 +143,7 @@ class TiffLayerManager:
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            print(geo_eng.endpoint)
+            print(geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=True, EPSG=4326, enabled=True))
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
 
