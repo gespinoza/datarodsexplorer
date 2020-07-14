@@ -158,10 +158,6 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                 if (response.success) {
                     if (response.hasOwnProperty('load_layer')) {
                         if (response['load_layer']) {
-                            for (var i in response){
-                                document.getElementById("nav-title-wrapper").innerHTML=document.getElementById("nav-title-wrapper").innerHTML+" |  "+i+": "+response[i];
-                            }
-                            document.getElementById("nav-title-wrapper").innerHTML=document.getElementById("nav-title-wrapper").innerHTML+" |  "+layerExtents+" !";
                             $('#btnDisplayMap').prop('disabled', false);
                             hideMapLoading();
                             var map = TETHYS_MAP_VIEW.getMap();

@@ -133,7 +133,7 @@ class TiffLayerManager:
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
-                                                    debug=True,
+                                                    debug=False,
                                                     )
         if not response['success']:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
@@ -143,7 +143,7 @@ class TiffLayerManager:
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            print(geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=True, EPSG=4326, enabled=True))
+            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326, enabled=True)
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
 
