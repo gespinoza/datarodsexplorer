@@ -1,9 +1,9 @@
 from urllib.request import urlopen
 from os import path
 from sys import path as syspath
-syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found
+syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found #?
 from requests import get
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup   #?
 from datetime import datetime, timedelta
 
 
