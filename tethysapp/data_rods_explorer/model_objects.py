@@ -235,7 +235,7 @@ def parse_fences_from_file():
     """
     model_fences = {}
 
-    fencefile = path.join(path.dirname(path.realpath(__file__)), 'public/data/dates_and_spatial_range.txt')
+    fencefile = path.join(path.dirname(path.realpath(__file__)), 'dates_and_spatial_range.txt')
 
     with open(fencefile, mode='r') as f:
         f.readline()  # skip column headings line
@@ -278,7 +278,7 @@ def parse_model_database_from_file():
         next(lines)  # Skip second line
     else:
         # If the file cannot be parsed from GitHub, use the locally stored file instead
-        db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'model_config.txt')
         with open(db_file, mode='r') as f:
             f.readline()  # Skip first line
             f.readline()  # Skip second line
