@@ -108,8 +108,8 @@ function load_map_post_parameters() {
     var map = TETHYS_MAP_VIEW.getMap();
     var view = map.getView();
     var extent = view.calculateExtent(map.getSize());
-    var topleft = ol.proj.toLonLat(ol.extent.getTopLeft(extent));
-    var bottomright = ol.proj.toLonLat(ol.extent.getBottomRight(extent));
+    var topleft = ol.proj.toLonLat([extent[0], extent[3]]);
+    var bottomright = ol.proj.toLonLat([extent[2], extent[1]]);
     var zoom = view.getZoom();
     var center = ol.proj.toLonLat(view.getCenter());
     document.getElementById('lonW').value = topleft[0];
@@ -136,24 +136,26 @@ function load_map() {
     data += '&plotTime=' + urlVars['plotTime'];
     data += '&variable=' + urlVars['variable'];
     data += '&model=' + urlVars['model'];
+
     $('#btnDisplayMap').prop('disabled', true);
 
     displayNasaMapRequestOutput(data);
+
     requestMap(data, layerName, layerExtents)
 }
 
-function requestMap(data, layerName, layerExtents, instanceId=undefined) {
+function requestMap(data, layerName, layerExtents, instanceId) {
     var requestMapAgain = false;
     if (instanceId === undefined || instanceId === null) {
         instanceId = Math.floor(Math.random() * 1000000000000000);
-            data += '&instance_id=' + instanceId;
     }
+    data += '&instance_id=' + instanceId;
+
     $.ajax({
         url: '/apps/data-rods-explorer/request-map-layer/',
         type: 'POST',
         dataType: 'json',
         data: data,
-        timeout: 180000, //3 minutes
         success: function (response) {
             if (response.hasOwnProperty('success')) {
                 if (response.success) {
@@ -167,24 +169,21 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                                 'TILED': true
                             };
                             var newLayer = new ol.layer.Tile({
-                                extent: layerExtents,
                                 source: new ol.source.TileWMS({
                                     url: response['geoserver_url'],
-                                    params: lyrParams,//
-                                    serverType: 'geoserver',
-                                    projection:'EPSG:3857',
-                                    crossOrigin: 'anonymous',
-                                    transition:0,
-                                }),
+                                    params: lyrParams,
+                                    serverType: 'geoserver'
+                                })
                             });
                             map.addLayer(newLayer);
                             newLayer['tethys_legend_title'] = layerName;
-                            //newLayer['tethys_legend_extent'] = layerExtents; //no longerworks due to ol update
-                            //newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
+                            newLayer['tethys_legend_extent'] = layerExtents;
+                            newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
+
                             update_legend();
                             return;
                         }
-                    } else {//
+                    } else {
                         requestMapAgain = true;
                     }
                 } else {
@@ -192,14 +191,16 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                         if (!response.error) {
                             requestMapAgain = true;
                         }
-                    }else {// Error
+                    } else {
                         requestMapAgain = true;
                     }
                 }
             }
-            if (requestMapAgain) {// Remove Infinite Loop
-                window.setTimeout(function () {requestMap(data, layerName, layerExtents, instanceId);}, 3000);
 
+            if (requestMapAgain) {
+                window.setTimeout(function () {
+                    requestMap(data, layerName, layerExtents, instanceId);
+                }, 3000);
             } else {
                 $('#btnDisplayMap').prop('disabled', false);
                 hideMapLoading();
@@ -231,7 +232,6 @@ function createPlot(plotType) {
     removeFlashMessage(pointOutBoundsFlashMessageID);
     removeFlashMessage(error999FlashMessageID);
 
-
     load_map_post_parameters();
     var data = {};
     var formParams = $('#parametersForm').serializeArray();
@@ -239,7 +239,6 @@ function createPlot(plotType) {
     Object.keys(urlParams).forEach(function (param) {
         data[param] = urlParams[param];
     });
-
     $(formParams).each(function (index, obj) {
         data[obj.name] = obj.value;
     });
@@ -254,7 +253,9 @@ function createPlot(plotType) {
         displayFlashMessage(pointOutBoundsFlashMessageID, 'warning', pointOutBoundsFlashMessageText);
     } else {
         $('#plot-loading').removeClass('hidden');
+
         displayNasaPlotRequestOutput(plotType, data);
+
         $.ajax({
             url: '/apps/data-rods-explorer/' + plotType + '/',
             type: 'POST',
@@ -412,8 +413,10 @@ var update_legend = function() {
 var initHighChartsPlot = function($element, plot_type) {
     if ($element.attr('data-json')) {
         var json_string, json;
+
         // Get string from data-json attribute of element
         json_string = $element.attr('data-json');
+
         // Parse the json_string with special reviver
         json = JSON.parse(json_string, functionReviver);
         $element.highcharts(json);
@@ -787,8 +790,7 @@ function updateSpatialFences(differentiator, model) {
     var layer = differentiator === '1' ? MODEL1_LAYER : MODEL2_LAYER;
 
     layer.getSource().clear();
-    var newLayer=(new ol.format.GeoJSON()).readFeatures(geojsonObject);
-    layer.getSource().addFeatures(newLayer);
+    layer.getSource().addFeatures((new ol.format.GeoJSON()).readFeatures(geojsonObject));
     layer['tethys_legend_extent'] = [minX, minY, maxX, maxY];
     layer['tethys_legend_extent_projection'] = 'EPSG:4326';
 }
@@ -941,9 +943,17 @@ function modifyYAxis() {
         .css('transform', 'matrix3d(0,-1,0.00,0,1.00,0,0.00,0,0,0,1,0,-100,135,0,1)');
 }
 
-function removeExistingPoint() {
+function removeExistingPoint(pointAddedBefore) {
+    var numExistingPts = 0;
+    if (pointAddedBefore) {
+        numExistingPts = 1;
+    }
     var map = TETHYS_MAP_VIEW.getMap();
-    map.getLayers().item(1).getSource().clear(false);
+    var pointSource = map.getLayers().item(1).getSource();
+
+    while (pointSource.getFeatures().length > numExistingPts) {
+        pointSource.removeFeature(pointSource.getFeatures()[0]);
+    }
 }
 
 function addToURL(lon, lat) {

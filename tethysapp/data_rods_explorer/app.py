@@ -1,5 +1,4 @@
 from tethys_apps.base import TethysAppBase, url_map_maker
-from tethys_sdk.app_settings import SpatialDatasetServiceSetting
 
 
 class DataRodsExplorer(TethysAppBase):
@@ -44,18 +43,3 @@ class DataRodsExplorer(TethysAppBase):
                     )
 
         return url_maps
-
-    def spatial_dataset_service_settings(self):
-        """
-        Example spatial_dataset_service_settings method.
-        """
-        sds_settings = (
-            SpatialDatasetServiceSetting(
-                name='default',
-                description='spatial dataset service for app to use',
-                engine=SpatialDatasetServiceSetting.GEOSERVER,
-                required=True,
-            ),
-        )
-
-        return sds_settings

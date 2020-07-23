@@ -16,7 +16,7 @@ $(function() {
         lonlat = convertLonLatToMainMapExtents(lonlat);
         lon = parseFloat(lonlat[0]).toFixed(4);
         lat = parseFloat(lonlat[1]).toFixed(4);
-        removeExistingPoint();
+        removeExistingPoint(true);
         addNewPoint(lon, lat, false);
         $('#lon').val(lon);
         $('#lat').val(lat);

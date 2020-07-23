@@ -1,11 +1,16 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from tethys_sdk.gizmos import SelectInput, Button, TimeSeries, MapView
-from .model_objects import get_wms_vars, get_datarods_png, get_datarods_tsb, \
+from tethys_sdk.gizmos import SelectInput, Button, TimeSeries
+from model_objects import get_wms_vars, get_datarods_png, get_datarods_tsb, \
     get_model_fences, get_model_options, get_var_dict, init_model, TiffLayerManager
-from .utilities import create_map, create_select_model, create_plot_ctrls, create_map_date_ctrls, \
+from utilities import create_map, create_select_model, create_plot_ctrls, create_map_date_ctrls, \
     create_years_list, get_data_rod_plot, get_data_rod_plot2, get_data_rod_years
 from json import dumps
+from tethys_services.backends.hs_restclient_helper import get_oauth_hs
+from requests import get
+from tempfile import TemporaryFile
+from ast import literal_eval
+from urlparse import parse_qs, urlsplit
 
 
 def home(request):
@@ -55,7 +60,7 @@ def home(request):
     # Context variables
     context = {
         'select_model': select_model,
-        'MapView': MapView,
+        'MapView': map_view,
         'map_view_options': map_view_options,
         'select_date': select_date,
         'select_hour': select_hour,
@@ -86,7 +91,6 @@ def request_map_layer(request):
         post_params = request.POST
         instance_id = post_params['instance_id']
         tif_layer_manager = TiffLayerManager.get_instance(instance_id)
-
         if tif_layer_manager:
             if tif_layer_manager.requested:
                 if tif_layer_manager.loaded:
@@ -104,6 +108,7 @@ def request_map_layer(request):
             tif_layer_manager = TiffLayerManager.create_instance(instance_id)
             tif_layer_manager.request_tiff_layer(post_params)
             context['success'] = True
+
     return JsonResponse(context)
 
 
@@ -139,14 +144,14 @@ def plot(request):
                 'plot_type': 'plot'
             }
         except Exception as e:
-            print(str(e))
+            print str(e)
             if 'ERROR 999' in str(e):
                 context = {
                     'error': str(e)
                 }
             else:
                 context = {
-                    'error': 'An unknown error occurred.'
+                    'error': 'An unknown error occured.'
                 }
 
     return render(request, 'data_rods_explorer/plot.html', context)
@@ -204,7 +209,6 @@ def years(request):
         }
 
         return render(request, 'data_rods_explorer/plot.html', context)
-
 
 '''
 def upload_to_hs(request):

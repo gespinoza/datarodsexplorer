@@ -1,10 +1,10 @@
 # coding=utf-8
-import urllib.request, urllib.error, urllib.parse
+import urllib2
 from datetime import datetime
 from dateutil import parser as dateparser
-from .model_objects import get_wms_vars, get_datarods_tsb, \
+from model_objects import get_wms_vars, get_datarods_tsb, \
     get_model_fences, get_model_options
-from tethys_sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button, MVDraw
+from tethys_sdk.gizmos import SelectInput, MapView, MVView, DatePicker, Button
 
 
 def create_select_model(modelname):
@@ -44,25 +44,15 @@ def create_map():
         maxZoom=10,
         minZoom=1
     )
-    draw_options = MVDraw(
-        controls=["Pan"],
-        feature_selection=False,
-        point_color='yellow',
-
-    )
     # Define map view options
     map_view_options = MapView(
         height='500px',
         width='100%',
         controls=['ZoomSlider'],
-        layers=[],
         view=view_options,
         basemap='OpenStreetMap',
-        draw=draw_options,
-        legend=True,
-        disable_basemap=False,
-
-    )
+        draw=True,
+        legend=True)
     # Return map element
     return [MapView, map_view_options]
 
@@ -170,15 +160,15 @@ def get_data_from_nasa_server(link, overlap_years=False):
 
     while error_found and time >= 0:
         nasa_error_message = None
-        s_file = urllib.request.urlopen(link)
+        s_file = urllib2.urlopen(link)
 
         for line in s_file.readlines():
-            if data_flag_text.encode() in line:
+            if data_flag_text in line:
                 found_data = True
                 error_found = False
                 continue
 
-            if not found_data and error_flag_text.encode() in line:
+            if not found_data and error_flag_text in line:
                 nasa_error_message = line
                 link = link[:-2] + "%02d" % time
                 time -= 1
@@ -195,15 +185,13 @@ def get_data_from_nasa_server(link, overlap_years=False):
         raise Exception(nasa_error_message)
 
     for row in s_lines:
-        row_ls = row.strip()
-        row_ls = row_ls.decode().replace(' ', '-', 1)
-        row_ls = row_ls.split()
+        row_ls = row.strip().replace(' ', '-', 1).split()
         try:
             date = '2000' + row_ls[0][4:] if overlap_years else row_ls[0]
             val = row_ls[1]
             date_val_pair = [dateparser.parse(date), float(val)]
         except Exception as e:
-            print(str(e))
+            print str(e)
             continue
         data.append(date_val_pair)
 

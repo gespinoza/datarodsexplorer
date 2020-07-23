@@ -46,10 +46,3 @@ Thumbs.db
 ###############
 *dates_and_spatial_range.txt
 docs/
-
-*.pydevproject
-*.project
-*.egg-info
-*.class
-
-dist/
