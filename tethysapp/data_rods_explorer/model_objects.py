@@ -126,7 +126,6 @@ class TiffLayerManager:
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
-       # geo_eng = get_spatial_dataset_engine(name='default') #error
         geo_eng = app.get_spatial_dataset_service('default', as_engine=True)
         # Create raster in geoserver
         response = geo_eng.create_coverage_resource(store_id=self.store_id,
@@ -291,7 +290,7 @@ def parse_model_database_from_file():
     datarods_tsb = {}
 
     for line in lines:
-        line=line.decode()
+        line = line.decode()
         if line == '\n' or line == '':
             new_model_switch = True
             continue

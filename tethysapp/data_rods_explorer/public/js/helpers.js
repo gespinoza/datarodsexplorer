@@ -153,6 +153,7 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
         type: 'POST',
         dataType: 'json',
         data: data,
+        timeout: 180000, //3 minutes
         success: function (response) {
             if (response.hasOwnProperty('success')) {
                 if (response.success) {
