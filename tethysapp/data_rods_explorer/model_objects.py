@@ -5,9 +5,10 @@ from tethys_sdk.services import get_spatial_dataset_engine
 import os
 from threading import Thread
 from tempfile import NamedTemporaryFile
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import zipfile
 from math import copysign
+from tethysapp.data_rods_explorer.app import DataRodsExplorer as app
 
 
 WORKSPACE = 'data_rods_explorer'
@@ -99,14 +100,14 @@ class TiffLayerManager:
             self.zip_path = file_name + '.zip'
             self.download_raster_from_nasa()
         except Exception as e:
-            print e.message
-            self.message = e.message
+             print(str(e))
+             self.message = str(e)
 
     def download_raster_from_nasa(self):
         try:
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
-            url_image = urllib2.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
+            url_image = urllib.request.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
                                                                   self.time_st,
                                                                   get_wms_vars()[self.model][self.variable][0]))
             self.tiff_file.write(url_image.read())
@@ -118,28 +119,33 @@ class TiffLayerManager:
             # Create zipfile
             self.create_zip_file()
 
-            self.upload_layer_to_geoserver()
+            self.upload_layer_to_geoserver() #error
         except Exception as e:
-            print e.message
-            self.message = e.message
+             print(str(e))
+             self.message = str(e)
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
-        geo_eng = get_spatial_dataset_engine(name='default')
+        geo_eng = app.get_spatial_dataset_service('default', as_engine=True)
         # Create raster in geoserver
         response = geo_eng.create_coverage_resource(store_id=self.store_id,
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
+                                                    debug=False,
                                                     )
         if not response['success']:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
-                                              uri='tethys_app-%s' % get_workspace())
+                                              uri='tethys_app-%s' % get_workspace(),
+                                              debug=False,
+                                              )
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
+            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326, enabled=True)
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
+
 
     def create_tfw_file(self, h=256, w=512):
         minx, miny, maxx, maxy = self.latlonbox
@@ -228,7 +234,7 @@ def parse_fences_from_file():
     """
     model_fences = {}
 
-    fencefile = path.join(path.dirname(path.realpath(__file__)), 'public/data/dates_and_spatial_range.txt')
+    fencefile = path.join(path.dirname(path.realpath(__file__)), 'dates_and_spatial_range.txt')
 
     with open(fencefile, mode='r') as f:
         f.readline()  # skip column headings line
@@ -271,7 +277,7 @@ def parse_model_database_from_file():
         next(lines)  # Skip second line
     else:
         # If the file cannot be parsed from GitHub, use the locally stored file instead
-        db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'model_config.txt')
         with open(db_file, mode='r') as f:
             f.readline()  # Skip first line
             f.readline()  # Skip second line
@@ -284,6 +290,7 @@ def parse_model_database_from_file():
     datarods_tsb = {}
 
     for line in lines:
+        line = line.decode()
         if line == '\n' or line == '':
             new_model_switch = True
             continue

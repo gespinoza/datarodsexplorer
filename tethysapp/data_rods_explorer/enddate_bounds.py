@@ -1,16 +1,16 @@
-from urllib2 import urlopen
+from urllib.request import urlopen
 from os import path
 from sys import path as syspath
-syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found
+syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found #?
 from requests import get
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup   #?
 from datetime import datetime, timedelta
 
 
 def extract_model_data_from_config_file():
     # Attempt to parse model_config.txt from GitHub repo master branch
     db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
-                   'data_rods_explorer/public/data/model_config.txt')
+                   'data_rods_explorer/model_config.txt')
     f = get(db_file_url)
     if f.status_code == 200:
         if f.encoding is None:
@@ -20,7 +20,7 @@ def extract_model_data_from_config_file():
         next(lines)  # Skip second line
     else:
         # If the file cannot be parsed from GitHub, use the locally stored file instead
-        db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'model_config.txt')
         with open(db_file, mode='r') as f:
             f.readline()  # Skip first line
             f.readline()  # Skip second line
@@ -51,7 +51,7 @@ def extract_model_data_from_config_file():
 
 
 def write_fences_file(model_list):
-    fencefile = path.join(path.dirname(path.realpath(__file__)), 'public/data/dates_and_spatial_range.txt')
+    fencefile = path.join(path.dirname(path.realpath(__file__)), 'dates_and_spatial_range.txt')
 
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=-start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_NOAH0125_H&version=002&page_size=1&sort_key=-start_date
@@ -70,7 +70,7 @@ def write_fences_file(model_list):
 
         for model in model_list:
             middleman_url1 = url_pattern.format(model['short_name'], model['version'], 'start_date')
-            print middleman_url1
+            print(middleman_url1)
             middleman_url2 = url_pattern.format(model['short_name'], model['version'], '-start_date')
             url1 = get_url2(middleman_url1)
             url2 = get_url2(middleman_url2)
