@@ -6,7 +6,7 @@ app_package = 'data_rods_explorer'
 release_package = 'tethysapp-' + app_package
 
 ### Python Dependencies ###
-dependencies = ['python-dateutil', 'bs4']
+dependencies = []
 
 # -- Get Resource File -- #
 resource_files = find_resource_files('tethysapp/' + app_package + '/templates', 'tethysapp/' + app_package)
