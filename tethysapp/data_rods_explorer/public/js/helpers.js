@@ -153,7 +153,7 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
         type: 'POST',
         dataType: 'json',
         data: data,
-        timeout: 180000, //3 minutes
+        timeout: 120000, //2 minutes
         success: function (response) {
             if (response.hasOwnProperty('success')) {
                 if (response.success) {
@@ -198,7 +198,7 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                 }
             }
             if (requestMapAgain) {// Remove Infinite Loop
-                window.setTimeout(function () {requestMap(data, layerName, layerExtents, instanceId);}, 3000);
+                window.setTimeout(function () {requestMap(data, layerName, layerExtents, instanceId);});
 
             } else {
                 $('#btnDisplayMap').prop('disabled', false);
