@@ -97,6 +97,7 @@ def request_map_layer(request):
                     }
                     tif_layer_manager.trash()
                 elif tif_layer_manager.error:
+                    print('request map layer error')
                     context['error'] = tif_layer_manager.error
                     tif_layer_manager.trash()
         else:

@@ -75,7 +75,7 @@ class TiffLayerManager:
                kwargs={}).start()
 
     def request_tiff_layer_async(self, post_params):
-        try:
+        try: #uncomment Try/excpet
             self.requested = True
             plot_time = post_params.get('plotTime', None)
             self.model = post_params.get('model', None)
@@ -103,13 +103,18 @@ class TiffLayerManager:
              print(str(e))
              self.message = str(e)
 
+
     def download_raster_from_nasa(self):
-        try:
+        try: # uncomment Try/except
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
-            url_image = urllib.request.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
-                                                                  self.time_st,
-                                                                  get_wms_vars()[self.model][self.variable][0]))
+
+
+            url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st, get_wms_vars()[self.model][self.variable][0])
+
+            url_image = urllib.request.urlopen(url) # error
+
+
             self.tiff_file.write(url_image.read())
             self.tiff_file.close()
             # Create prj file
@@ -118,17 +123,20 @@ class TiffLayerManager:
             self.create_tfw_file()
             # Create zipfile
             self.create_zip_file()
-
-            self.upload_layer_to_geoserver() #error
+            self.upload_layer_to_geoserver()
         except Exception as e:
-             print(str(e))
-             self.message = str(e)
+            print ('download raster from nasa error')
+            print(str(e))
+            self.message = str(e)
+
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
         geo_eng = app.get_spatial_dataset_service('default', as_engine=True)
         # Create raster in geoserver
-        response = geo_eng.create_coverage_resource(store_id=self.store_id,
+        print ('upload layer to geoserver')
+
+        response = geo_eng.create_coverage_resource(store_id=self.store_id,   ## error
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
@@ -142,7 +150,10 @@ class TiffLayerManager:
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326, enabled=True)
+
+            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326,
+                                               enabled=True)
+
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
 
@@ -239,7 +250,7 @@ def parse_fences_from_file():
     with open(fencefile, mode='r') as f:
         f.readline()  # skip column headings line
         for line in f.readlines():
-            if not (line == '' or 'Model name' in line):      # end condition
+            if not (line == '' or 'Model name' in line):  # end condition
                 line = line.strip()
                 linevals = line.split('|')
                 start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1)) \
