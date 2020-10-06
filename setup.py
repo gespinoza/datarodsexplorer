@@ -24,9 +24,9 @@ setup(
     author_email='gespinoza@utexas.edu',
     url='',
     license='',
-    packages=find_namespace_packages(exclude=['ez_setup', 'examples', 'tests']),
+    packages=find_namespace_packages(),
+    package_data={'': resource_files},
     include_package_data=True,
     zip_safe=False,
     install_requires=dependencies,
-
 )

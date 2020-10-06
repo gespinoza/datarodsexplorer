@@ -74,7 +74,7 @@ class TiffLayerManager:
                kwargs={}).start()
 
     def request_tiff_layer_async(self, post_params):
-        try: #uncomment Try/excpet
+        #try: #uncomment Try/excpet
             self.requested = True
             plot_time = post_params.get('plotTime', None)
             self.model = post_params.get('model', None)
@@ -98,18 +98,22 @@ class TiffLayerManager:
             self.prj_path = file_name + '.prj'
             self.zip_path = file_name + '.zip'
             self.download_raster_from_nasa()
-        except Exception as e:
-            print ('request tiff layer async error')
-            print(str(e))
-            self.message = str(e)
+        #except Exception as e:
+        #    print ('request tiff layer async error')
+        #    print(str(e))
+        #    self.message = str(e)
 
     def download_raster_from_nasa(self):
-        try: # uncomment Try/except
+        #  try: # uncomment Try/except
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
 
-            url = get_datarods_png().format(minx, miny, maxx, maxy,self.time_st,get_wms_vars()[self.model][self.variable][0])
+            url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st, get_wms_vars()[self.model][self.variable][0])
+            print (self.time_st)
+            print (self.variable)
+            print (self.model)
             url_image = urllib.request.urlopen(url) # error
+
             self.tiff_file.write(url_image.read())
             self.tiff_file.close()
             # Create prj file
@@ -119,20 +123,22 @@ class TiffLayerManager:
             # Create zipfile
             self.create_zip_file()
             self.upload_layer_to_geoserver()
-        except Exception as e:
-            print ('download raster from nasa error')
-            print(str(e))
-            self.message = str(e)
+        #except Exception as e:
+        #    print ('download raster from nasa error')
+        #    print(str(e))
+        #    self.message = str(e)
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
         geo_eng = app.get_spatial_dataset_service('default', as_engine=True)
         # Create raster in geoserver
-        response = geo_eng.create_coverage_resource(store_id=self.store_id,
+        print ('upload layer to geoserver')
+
+        response = geo_eng.create_coverage_resource(store_id=self.store_id,   ## error
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
-                                                    debug=True,
+                                                    debug=False,
                                                     )
         if not response['success']:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
