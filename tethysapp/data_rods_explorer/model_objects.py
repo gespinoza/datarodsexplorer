@@ -243,7 +243,7 @@ def parse_fences_from_file():
     """
     model_fences = {}
 
-    fencefile = path.join(path.dirname(path.realpath(__file__)), 'dates_and_spatial_range.txt')
+    fencefile = path.join(path.dirname(path.realpath(__file__)), 'workspaces/app_workspace/dates_and_spatial_range.txt')
 
     with open(fencefile, mode='r') as f:
         f.readline()  # skip column headings line
