@@ -1,3 +1,4 @@
+
 # Data Rods Explorer 1.0.4  ![](figs/app-icon-balloon.png) 
 
 _Browse NASA data services for land surface model maps and time series_
@@ -927,4 +928,3 @@ _This content is intended for the HydroShare apps registry._
 **App icons** :   ![logo-sm](figs/app-icon-sm.png) ![logo-balloon](figs/app-icon-balloon.png)  ![logo-lg](figs/app-icon-lg.png)
 
 ---
-
