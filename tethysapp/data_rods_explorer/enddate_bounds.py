@@ -51,7 +51,7 @@ def extract_model_data_from_config_file():
 
 
 def write_fences_file(model_list):
-    fencefile = path.join(path.dirname(path.realpath(__file__)), 'dates_and_spatial_range.txt')
+    fencefile = path.join(path.dirname(path.realpath(__file__)), 'workspaces/app_workspace/dates_and_spatial_range.txt')
 
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=-start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_NOAH0125_H&version=002&page_size=1&sort_key=-start_date
