@@ -105,13 +105,13 @@ class TiffLayerManager:
 
 
     def download_raster_from_nasa(self):
-        try: # uncomment Try/except
+        try:
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
 
 
             url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st, get_wms_vars()[self.model][self.variable][0])
-
+            print (url)
             url_image = urllib.request.urlopen(url) # error
 
 
@@ -134,9 +134,7 @@ class TiffLayerManager:
         # Geoserver parameters
         geo_eng = app.get_spatial_dataset_service('default', as_engine=True)
         # Create raster in geoserver
-        print ('upload layer to geoserver')
-
-        response = geo_eng.create_coverage_resource(store_id=self.store_id,   ## error
+        response = geo_eng.create_coverage_resource(store_id=self.store_id,
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
@@ -147,7 +145,7 @@ class TiffLayerManager:
                                               uri='tethys_app-%s' % get_workspace(),
                                               debug=False,
                                               )
-            if result['success']:
+            if  result['success']:
                 self.upload_layer_to_geoserver()
         else:
 
