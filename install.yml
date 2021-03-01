@@ -12,6 +12,8 @@ requirements:
       - django
       - bs4
       - python-dateutil
+      - urllib3
+
 
   pip:
 

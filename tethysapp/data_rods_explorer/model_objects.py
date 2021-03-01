@@ -75,7 +75,7 @@ class TiffLayerManager:
                kwargs={}).start()
 
     def request_tiff_layer_async(self, post_params):
-        try:
+        try: #uncomment Try/excpet
             self.requested = True
             plot_time = post_params.get('plotTime', None)
             self.model = post_params.get('model', None)
@@ -103,13 +103,18 @@ class TiffLayerManager:
              print(str(e))
              self.message = str(e)
 
+
     def download_raster_from_nasa(self):
         try:
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
-            url_image = urllib.request.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
-                                                                  self.time_st,
-                                                                  get_wms_vars()[self.model][self.variable][0]))
+
+
+            url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st, get_wms_vars()[self.model][self.variable][0])
+            print (url)
+            url_image = urllib.request.urlopen(url) # error
+
+
             self.tiff_file.write(url_image.read())
             self.tiff_file.close()
             # Create prj file
@@ -118,11 +123,12 @@ class TiffLayerManager:
             self.create_tfw_file()
             # Create zipfile
             self.create_zip_file()
-
-            self.upload_layer_to_geoserver() #error
+            self.upload_layer_to_geoserver()
         except Exception as e:
-             print(str(e))
-             self.message = str(e)
+            print ('download raster from nasa error')
+            print(str(e))
+            self.message = str(e)
+
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
@@ -139,10 +145,13 @@ class TiffLayerManager:
                                               uri='tethys_app-%s' % get_workspace(),
                                               debug=False,
                                               )
-            if result['success']:
+            if  result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326, enabled=True)
+
+            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326,
+                                               enabled=True)
+
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
 
@@ -234,12 +243,12 @@ def parse_fences_from_file():
     """
     model_fences = {}
 
-    fencefile = path.join(path.dirname(path.realpath(__file__)), 'dates_and_spatial_range.txt')
+    fencefile = path.join(path.dirname(path.realpath(__file__)), 'workspaces/app_workspace/dates_and_spatial_range.txt')
 
     with open(fencefile, mode='r') as f:
         f.readline()  # skip column headings line
         for line in f.readlines():
-            if not (line == '' or 'Model name' in line):      # end condition
+            if not (line == '' or 'Model name' in line):  # end condition
                 line = line.strip()
                 linevals = line.split('|')
                 start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1)) \
@@ -277,7 +286,7 @@ def parse_model_database_from_file():
         next(lines)  # Skip second line
     else:
         # If the file cannot be parsed from GitHub, use the locally stored file instead
-        db_file = path.join(path.dirname(path.realpath(__file__)), 'model_config.txt')
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'workspaces/app_workspace/model_config.txt')
         with open(db_file, mode='r') as f:
             f.readline()  # Skip first line
             f.readline()  # Skip second line
