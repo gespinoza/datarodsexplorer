@@ -10,8 +10,8 @@ from datetime import datetime, timedelta
 
 def extract_model_data_from_config_file():
     # Attempt to parse model_config.txt from GitHub repo master branch
-    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
-                   'data_rods_explorer/model_config.txt')
+    db_file_url = ('https://raw.githubusercontent.com/CUAHSI-APPS/datarodsexplorer/master/tethysapp/'
+                   'data_rods_explorer/public/data/model_config.txt')
     f = get(db_file_url)
     if f.status_code == 200:
         if f.encoding is None:
@@ -21,7 +21,7 @@ def extract_model_data_from_config_file():
         next(lines)  # Skip second line
     else:
         # If the file cannot be parsed from GitHub, use the locally stored file instead
-        db_file = path.join(path.dirname(path.realpath(__file__)), 'model_config.txt')
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
         with open(db_file, mode='r') as f:
             f.readline()  # Skip first line
             f.readline()  # Skip second line
@@ -69,19 +69,24 @@ def write_fences_file(model_list):
         f.write(columnheadings)
 
         for model in model_list:
-            print(model['key'])
             middleman_url1 = url_pattern.format(model['short_name'], model['version'], 'start_date')
             print(middleman_url1)
             middleman_url2 = url_pattern.format(model['short_name'], model['version'], '-start_date')
             url1 = get_url2(middleman_url1)
             url2 = get_url2(middleman_url2)
 
-            if (url1 == "" or url2 == ""):
-                continue
-
-            begin_time = convert_datetime(get_begintime(url1))
-            end_time = convert_datetime(get_endtime(url2))
-            bounds = get_bounds(url2)
+            if model['key'] == "GRACE":
+                print(model)
+            try:
+                begin_time = convert_datetime(get_begintime(url1))
+                end_time = convert_datetime(get_endtime(url2))
+                bounds = get_bounds(url2)
+                if model['key'] == "GRACE":
+                    print(model)
+                    print(begin_time+"; "+end_time+"; "+bounds)
+            except:
+                print(model["key"]+" failed to get dates and spatial range.")
+                f.write(model_output_pattern.format(model['key'], "", "", ""))
 
             if model['key'] == 'GLDAS':
                 end_date = get_endtime(url2).split('T')[0]

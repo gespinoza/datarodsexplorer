@@ -10,7 +10,6 @@ import zipfile
 from math import copysign
 from tethysapp.data_rods_explorer.app import DataRodsExplorer as app
 
-
 WORKSPACE = 'data_rods_explorer'
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
                 '&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256'
@@ -75,7 +74,7 @@ class TiffLayerManager:
                kwargs={}).start()
 
     def request_tiff_layer_async(self, post_params):
-        try: #uncomment Try/excpet
+        try:  # uncomment Try/excpet
             self.requested = True
             plot_time = post_params.get('plotTime', None)
             self.model = post_params.get('model', None)
@@ -100,20 +99,18 @@ class TiffLayerManager:
             self.zip_path = file_name + '.zip'
             self.download_raster_from_nasa()
         except Exception as e:
-             print(str(e))
-             self.message = str(e)
-
+            print(str(e))
+            self.message = str(e)
 
     def download_raster_from_nasa(self):
         try:
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
 
-
-            url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st, get_wms_vars()[self.model][self.variable][0])
-            print (url)
-            url_image = urllib.request.urlopen(url) # error
-
+            url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st,
+                                            get_wms_vars()[self.model][self.variable][0])
+            print(url)
+            url_image = urllib.request.urlopen(url)  # error
 
             self.tiff_file.write(url_image.read())
             self.tiff_file.close()
@@ -125,10 +122,9 @@ class TiffLayerManager:
             self.create_zip_file()
             self.upload_layer_to_geoserver()
         except Exception as e:
-            print ('download raster from nasa error')
+            print('download raster from nasa error')
             print(str(e))
             self.message = str(e)
-
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
@@ -145,7 +141,7 @@ class TiffLayerManager:
                                               uri='tethys_app-%s' % get_workspace(),
                                               debug=False,
                                               )
-            if  result['success']:
+            if result['success']:
                 self.upload_layer_to_geoserver()
         else:
 
@@ -154,7 +150,6 @@ class TiffLayerManager:
 
             self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
-
 
     def create_tfw_file(self, h=256, w=512):
         minx, miny, maxx, maxy = self.latlonbox
@@ -277,8 +272,9 @@ def parse_fences_from_file():
 
 def parse_model_database_from_file():
     # Attempt to parse model_config.txt from GitHub repo master branch
-    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
-                   'data_rods_explorer/public/data/model_config.txt')
+    db_file_url = ('https://raw.githubusercontent.com/CUAHSI-APPS/datarodsexplorer/master/tethysapp/'
+                    'data_rods_explorer/public/data/model_config.txt')
+
     f = get(db_file_url)
     if f.status_code == 200:
         lines = f.iter_lines()
@@ -286,12 +282,11 @@ def parse_model_database_from_file():
         next(lines)  # Skip second line
     else:
         # If the file cannot be parsed from GitHub, use the locally stored file instead
-        db_file = path.join(path.dirname(path.realpath(__file__)), 'workspaces/app_workspace/model_config.txt')
+        db_file = path.join(path.dirname(path.realpath(__file__)), 'public/data/model_config.txt')
         with open(db_file, mode='r') as f:
             f.readline()  # Skip first line
             f.readline()  # Skip second line
             lines = f.readlines()
-
     new_model_switch = False
     model_options = []
     var_dict = {}
@@ -299,7 +294,10 @@ def parse_model_database_from_file():
     datarods_tsb = {}
 
     for line in lines:
-        line = line.decode()
+        try:
+            line = line.decode()
+        except AttributeError:
+            pass
         if line == '\n' or line == '':
             new_model_switch = True
             continue
