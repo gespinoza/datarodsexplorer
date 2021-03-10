@@ -1,5 +1,5 @@
 # This file should be committed to your app code.
-version: 2.0
+version: 0.0.2
 # This should match the app - package name in your setup.py
 name: data_rods_explorer
 
