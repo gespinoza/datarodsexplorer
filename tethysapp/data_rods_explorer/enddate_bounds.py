@@ -31,9 +31,15 @@ def extract_model_data_from_config_file():
     model_list = []
 
     for line in lines:
+        if type(line) == bytes:
+            if f.encoding:
+                line = str(line, f.encoding)
+            else:
+                line = str(line, 'utf-8')
         if line == '\n' or line == '':
             new_model_switch = True
             continue
+
         line = line.strip()
         linevals = line.split('|')
         if new_model_switch:
@@ -47,7 +53,6 @@ def extract_model_data_from_config_file():
                 'version': model_version
             })
             new_model_switch = False
-
     return model_list
 
 
@@ -74,19 +79,14 @@ def write_fences_file(model_list):
             middleman_url2 = url_pattern.format(model['short_name'], model['version'], '-start_date')
             url1 = get_url2(middleman_url1)
             url2 = get_url2(middleman_url2)
-
-            if model['key'] == "GRACE":
-                print(model)
             try:
                 begin_time = convert_datetime(get_begintime(url1))
                 end_time = convert_datetime(get_endtime(url2))
                 bounds = get_bounds(url2)
-                if model['key'] == "GRACE":
-                    print(model)
-                    print(begin_time+"; "+end_time+"; "+bounds)
             except:
-                print(model["key"]+" failed to get dates and spatial range.")
+                print(model["key"] + " failed to get dates and spatial range.")
                 f.write(model_output_pattern.format(model['key'], "", "", ""))
+                continue
 
             if model['key'] == 'GLDAS':
                 end_date = get_endtime(url2).split('T')[0]
