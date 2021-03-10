@@ -74,7 +74,7 @@ Smerge-Noah-CCI Root Zone~SMERGE~SMERGE_RZSM0_40CM~2.0~http://hydro1.gesdisc.eos
 SMERGE|RZSM|SMERGE_RZSM0_40CM_2.0_RZSM|0-40cm avg soil moisture|m^3/m^3|SMERGE:0-40cmSoilMoisture
 SMERGE|CCI_ano|SMERGE_RZSM0_40CM_2.0_CCI_ano|0-40cm CCI-based soil moisture anomalies|m^3/m^3|SMERGE:0-40cmCCISoilMoistureAnomalies
 
-GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~4.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.2:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~4.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.4:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_4_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
 GRACE|rtzsm_inst|GRACEDADM_CLSM0125US_7D_4_0_rtzsm_inst|0-100cm root zone soil moisture percentile|%|GRACE:100cmRootZoneSoilMoist%
 GRACE|gws_inst|GRACEDADM_CLSM0125US_7D_4_0_gws_inst|Shallow groundwater percentile|%|GRACE:GroundWater%
