@@ -16,7 +16,7 @@ resource_files += find_resource_files('tethysapp/' + app_package + '/workspaces'
 
 setup(
     name=release_package,
-    version='0.0.1',
+    version='0.0.2',
     description='Plot and visualize data from LDAS',
     long_description='',
     keywords='',
