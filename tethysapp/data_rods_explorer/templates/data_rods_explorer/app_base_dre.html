@@ -1,4 +1,5 @@
 {% extends "tethys_apps/app_base.html" %}
+{% block title %}{{ block.super }} Data Rods Explorer{% endblock %}
 
 {% load staticfiles tethys_gizmos %}
 {% block htmltag %}
@@ -21,7 +22,6 @@
         {% else %}
             Tethys
         {% endif %}
-        {% block title %}{% endblock %}
  </title>
     {% block links %}
         {% if site_globals.favicon %}<link rel="shortcut icon" href="{{ site_globals.favicon }}" />{% endif %}

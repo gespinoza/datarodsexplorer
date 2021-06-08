@@ -86,7 +86,6 @@ def request_map_layer(request):
         post_params = request.POST
         instance_id = post_params['instance_id']
         tif_layer_manager = TiffLayerManager.get_instance(instance_id)
-
         if tif_layer_manager:
             if tif_layer_manager.requested:
                 if tif_layer_manager.loaded:
