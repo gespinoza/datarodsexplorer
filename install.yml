@@ -1,5 +1,5 @@
 # This file should be committed to your app code.
-version: 0.0.3 # use setup.py to change version
+version: 0.0.4 # use setup.py to change version
 # This should match the app - package name in your setup.py
 name: data_rods_explorer
 
@@ -13,8 +13,5 @@ requirements:
       - bs4
       - python-dateutil
       - urllib3
-
-
   pip:
-
 post:
