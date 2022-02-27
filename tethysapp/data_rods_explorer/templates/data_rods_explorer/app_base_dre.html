@@ -1,46 +1,20 @@
-{% load staticfiles tethys_gizmos %}
-<!DOCTYPE html>
+{% extends "tethys_apps/app_base.html" %}
+{% block title %}{{ block.super }} Data Rods Explorer{% endblock %}
 
-{# Allows custom attributes to be added to the html tag #}
+{% load staticfiles tethys_gizmos %}
 {% block htmltag %}
-    <!--[if IE 7]> <html lang="en" class="ie ie7"> <![endif]-->
-    <!--[if IE 8]> <html lang="en"  class="ie ie8"> <![endif]-->
-    <!--[if IE 9]> <html lang="en"  class="ie9"> <![endif]-->
-    <!--[if gt IE 8]><!--> <html lang="en" > <!--<![endif]-->
 {% endblock %}
 
 {# Allows custom attributes to be added to the head tag #}
 <head {% block headtag %}{% endblock %}>
-
-    {% comment "meta explanation" %}
-    Add custom meta tags to the page. Call block.super to get the default tags
-    such as charset, viewport and generator.
-
-    Example:
-
-    {% block meta %}
-    {{ block.super }}
-    <meta name="description" value="My website description" />
-    {% endblock %}
-    {% endcomment %}
-
-    {% block meta %}
+{% block meta %}
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="generator" content="Django" />
-    {% endblock %}
+{% endblock %}
 
-    {% comment "title explanation" %}
-    Add a custom title to the page by extending the title block. Call block.super
-    to get the default page title.
-
-    Example:
-
-    {% block title %}- {{ tethys_app.name }}{% endblock %}
-    {% endcomment %}
-
-    <title>
+ <title>
         {% if site_globals.site_title %}
             {{ site_globals.site_title }}
         {% elif site_globals.brand_text %}
@@ -48,36 +22,15 @@
         {% else %}
             Tethys
         {% endif %}
-        {% block title %}{% endblock %}
-    </title>
-
-    {% comment "links explanation" %}
-    The links block allows you to add additional content before the stylesheets
-    such as rss feeds and favicons in the same way as the meta block.
-    {% endcomment %}
-
+ </title>
     {% block links %}
         {% if site_globals.favicon %}<link rel="shortcut icon" href="{{ site_globals.favicon }}" />{% endif %}
     {% endblock %}
-
-    {% comment "styles explanation" %}
-    The styles block allows you to add additional stylesheets to the page in
-    the same way as the meta block. Use block.super to include the default
-    stylesheets before or after your own.
-
-    Example:
-
-    {% block styles %}
+{% block styles %}
     {{ block.super }}
-    <link href="{% static 'custom/css/foo.css' %}" rel="stylesheet" />
-    {% endblock %}
-    {% endcomment %}
-
-    {% block styles %}
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="{% static 'tethys_apps/css/app_base.css' %}" rel="stylesheet" />
-        <link href="{% static 'data_rods_explorer/css/main.css' %}" rel="stylesheet"/>
-    {% endblock %}
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{% static 'data_rods_explorer/css/main.css' %}" rel="stylesheet"/>
+{% endblock %}
 
     {% block global_scripts %}
         <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
@@ -87,11 +40,13 @@
 
 {# Allows custom attributes to be added to the body tag #}
 <body {% block bodytag %}{% endblock %}>
+
 {% block app_content_wrapper_override %}
     <div id="app-content-wrapper" class="show-nav">
         {% block app_header_override %}
             <div id="app-header" class="clearfix">
                 <div class="tethys-app-header" style="background: {{ tethys_app.color|default:'#1b95dc' }};">
+                    <div id="nav-title-wrapper">
                     {% block app-navigation-toggle-override %}
                         <a href="javascript:void(0);" class="toggle-nav">
                             <div></div>
@@ -109,17 +64,30 @@
                             <span class="app-title">{% block app_title %}{{ tethys_app.name }}{% endblock %}</span>
                         </div>
                     {% endblock %}
-                    {% block exit_button_override %}
-                        <div class="exit-button">
+                    </div>
+
+                    {% block header_buttons_override %}
+                    <div id="header-buttons-wrapper">
+                        {% block header_buttons %}
+                        <div class="header-button settings-button">
                             <a id="resetPage">Reset</a>
                         </div>
-                        <div class="exit-button">
-                            <a href="https://github.com/gespinoza/datarodsexplorer/blob/master/docs/DREUserGuide.md" target="_blank">About</a>
+                        <div class="header-button settings-button">
+                            <a href="https://github.com/CUAHSI-APPS/datarodsexplorer/blob/master/docs/DREUserGuide.md" target="_blank">About</a>
                         </div>
+                        {% endblock %}
+                        {% block exit_button_override %}
+                        <div class="header-button settings-button">
+                            <a href="javascript:void(0);" onclick="TETHYS_APP_BASE.exit_app('{% url 'app_library' %}');">Exit</a>
+                         </div>
+                        {% endblock %}
+                    </div>
                     {% endblock %}
                 </div>
             </div>
         {% endblock %}
+
+
         {% block app_content_override %}
             <div id="app-content">
                 {% block flash %}
@@ -135,7 +103,6 @@
                 {% endblock %}
 
                 {% block app_navigation_override %}
-
                     <div id="app-navigation">
                         {% block app_navigation %}
                             <ul class="nav nav-pills nav-stacked">
@@ -153,15 +120,15 @@
 
                                         <form id="parametersForm" name="parametersForm">
                                             {% csrf_token %}
-                                            <input name="lonW" id="lonW" value=-107 hidden>
-                                            <input name="latS" id="latS" value=24 hidden>
-                                            <input name="lonE" id="lonE" value=-95 hidden>
-                                            <input name="latN" id="latN" value=30 hidden>
-                                            <input name="zoom" id="zoom" value=4.25 hidden>
-                                            <input name="centerX" id="centerX" value=-96.5 hidden>
-                                            <input name="centerY" id="centerY" value=38.5 hidden>
-                                            <input name="pointLonLat" id="pointLonLat" value=-9999 hidden>
-                                            <button id="btnDisplayMap" type="button" class="btn btn-default" onclick="load_map()">Display map</button>
+                                            <input name="lonW" id="lonW" value=-107 hidden > <!-- Add hidden start-->
+                                            <input name="latS" id="latS" value=24 hidden >
+                                            <input name="lonE" id="lonE" value=-95 hidden >
+                                            <input name="latN" id="latN" value=30 hidden >
+                                            <input name="zoom" id="zoom" value=4.25 hidden >
+                                            <input name="centerX" id="centerX" value=-96.5 hidden >
+                                            <input name="centerY" id="centerY" value=38.5 hidden >
+                                            <input name="pointLonLat" id="pointLonLat" value=-9999 hidden ><!-- Add hidden end-->
+                                            <button id="btnDisplayMap" type="button" class="btn btn-default" onclick="load_map()" disabled="true">Display map</button>
                                         </form>
                                     </div>
 
@@ -232,54 +199,6 @@
         {% endblock %}
     </div>
 
-    <!-- Upload to HydroShare Modal
-    <div id="modalUploadToHS" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            Modal content
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Upload to HydroShare</h4>
-                </div>
-                <div class="modal-body">
-                    <fieldset>
-                        <div class="form-group hidden">
-                            <label for="plotType" class="control-label">Plot Type:</label>
-                            <input type="text" id="plotType" />
-                        </div>
-                        <div class="form-group hidden">
-                            <label for="resType" class="control-label">Resource Type:</label>
-                            <input type="text" id="resType" />
-                        </div>
-                        <div class="form-group hidden">
-                            <label for="rodsEndpoint" class="control-label">Rods Endpoint:</label>
-                            <input type="text" id="rodsEndpoint" />
-                        </div>
-                        <div class="form-group">
-                            <label for="resTitle" class="control-label">Resource Title:</label>
-                            <input type="text" class="form-control resField" id="resTitle">
-                        </div>
-                        <div class="form-group">
-                            <label for="resAbstract" class="control-label">Resource Abstract:</label>
-                            <textarea rows="6" cols="50" id="resAbstract" class="form-control resField"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="resKeywords" class="control-label">Resource Keywords (comma-separated):</label>
-                            <input type="text" class="form-control resField" id="resKeywords">
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="modal-footer">
-                    <div class="button-group flex1-0">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" id="btn-uploadToHS" class="btn btn-default btn-upload">Upload</button>
-                    </div>
-                </div>
-            </div>
-            End modal content
-        </div>
-    </div>
-    End modal-->
 {% endblock %}
 
 {% block scripts %}
@@ -306,8 +225,9 @@
         $(function () {
             loadDefaultHome();
             loadVariableOptions('model', 'variable');
+
         });
     </script>
 {% endblock %}
 </body>
-</html>
+

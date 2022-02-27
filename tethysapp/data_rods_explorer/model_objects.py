@@ -5,10 +5,10 @@ from tethys_sdk.services import get_spatial_dataset_engine
 import os
 from threading import Thread
 from tempfile import NamedTemporaryFile
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import zipfile
 from math import copysign
-
+from tethysapp.data_rods_explorer.app import DataRodsExplorer as app
 
 WORKSPACE = 'data_rods_explorer'
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
@@ -74,7 +74,7 @@ class TiffLayerManager:
                kwargs={}).start()
 
     def request_tiff_layer_async(self, post_params):
-        try:
+        try:  # uncomment Try/excpet
             self.requested = True
             plot_time = post_params.get('plotTime', None)
             self.model = post_params.get('model', None)
@@ -99,16 +99,19 @@ class TiffLayerManager:
             self.zip_path = file_name + '.zip'
             self.download_raster_from_nasa()
         except Exception as e:
-            print e.message
-            self.message = e.message
+            print(str(e))
+            self.message = str(e)
 
     def download_raster_from_nasa(self):
         try:
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
-            url_image = urllib2.urlopen(get_datarods_png().format(minx, miny, maxx, maxy,
-                                                                  self.time_st,
-                                                                  get_wms_vars()[self.model][self.variable][0]))
+
+            url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st,
+                                            get_wms_vars()[self.model][self.variable][0])
+            print(url)
+            url_image = urllib.request.urlopen(url)  # error
+
             self.tiff_file.write(url_image.read())
             self.tiff_file.close()
             # Create prj file
@@ -117,28 +120,33 @@ class TiffLayerManager:
             self.create_tfw_file()
             # Create zipfile
             self.create_zip_file()
-
             self.upload_layer_to_geoserver()
         except Exception as e:
-            print e.message
-            self.message = e.message
+            print('download raster from nasa error')
+            print(str(e))
+            self.message = str(e)
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
-        geo_eng = get_spatial_dataset_engine(name='default')
+        geo_eng = app.get_spatial_dataset_service('default', as_engine=True)
         # Create raster in geoserver
         response = geo_eng.create_coverage_resource(store_id=self.store_id,
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
+                                                    debug=False,
                                                     )
         if not response['success']:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
-                                              uri='tethys_app-%s' % get_workspace())
+                                              uri='tethys_app-%s' % get_workspace(),
+                                              debug=False,
+                                              )
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
+            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326,
+                                               enabled=True)
+            self.geoserver_url = geo_eng.public_endpoint.replace('rest', 'wms')
             self.loaded = True
 
     def create_tfw_file(self, h=256, w=512):
@@ -233,7 +241,7 @@ def parse_fences_from_file():
     with open(fencefile, mode='r') as f:
         f.readline()  # skip column headings line
         for line in f.readlines():
-            if not (line == '' or 'Model name' in line):      # end condition
+            if not (line == '' or 'Model name' in line):  # end condition
                 line = line.strip()
                 linevals = line.split('|')
                 start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1)) \
@@ -262,8 +270,9 @@ def parse_fences_from_file():
 
 def parse_model_database_from_file():
     # Attempt to parse model_config.txt from GitHub repo master branch
-    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
-                   'data_rods_explorer/public/data/model_config.txt')
+    db_file_url = ('https://raw.githubusercontent.com/CUAHSI-APPS/datarodsexplorer/master/tethysapp/'
+                    'data_rods_explorer/public/data/model_config.txt')
+
     f = get(db_file_url)
     if f.status_code == 200:
         lines = f.iter_lines()
@@ -276,7 +285,6 @@ def parse_model_database_from_file():
             f.readline()  # Skip first line
             f.readline()  # Skip second line
             lines = f.readlines()
-
     new_model_switch = False
     model_options = []
     var_dict = {}
@@ -284,6 +292,10 @@ def parse_model_database_from_file():
     datarods_tsb = {}
 
     for line in lines:
+        try:
+            line = line.decode()
+        except AttributeError:
+            pass
         if line == '\n' or line == '':
             new_model_switch = True
             continue
