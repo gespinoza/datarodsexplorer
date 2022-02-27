@@ -1,15 +1,16 @@
-from urllib2 import urlopen
+from urllib.request import urlopen
 from os import path
 from sys import path as syspath
-syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found
+
+syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found #?
 from requests import get
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup  # ?
 from datetime import datetime, timedelta
 
 
 def extract_model_data_from_config_file():
     # Attempt to parse model_config.txt from GitHub repo master branch
-    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
+    db_file_url = ('https://raw.githubusercontent.com/CUAHSI-APPS/datarodsexplorer/master/tethysapp/'
                    'data_rods_explorer/public/data/model_config.txt')
     f = get(db_file_url)
     if f.status_code == 200:
@@ -30,9 +31,15 @@ def extract_model_data_from_config_file():
     model_list = []
 
     for line in lines:
+        if type(line) == bytes:
+            if f.encoding:
+                line = str(line, f.encoding)
+            else:
+                line = str(line, 'utf-8')
         if line == '\n' or line == '':
             new_model_switch = True
             continue
+
         line = line.strip()
         linevals = line.split('|')
         if new_model_switch:
@@ -46,13 +53,11 @@ def extract_model_data_from_config_file():
                 'version': model_version
             })
             new_model_switch = False
-
     return model_list
 
 
 def write_fences_file(model_list):
     fencefile = path.join(path.dirname(path.realpath(__file__)), 'public/data/dates_and_spatial_range.txt')
-
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=-start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_NOAH0125_H&version=002&page_size=1&sort_key=-start_date
     # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=-start_date
@@ -70,14 +75,18 @@ def write_fences_file(model_list):
 
         for model in model_list:
             middleman_url1 = url_pattern.format(model['short_name'], model['version'], 'start_date')
-            print middleman_url1
+            print(middleman_url1)
             middleman_url2 = url_pattern.format(model['short_name'], model['version'], '-start_date')
             url1 = get_url2(middleman_url1)
             url2 = get_url2(middleman_url2)
-
-            begin_time = convert_datetime(get_begintime(url1))
-            end_time = convert_datetime(get_endtime(url2))
-            bounds = get_bounds(url2)
+            try:
+                begin_time = convert_datetime(get_begintime(url1))
+                end_time = convert_datetime(get_endtime(url2))
+                bounds = get_bounds(url2)
+            except:
+                print(model["key"] + " failed to get dates and spatial range.")
+                f.write(model_output_pattern.format(model['key'], "", "", ""))
+                continue
 
             if model['key'] == 'GLDAS':
                 end_date = get_endtime(url2).split('T')[0]
@@ -97,7 +106,8 @@ def write_fences_file(model_list):
                     if 'end_time' in line:
                         end_time = datetime.strptime(line.split('=')[1], '%Y/%m/%d/%H').strftime('%m/%d/%Y %H:00:00')
                         break
-
+            if begin_time == "":
+                begin_time = '04/01/2002 00:00:00'
             f.write(model_output_pattern.format(model['key'], begin_time, end_time, bounds))
 
 
@@ -169,6 +179,7 @@ def convert_datetime(date_time):
     minute = date_time[14:16]
     second = date_time[17:19]
     return "%s/%s/%s %s:%s:%s" % (month, day, year, hour, minute, second)
+
 
 models_list = extract_model_data_from_config_file()
 write_fences_file(models_list)

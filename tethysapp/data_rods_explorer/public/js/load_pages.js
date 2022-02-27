@@ -263,6 +263,7 @@ function addVarsToURL(vars) {
 }
 
 function loadExtentsLayers(model) {
+
     var extents = validateExtents(MODEL_FENCES[model].extents);
     var minX = parseFloat(extents.minX);
     var maxX = parseFloat(extents.maxX);
@@ -323,13 +324,11 @@ function loadExtentsLayers(model) {
         source: source1,
         style: getStyle(1),
         name: 'model1_extents',
-        extent: olExtents
     });
     MODEL2_LAYER = new ol.layer.Vector({
         source: source2,
         style: getStyle(2),
         name: 'model2_extents',
-        extent: olExtents
     });
     MODEL1_LAYER['tethys_legend_title'] = 'Model 1 Extents';
     MODEL2_LAYER['tethys_legend_title'] = 'Model 2 Extents';
@@ -337,7 +336,6 @@ function loadExtentsLayers(model) {
     MODEL2_LAYER['tethys_legend_extent'] = olExtents;
     MODEL1_LAYER['tethys_legend_extent_projection'] = olProjection;
     MODEL2_LAYER['tethys_legend_extent_projection'] = olProjection;
-
     map.addLayer(MODEL1_LAYER);
     update_legend();
 }
