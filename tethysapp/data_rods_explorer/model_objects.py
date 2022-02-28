@@ -134,17 +134,17 @@ class TiffLayerManager:
                                                     coverage_file=self.zip_path,
                                                     coverage_type='worldimage',
                                                     overwrite=True,
-                                                    debug=False,
+                                                    debug=True,
                                                     )
         if not response['success']:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
                                               uri='tethys_app-%s' % get_workspace(),
-                                              debug=False,
+                                              debug=True,
                                               )
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326,
+            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=True, EPSG=4326,
                                                enabled=True)
             self.geoserver_url = geo_eng.public_endpoint.replace('rest', 'wms')
             self.loaded = True
