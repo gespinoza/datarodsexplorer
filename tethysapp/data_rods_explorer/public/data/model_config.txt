@@ -26,17 +26,6 @@ NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100cm soil moisture|kg
 NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200cm soil moisture|kg/m^2|NLDAS:100-200cmSoilMoisture
 NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10cm soil temperature|K|NLDAS:0-10cmSoilTemp
 
-NLDAS 2.0-Forcing (LSM)~NLDAS2F~NLDAS_FORA0125_H_v2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS2:NLDAS_FORA0125_H_v2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-NLDAS2F|Rainf|NLDAS_FORA0125_H_v2.0_Rainf|Total precipitation|kg/m^2|NLDAS2F:TotalPrecip
-NLDAS2F|LWdown|NLDAS_FORA0125_H_v2.0_LWdown|LW down radiation flux|w/m^2|NLDAS2F:LWFluxDown
-NLDAS2F|SWdown|NLDAS_FORA0125_H_v2.0_SWdown|LW down radiation flux|w/m^2|NLDAS2F:SWFluxDown
-NLDAS2F|PotEvap|NLDAS_FORA0125_H_v2.0_PotEvap|Potential evaporation|kg/m^2|NLDAS2F:PotEvap
-NLDAS2F|PSurf|NLDAS_FORA0125_H_v2.0_PSurf|Surface pressure|Pa|NLDAS2F:SurfPressure
-NLDAS2F|Qair|NLDAS_FORA0125_H_v2.0_Qair|2-m above ground specific humidity|kg/kg|NLDAS2F:2mSpecHumidity
-NLDAS2F|Tair|NLDAS_FORA0125_H_v2.0_Tair|2-m above ground temperature|K|NLDAS2F:2mAirTemperature
-NLDAS2F|Wind_E|NLDAS_FORA0125_H_v2.0_Wind_E|10-meter above ground Zonal wind speed|m/s|NLDAS2F:10mZonalWindSpeed
-NLDAS2F|Wind_N|NLDAS_FORA0125_H_v2.0_Wind_N|10-meter above ground Meridional wind speed|m/s|NLDAS2F:10mMeridionalWindSpeed
-
 GLDAS 2.1-Noah (LSM) 2000-Present~GLDAS21~GLDAS_NOAH025_3H~2.1~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.1:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
 GLDAS21|Evap_tavg|GLDAS_NOAH025_3H_2_1_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS21:Evapotrans
 GLDAS21|Rainf_tavg|GLDAS_NOAH025_3H_2_1_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS21:RainRate
