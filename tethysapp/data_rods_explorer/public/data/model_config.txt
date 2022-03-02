@@ -26,7 +26,7 @@ NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100cm soil moisture|kg
 NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200cm soil moisture|kg/m^2|NLDAS:100-200cmSoilMoisture
 NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10cm soil temperature|K|NLDAS:0-10cmSoilTemp
 
-NLDAS 2.0-Forcing (LSM)~NLDAS2F~NLDAS_FORA0125_H_v2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS2:NLDAS_FORA0125_H_v2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+NLDAS 2.0-Forcing (LSM)~NLDAS2F~NLDAS_FORA0125_H~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS2:NLDAS_FORA0125_H_v2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 NLDAS2F|Rainf|NLDAS_FORA0125_H_v2.0_Rainf|Total precipitation|kg/m^2|NLDAS2F:TotalPrecip
 NLDAS2F|LWdown|NLDAS_FORA0125_H_v2.0_LWdown|LW down radiation flux|w/m^2|NLDAS2F:LWFluxDown
 NLDAS2F|SWdown|NLDAS_FORA0125_H_v2.0_SWdown|LW down radiation flux|w/m^2|NLDAS2F:SWFluxDown
