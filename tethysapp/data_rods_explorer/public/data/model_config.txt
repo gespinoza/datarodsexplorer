@@ -81,11 +81,11 @@ GLDAS20|AvgSurfT_inst|GLDAS_NOAH025_3H_2_0_AvgSurfT_inst|Average Surface Skin te
 GLDAS20|LWdown_f_tavg|GLDAS_NOAH025_3H_2_0_LWdown_f_tavg|LW down radiation flux|W/m^2|GLDAS20:LWdownRadFlux
 GLDAS20|SWdown_f_tavg|GLDAS_NOAH025_3H_2_0_SWdown_f_tavg|SW down radiation flux|W/m^2|GLDAS20:SWdownRadFlux
 
-Smerge-Noah-CCI Root Zone~SMERGE~SMERGE_RZSM0_40CM~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=SMERGE:SMERGE_RZSM0_40CM_4.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+Smerge-Noah-CCI Root Zone~SMERGE~SMERGE_RZSM0_40CM~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=SMERGE:SMERGE_RZSM0_40CM_2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 SMERGE|RZSM|SMERGE_RZSM0_40CM_2.0_RZSM|0-40cm avg soil moisture|m^3/m^3|SMERGE:0-40cmSoilMoisture
 SMERGE|CCI_ano|SMERGE_RZSM0_40CM_2.0_CCI_ano|0-40cm CCI-based soil moisture anomalies|m^3/m^3|SMERGE:0-40cmCCISoilMoistureAnomalies
 
-GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~4.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.4.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~4.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.4:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
 GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_4_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
 GRACE|rtzsm_inst|GRACEDADM_CLSM0125US_7D_4_0_rtzsm_inst|0-100cm root zone soil moisture percentile|%|GRACE:100cmRootZoneSoilMoist%
 GRACE|gws_inst|GRACEDADM_CLSM0125US_7D_4_0_gws_inst|Shallow groundwater percentile|%|GRACE:GroundWater%
