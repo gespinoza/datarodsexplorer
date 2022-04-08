@@ -16,7 +16,7 @@ resource_files += find_resource_files('tethysapp/' + app_package + '/workspaces'
 
 setup(
     name=release_package,
-    version='0.0.4',  # Change version in install.yml as well
+    version='0.1.0',  # Change version in install.yml as well
     description='Plot and visualize data from LDAS',
     long_description='',
     keywords='',

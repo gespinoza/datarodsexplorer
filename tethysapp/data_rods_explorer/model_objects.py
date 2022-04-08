@@ -270,7 +270,7 @@ def parse_fences_from_file():
 
 def parse_model_database_from_file():
     # Attempt to parse model_config.txt from GitHub repo master branch
-    db_file_url = ('https://raw.githubusercontent.com/CUAHSI-APPS/datarodsexplorer/master/tethysapp/'
+    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
                     'data_rods_explorer/public/data/model_config.txt')
 
     f = get(db_file_url)

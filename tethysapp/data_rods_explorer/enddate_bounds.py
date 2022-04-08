@@ -7,10 +7,12 @@ from requests import get
 from bs4 import BeautifulSoup  # ?
 from datetime import datetime, timedelta
 
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def extract_model_data_from_config_file():
     # Attempt to parse model_config.txt from GitHub repo master branch
-    db_file_url = ('https://raw.githubusercontent.com/CUAHSI-APPS/datarodsexplorer/master/tethysapp/'
+    db_file_url = ('https://raw.githubusercontent.com/gespinoza/datarodsexplorer/master/tethysapp/'
                    'data_rods_explorer/public/data/model_config.txt')
     f = get(db_file_url)
     if f.status_code == 200:
@@ -58,14 +60,27 @@ def extract_model_data_from_config_file():
 
 def write_fences_file(model_list):
     fencefile = path.join(path.dirname(path.realpath(__file__)), 'public/data/dates_and_spatial_range.txt')
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=-start_date
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_NOAH0125_H&version=002&page_size=1&sort_key=-start_date
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025SUBP_3H&version=001&page_size=1&sort_key=-start_date
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025_3H&version=2.0&page_size=1&sort_key=-start_date
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=TRMM_3B42&version=7&page_size=1&sort_key=-start_date
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSRE_D_SOILM3&version=002&page_size=1&sort_key=-start_date
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSRE_A_SOILM3&version=002&page_size=1&sort_key=-start_date
-    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GRACEDADM_CLSM025NA_7D&version=1.0&page_size=1&sort_key=-start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_NOAH0125_H&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=NLDAS_FORA0125_H&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025_3H&version=2.1&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GLDAS_NOAH025_3H&version=2.0&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=SMERGE_RZSM0_40CM&version=2.0&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=GRACEDADM_CLSM0125US_7D&version=4.0&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSRE_D_SOILM3&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSRE_D_RZSM3&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSRE_A_SOILM3&version=002&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSR2_DS_D_SOILM3&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSR2_DS_A_SOILM3&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSR2_DS_D_SOILM3&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_AMSR2_DS_D_SOILM3&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_TMI_DY_SOILM3&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=LPRM_TMI_NT_SOILM3&version=001&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=TRMM_3B42&version=7&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=MST1NXMLD&version=5.2.0&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=M2T1NXFLX&version=5.12.4&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=M2T1NXLFO&version=5.12.4&page_size=1&sort_key=start_date
+    # https://cmr.earthdata.nasa.gov/search/granules?short_name=M2I1NXLFO&version=5.12.4&page_size=1&sort_key=start_date
     url_pattern = "https://cmr.earthdata.nasa.gov/search/granules?short_name={0}&version={1}&page_size=1&sort_key={2}"
     columnheadings = "Model name | Begin time | End time | N , E , S , W bounds\n"
     model_output_pattern = "{0}|{1}|{2}|{3}\n"

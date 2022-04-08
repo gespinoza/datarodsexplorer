@@ -3,6 +3,10 @@ function oc_model() {
     var NLDASFlashMessageText = 'NLDAS does not support the "Display Map" function, ' +
         'but data rods data can still be obtained under the "Plot one variable", "Compare two variables", ' +
         'or "Year-on-year changes" options.';
+    var SMERGEFlashMessageID = 'Smerge-get-map-disabled';
+    var SMERGEFlashMessageText = 'Smerge does not support the "Display Map" function, ' +
+        'but data rods data can still be obtained under the "Plot one variable", "Compare two variables", ' +
+        'or "Year-on-year changes" options.';
     var href;
     var GET = getUrlVars();
     var model = $('#model1').val();
@@ -30,6 +34,9 @@ function oc_model() {
     if (model.includes('NLDAS')) {
         btnDisplayMap.prop('disabled', true);
         displayFlashMessage(NLDASFlashMessageID, 'info', NLDASFlashMessageText)
+    } else if (model.includes('SMERGE')) {
+        btnDisplayMap.prop('disabled', true);
+        displayFlashMessage(SMERGEFlashMessageID, 'info', SMERGEFlashMessageText)
     } else {
         btnDisplayMap.prop('disabled', false);
         removeFlashMessage(NLDASFlashMessageID)

@@ -42,9 +42,9 @@ Thumbs.db
 .idea/
 *.egg-info/
 *.pyc
+
 # Other files #
 ###############
-*dates_and_spatial_range.txt
 docs/
 
 *.pydevproject
@@ -53,3 +53,4 @@ docs/
 *.class
 
 dist/
+build/
