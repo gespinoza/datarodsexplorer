@@ -1,0 +1,9 @@
+#main-container {
+    max-height: 800px;
+    overflow: hidden;
+}
+
+.data-container {
+    overflow-y: scroll;
+    max-height: 800px;
+}

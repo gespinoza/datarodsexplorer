@@ -12,6 +12,6 @@ requirements:
       - django
       - bs4
       - python-dateutil
-      - urllib3
+      - urllib3<2.0.0
   pip:
 post:

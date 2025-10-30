@@ -1,8 +1,65 @@
+const mapDisabledMessage = ' does not support the "Display Map" function, ' +
+    'but data rods data can still be obtained under the "Plot one variable", "Compare two variables", ' +
+    'or "Year-on-year changes" options.';
+
+const mapFlashMessages = {
+    'NLDAS': {
+        'id': 'NLDAS-get-map-disabled',
+        'text': 'NLDAS ' + mapDisabledMessage,
+        'disable': '#btnDisplayMap'
+    },   
+}
+
+const plotDisabledMessage = ' does not support the "Plot one variable", "Compare two variables", ' +
+    'or "Year-on-year changes" functions, but data rods data can still be obtained under the "Display Map" option.';
+
+const plotFlashMessages = {
+    'AMSRED' : {
+        'id': 'AMSRED-get-plot-disabled',
+        'text': 'LPRM-AMSRE-D ' + plotDisabledMessage,
+    },
+    'AMSREA': {
+        'id': 'AMSREA-get-plot-disabled',
+        'text': 'LPRM-AMSRE-A ' + plotDisabledMessage,
+    },
+    'AMSR2D10' : {
+        'id': 'AMSR2D10-get-plot-disabled',
+        'text': 'LPRM-AMSR2-D 10km' + plotDisabledMessage,
+    },
+    'AMSR2A10' : {
+        'id': 'AMSR2A10-get-plot-disabled',
+        'text': 'LPRM-AMSR2-A 10km' + plotDisabledMessage,
+    },
+    'AMSR2D25' : {
+        'id': 'AMSR2D25-get-plot-disabled',
+        'text': 'LPRM-AMSR2-D 25km' + plotDisabledMessage,
+    },
+    'AMSR2A25' : {
+        'id': 'AMSR2A25-get-plot-disabled',
+        'text': 'LPRM-AMSR2-A 25km' + plotDisabledMessage,
+    },
+    'TMIDY' : {
+        'id': 'TMIDY-get-plot-disabled',
+        'text': 'LPRM-TMI-Day' + plotDisabledMessage,
+    },
+    'TMINT' : {
+        'id': 'TMINT-get-plot-disabled',
+        'text': 'LPRM-TMI-Night' + plotDisabledMessage,
+    }, 
+    'TRMM' : {
+        'id': 'TRMM-get-plot-disabled',
+        'text': 'TRMM' + plotDisabledMessage,
+    }
+}
+
 // Global flash messages
 var mapDisplayErrorFlashMessageID = 'map-error';
 var mapDisplayErrorFlashMessageText = 'A map could not be retrieved for the chosen parameters.';
 var ajaxErrorFlashMessageID = 'ajax-error';
 var ajaxErrorFlashMessageText = 'An unexpected error occured when retrieving map. The NASA server may be down.';
+
+var outOfBoundsFlashMessageID = 'out-of-bounds';
+var outOfBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
 
 function current_date(day_offset, hh) {
     var today = new Date();
@@ -51,7 +108,11 @@ function loadVariableOptions(mod12, var12, data) {
         var selectElement = document.getElementById(var12);
         for(var i = 0, l = vecOption.length; i < l; i++) {
             var vec = vecOption[i];
-            selectElement.options.add(new Option(vec.text, vec.value, vec.selected));
+            let newOption = new Option(vec.text);
+            newOption.setAttribute('data-wms-name', vec.value);
+            newOption.setAttribute('data-variable-name', vec.variable);
+            selectElement.options.add(newOption);
+
         }
         if (GET['model'] === GET['model2'] && var12 === 'variable2') {
             removeVariable2Options(GET['variable']);
@@ -84,6 +145,11 @@ function getUrlVars() {
     }
 
     return paramStringToObj(paramString);
+}
+
+function normalizeDate(dateStr) {
+  // If it matches T followed by two digits (e.g. T00, T12, T23)
+  return dateStr.replace(/T(\d{2})$/, 'T$1:00:00');
 }
 
 function dateHourPickerToRodsDate(date, hour) {
@@ -130,20 +196,39 @@ function load_map() {
     var data = $('#parametersForm').serialize();
 
     showMapLoading();
-    removeFlashMessage(mapDisplayErrorFlashMessageID);
-    removeFlashMessage(ajaxErrorFlashMessageID);
+    removeFlashMessageById(mapDisplayErrorFlashMessageID);
+    removeFlashMessageById(ajaxErrorFlashMessageID);
 
     data += '&plotTime=' + urlVars['plotTime'];
-    data += '&variable=' + urlVars['variable'];
+    data += '&variable=' + urlVars['map_variable'];
     data += '&model=' + urlVars['model'];
-    $('#btnDisplayMap').prop('disabled', true);
+    $("#btnDisplayMap").addClass("disabled");
 
     displayNasaMapRequestOutput(data);
     requestMap(data, layerName, layerExtents)
 }
 
+var retryLimit = 15; // Set a retry limit
+var retryCount = 0; // Initialize retry count
+
 function requestMap(data, layerName, layerExtents, instanceId=undefined) {
     var requestMapAgain = false;
+    var map = TETHYS_MAP_VIEW.getMap();
+    var layerExists = map.getLayers().getArray().some(function(layer) {
+        return layer.tethys_legend_title === layerName;
+    });
+    if (layerExists) {
+        hideMapLoading();
+        return;
+    }
+
+    // Remove layers with attribute "is_nasa_map_layer"
+    map.getLayers().getArray().forEach(function(layer) {
+        if (layer.is_nasa_map_layer) {
+            map.removeLayer(layer);
+        }
+    });
+
     if (instanceId === undefined || instanceId === null) {
         instanceId = Math.floor(Math.random() * 1000000000000000);
             data += '&instance_id=' + instanceId;
@@ -158,9 +243,10 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
         success: function (response) {
             if (response.hasOwnProperty('success')) {
                 if (response.success) {
+                    retryCount = 0;
                     if (response.hasOwnProperty('load_layer')) {
                         if (response['load_layer']) {
-                            $('#btnDisplayMap').prop('disabled', false);
+                            $("#btnDisplayMap").removeClass("disabled");
                             hideMapLoading();
                             var map = TETHYS_MAP_VIEW.getMap();
                             var lyrParams = {
@@ -180,6 +266,7 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                             });
                             map.addLayer(newLayer);
                             newLayer['tethys_legend_title'] = layerName;
+                            newLayer['is_nasa_map_layer'] = true;
                             //newLayer['tethys_legend_extent'] = layerExtents; //no longerworks due to ol update
                             //newLayer['tethys_legend_extent_projection'] = 'EPSG:3857';
                             update_legend();
@@ -189,33 +276,48 @@ function requestMap(data, layerName, layerExtents, instanceId=undefined) {
                         requestMapAgain = true;
                     }
                 } else {
+                    console.log(response);
                     if (response.hasOwnProperty('error')) {
                         if (!response.error) {
                             requestMapAgain = true;
                         }
-                    }else {// Error
+                        else {
+                            retryCount = 0;
+                            $("#btnDisplayMap").removeClass("disabled");
+                            hideMapLoading();
+                            displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', `Error: ${response.error}`);
+                            requestMapAgain = false;
+                        }
+                    } else {// Error
                         requestMapAgain = true;
                     }
                 }
             }
-            if (requestMapAgain) {// Remove Infinite Loop
-
+            if (requestMapAgain && retryCount < retryLimit) {// Remove Infinite Loop
+                retryCount++;
                 window.setTimeout(function () {requestMap(data, layerName, layerExtents, instanceId);}, 3000);
-
-
             } else {
-                $('#btnDisplayMap').prop('disabled', false);
+                $("#btnDisplayMap").removeClass("disabled");
                 hideMapLoading();
-                displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', mapDisplayErrorFlashMessageText);
+                
+                if (retryCount >= retryLimit) {
+                    displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', 'Retry limit reached. Please try again later.');
+                } else {
+                    displayFlashMessage(mapDisplayErrorFlashMessageID, 'warning', mapDisplayErrorFlashMessageText);
+                }
+                retryCount = 0;
             }
         }, error: function () {
-            $('#btnDisplayMap').prop('disabled', false);
+            $("#btnDisplayMap").removeClass("disabled");
             hideMapLoading();
+            retryCount = 0;
             displayFlashMessage(ajaxErrorFlashMessageID, 'warning', ajaxErrorFlashMessageText);
-            removeFlashMessage(mapDisplayErrorFlashMessageID);
+            removeFlashMessageById(mapDisplayErrorFlashMessageID);
         }
     });
 }
+
+
 
 function createPlot(plotType) {
     var noQueryPointFlashMessageID = 'no-query-point';
@@ -229,11 +331,10 @@ function createPlot(plotType) {
     var error999FlashMessageID = 'error-999';
     // error999FlashMessageText is generated dynamically in python and passed in below
 
-    removeFlashMessage(unexpectedErrorFlashMessageID);
-    removeFlashMessage(noQueryPointFlashMessageID);
-    removeFlashMessage(pointOutBoundsFlashMessageID);
-    removeFlashMessage(error999FlashMessageID);
-
+    removeFlashMessageById(unexpectedErrorFlashMessageID);
+    removeFlashMessageById(noQueryPointFlashMessageID);
+    removeFlashMessageById(pointOutBoundsFlashMessageID);
+    removeFlashMessageById(error999FlashMessageID);
 
     load_map_post_parameters();
     var data = {};
@@ -256,7 +357,8 @@ function createPlot(plotType) {
     } else if (pointIsOutOfBounds(pointLonLat, data['model'], data['model2'])) {
         displayFlashMessage(pointOutBoundsFlashMessageID, 'warning', pointOutBoundsFlashMessageText);
     } else {
-        $('#plot-loading').removeClass('hidden');
+        showPlotLoading();
+        $("#plot-container").empty();
         displayNasaPlotRequestOutput(plotType, data);
         $.ajax({
             url: '/apps/data-rods-explorer/' + plotType + '/',
@@ -270,13 +372,14 @@ function createPlot(plotType) {
             },
             success: function (responseHTML) {
                 if (responseHTML.indexOf('Error999') !== -1) {
-                    $('#plot-loading').addClass('hidden');
+                    hidePlotLoading();
                     displayFlashMessage(error999FlashMessageID, 'warning', $(responseHTML).text());
                 } else {
                     $('#plot-container').html(responseHTML);
+                    $('.dropdown-toggle').dropdown();
                     var hcPlotType = $('.highcharts-plot').attr('data-type');
                     initHighChartsPlot($('.highcharts-plot'), hcPlotType);
-                    $('#plot-loading').addClass('hidden');
+                    hidePlotLoading();
 
                     /*$('.option-uploadToHS').on('click', function () {
                         prepareAndOpenHSUploadModal(this);
@@ -299,7 +402,7 @@ function createPlot(plotType) {
                     });
                 }
             }, error: function () {
-                $('#plot-loading').addClass('hidden');
+                hidePlotLoading();
                 displayFlashMessage(unexpectedErrorFlashMessageID, 'danger', unexpectedErrorFlashMessageText);
             }
         });
@@ -312,21 +415,71 @@ function showMapLoading() {
             'height': $('#map_view').height(),
             'width': $('#map_view').width()
         })
-        .removeClass('hidden');
+        .removeClass('d-none');
 }
 
 function hideMapLoading() {
-    $('#map-loading').addClass('hidden');
+    $('#map-loading').addClass('d-none');
+}
+
+function showPlotLoading() {
+    $("#plot-loading").removeClass('d-none');
+}
+
+function hidePlotLoading() {
+    $("#plot-loading").addClass('d-none');
+}
+
+function getRawData(output_type) {
+    const params = getUrlVars();
+    const searchParams = new URLSearchParams();
+    Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null) {
+            searchParams.append(key, params[key]);
+        }
+    });
+    const url = `/apps/data-rods-explorer/raw-data/${output_type}/?${searchParams.toString()}`;
+    if (output_type == 'browser') {
+        window.open(url);
+        return;
+    } else {
+        showPlotLoading();
+        fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Download failed');
+            }
+            return Promise.all([response.blob(), response.headers]);
+        })
+        .then(([blob, headers]) => {
+            const disposition = headers.get('Content-Disposition');
+            let filename = disposition.split('filename=')[1].replace(/"/g, '');
+            const downloadUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(downloadUrl);
+        })
+        .catch(err => {
+        console.error(err);
+        alert('Error downloading file.');
+        })
+        .finally(() => {
+            hidePlotLoading();
+        });
+    }
 }
 
 function addLegendItem(layer) {
     var title = layer.tethys_legend_title;
     var html =  '<li class="legend-item">' +
-        '<div class="legend-buttons">' +
-        '<a class="btn btn-default btn-legend-action zoom-control">' + title + '</a>' +
-        '<a class="btn btn-default legend-dropdown-toggle">' +
-        '<span class="caret"></span>' +
-        '<span class="sr-only">Toggle Dropdown</span>' +
+        '<div class="legend-buttons dropdown">' +
+        '<a class="btn btn-outline-secondary btn-legend-action zoom-control">' + title + '</a>' +
+        '<a class="btn btn-outline-secondary legend-dropdown-toggle" data-bs-toggle="tooltip">' +
+        '<i class="bi bi-caret-down-fill"></i> <span class="visually-hidden">Toggle Dropdown</span>' +
         '</a>' +
         '<div class="tethys-legend-dropdown">' +
         '<ul>' +
@@ -526,16 +679,16 @@ function openDataRodsUrls(datarods_urls) {
     });
 }
 
-function displayFlashMessage(id, type, message, allowClose) {
+function displayFlashMessage(id, type, message, allowClose, className='') {
     var closeHtml = '';
     var sign;
 
     switch (type) {
         case 'success':
-            sign = 'ok';
+            sign = 'check';
             break;
         case 'danger':
-            sign = 'remove';
+            sign = 'x';
             break;
         default:
             sign = type;
@@ -546,24 +699,28 @@ function displayFlashMessage(id, type, message, allowClose) {
     }
 
     if (allowClose) {
-        closeHtml = '<button type="button" class="close" data-dismiss="alert">' +
+        closeHtml = '<button type="button" class="close" data-bs-dismiss="alert">' +
             '<span aria-hidden="true">&times;</span>' +
-            '<span class="sr-only">Close</span>' +
+            '<span class="visually-hidden">Close</span>' +
             '</button>';
     }
 
-    $('.flash-messages').append(
-        '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible" role="alert">' +
+    $('#top-info-container').append(
+        '<div id="' + id + '" class="alert alert-' + type + ' alert-dismissible ' + className + '" role="alert">' +
         closeHtml +
-        '<b><span class="glyphicon glyphicon-' + sign + '-sign" aria-hidden="true"></span> ' +
+        '<b><span class="bi bi-' + sign + '-circle" aria-hidden="true"></span> ' +
         message +
         '</b></div>'
     );
     $('#app-content-wrapper').scrollTop(0);
 }
 
-function removeFlashMessage(id) {
-    $('.flash-messages').find('#' + id).remove();
+function removeFlashMessageById(id) {
+    $('#top-info-container').find('#' + id).remove();
+}
+
+function removeFlashMessageByClass(className) {
+    $('#top-info-container').find('.' + className).remove();
 }
 
 function pointIsOutOfBounds(pointLonLat, model1, model2) {
@@ -678,7 +835,7 @@ function updateTemporalFences(modelNum) {
     var model2BoundsModified = false;
     var $endDate, $startDate, $plotDate;
 
-    removeFlashMessage(boundsAdjustedFlashMessageID);
+    removeFlashMessageById(boundsAdjustedFlashMessageID);
 
     if (modelNum === '1') {
         $plotDate = $('#plot_date');
@@ -710,7 +867,7 @@ function updateTemporalFences(modelNum) {
 
     }
 
-    if (!$('#nav-plot2').hasClass('hidden')) {
+    if (!$('#nav-plot2').hasClass('d-none')) {
         $endDate = $('#endDate2');
         $startDate = $('#startDate2');
         var earliestDateForModel2 = MODEL_FENCES[model2].start_date;
@@ -819,19 +976,148 @@ function convertLonLatToMainMapExtents(lonlat) {
     return lonlat;
 }
 
-function validateClickPoint() {
-    if ($('#pointLonLat').val() !== '-9999') {
-        var outOfBoundsFlashMessageID = 'out-of-bounds';
-        var outOfBoundsFlashMessageText = 'Query location outside of model extents. Please choose a new location.';
-        var lonlat = $('#pointLonLat').val().split(',');
-        if (pointIsOutOfBounds(lonlat, $('#model1').val(), $('#model2').val())) {
-            displayFlashMessage(outOfBoundsFlashMessageID, 'warning', outOfBoundsFlashMessageText);
-            $('.btn-plot').addClass('disabled');
-        } else {
-            removeFlashMessage(outOfBoundsFlashMessageID);
-            enablePlotButtons();
+function isModelValidForMap(modelSelected) {
+    for (const modelKey of Object.keys(mapFlashMessages)) {
+        if (modelSelected && modelSelected.includes(modelKey)) {
+            const flashMessage = mapFlashMessages[modelKey];
+            return [false, flashMessage];
         }
     }
+    return [true, null];
+}
+
+function isModel1ValidForMap() {
+    let model1 = $('#model1').val();
+    return isModelValidForMap(model1);
+}
+
+function updateMapButtonState() {
+    let [model1Valid, model1Message] = isModel1ValidForMap();
+    removeFlashMessageByClass("model-map-flash-message");
+    
+    if (model1Valid) {
+        enableMapButton();
+    }
+    else {
+        disableMapButton();
+        displayFlashMessage(model1Message.id, 'info', model1Message.text, false, "model-map-flash-message");
+        removeFlashMessageByClass("model1-plot-flash-message");
+        removeFlashMessageByClass("model2-plot-flash-message");
+    }
+}
+
+function isModelValidForPlot(modelSelected) {
+    for (const modelKey of Object.keys(plotFlashMessages)) {
+        if (modelSelected && modelSelected.includes(modelKey)) {
+            const flashMessage = plotFlashMessages[modelKey];
+            return [false, flashMessage];
+        }
+    }
+    return [true, null];
+}
+
+function isModel1ValidForPlot() {
+    let model1 = $('#model1').val();
+    return isModelValidForPlot(model1);
+}
+
+function isModel2ValidForPlot() {
+    let model2 = $('#model2').val();
+    return isModelValidForPlot(model2);
+}
+
+function isPlottingAllowed() {
+    let [isValidPoint, isDefaultPoint] = validateClickPoint();
+    const [model1Valid, model1Message] = isModel1ValidForPlot();
+
+    let model2Valid = true;
+    let model2Message = null;
+    if (COMPARE_TWO) {
+        [model2Valid, model2Message] = isModel2ValidForPlot();
+    }
+
+    let result = true;
+    let messagesData = {}
+
+    if (!isValidPoint) {
+        result = false;
+        if (isDefaultPoint) {
+            messagesData['outOfBounds'] = 'default point';
+        } else {
+            messagesData['outOfBounds'] = 'invalid point';
+        }
+        
+    } 
+
+    if (!model1Valid) {
+        messagesData['model1'] = model1Message;
+        result = false;
+    } 
+
+    if (!model2Valid) {
+        messagesData['model2'] = model2Message;
+        result = false;
+    }
+
+    return [result, messagesData];
+}
+
+function updatePlotButtonsState() {
+    let [isValid, messagesData] = isPlottingAllowed();
+    hideOutOfBoundsMessage();
+    removeFlashMessageByClass('model1-plot-flash-message');
+    removeFlashMessageByClass('model2-plot-flash-message');
+    if (isValid) {
+        enablePlotButtons();
+    } else {
+        disablePlotButtons();
+        if (messagesData.hasOwnProperty('outOfBounds')) {
+            if (messagesData['outOfBounds'] === 'invalid point') {
+                showOutOfBoundsMessage();
+            }
+        }
+
+        if (messagesData.hasOwnProperty('model1')) {
+            let message1 = messagesData['model1'];
+            displayFlashMessage(message1.id, 'info', message1.text, false, 'model1-plot-flash-message');
+            removeFlashMessageByClass("model-map-flash-message");
+        }
+
+        if (messagesData.hasOwnProperty('model2')) {
+            let message2 = messagesData['model2'];
+            if (messagesData.hasOwnProperty('model1')) {
+                let message1 = messagesData['model1'];
+                if (message1.text === message2.text) {
+                    return; // Already displayed for model 1
+                }  
+            } 
+            displayFlashMessage(message2.id, 'info', message2.text, false, 'model2-plot-flash-message');
+            removeFlashMessageByClass("model-map-flash-message");
+        }
+    }
+}
+
+function showOutOfBoundsMessage() {
+    displayFlashMessage(outOfBoundsFlashMessageID, 'warning', outOfBoundsFlashMessageText);
+}
+
+function hideOutOfBoundsMessage() {
+    removeFlashMessageById(outOfBoundsFlashMessageID);
+}
+
+function validateClickPoint() {
+    // Check if the point is not the default value
+    let isDefault = true;
+    if ($('#pointLonLat').val() !== '-9999') {
+        isDefault = false;
+        var lonlat = $('#pointLonLat').val().split(',');
+        if (pointIsOutOfBounds(lonlat, $('#model1').val(), $('#model2').val())) {
+            return [false, isDefault];
+        } else {
+            return [true, isDefault];
+        }
+    }
+    return [false, isDefault];
 }
 
 function paramStringToObj(string) {
@@ -849,10 +1135,10 @@ function displayNasaPlotRequestOutput(plotType, data) {
     if (plotType.indexOf('plot') !== -1) {
         if (plotType == 'plot') {
             model = data['model'];
-            variable = data['variable'];
+            variable = data['plot_variable'];
         } else if (plotType == 'plot2') {
             model = data['model2'];
-            variable = data['variable2'];
+            variable = data['plot_variable2'];
         }
 
         startDate = data['startDate'];
@@ -873,8 +1159,8 @@ function displayNasaPlotRequestOutput(plotType, data) {
     nasaRequest = DATARODS_TSB[model];
     nasaRequest = nasaRequest.replace('{0}', variable);
     nasaRequest = nasaRequest.replace('{1}', pointLonLat);
-    nasaRequest = nasaRequest.replace('{2}', startDate);
-    nasaRequest = nasaRequest.replace('{3}', endDate);
+    nasaRequest = nasaRequest.replace('{2}', normalizeDate(startDate));
+    nasaRequest = nasaRequest.replace('{3}', normalizeDate(endDate));
 
     $('#nasaRequestOutput').html('<b>NASA Data Request:</b><br>' + nasaRequest);
 }
@@ -904,6 +1190,17 @@ function displayNasaMapRequestOutput(data) {
     nasaRequest = nasaRequest.replace('{5}', WMS_VARS[model][variable][0]);
 
     $('#nasaRequestOutput').html('<b>NASA Data Request:</b><br>' + nasaRequest)
+}
+
+function disableMapButton() {
+    $('#btnDisplayMap').addClass('disabled');
+}
+function enableMapButton() {
+    $('#btnDisplayMap').removeClass('disabled');
+}
+
+function disablePlotButtons() {
+    $('.btn-plot').addClass('disabled');
 }
 
 function enablePlotButtons () {
@@ -970,7 +1267,9 @@ function addNewPoint(lon, lat, centerOnPoint) {
         geometry: new ol.geom.Point(mapCoords)
     }));
     document.getElementById('pointLonLat').value = parseFloat(lon).toFixed(4) + ',' + parseFloat(lat).toFixed(4);
-    validateClickPoint();
+
+    updatePlotButtonsState();
+
     addToURL(lon, lat);
 
     if (centerOnPoint) {
@@ -1029,7 +1328,7 @@ function validateDateFormat($dateObj) {
     var numDateSegments;
     var i;
 
-    removeFlashMessage(invalidDateFlashMessageId);
+    removeFlashMessageById(invalidDateFlashMessageId);
 
     if (originalDate === '' || originalDate === undefined) {
         displayFlashMessage(invalidDateFlashMessageId, 'danger', invalidDateFlashMessageText, false);

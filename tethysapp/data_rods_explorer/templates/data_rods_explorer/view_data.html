@@ -1,0 +1,44 @@
+{% load static %}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'data_rods_explorer/css/view_data.css' %}" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<div id="main-container" class="container mt-2">
+    {% if type == "single" %}
+        <div class="data-container">
+            <h3>{{ variable }}</h3>
+            <pre>{{ data|safe }}</pre>
+        </div>
+    {% elif type == "dual" %}
+        <div class="row">
+            <div class="col-md-6 data-container">
+                <h3>{{ variable_1 }}</h3>
+                <pre>{{ data1|safe }}</pre>
+            </div>
+            <div class="col-md-6 data-container">
+                <h3>{{ variable_2 }}</h3>
+                <pre>{{ data2|safe }}</pre>
+                </pre>
+            </div>
+        </div>
+    {% elif type == "years" %}
+        <ul class="nav nav-tabs" id="year-tabs" role="tablist">
+            {% for year, year_data in data.items %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ year }}" data-bs-toggle="tab" data-bs-target="#year-data-{{ year }}" type="button" role="tab" aria-controls="year-data-{{ year }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">{{ year }}</button>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content" id="year-tabs-content">
+            <h3>{{ variable }}</h3>
+            {% for year, year_data in data.items %}
+                <div class="tab-pane fade data-container {% if forloop.first %}show active{% endif %}" id="year-data-{{ year }}" role="tabpanel" aria-labelledby="tab-{{ year }}">
+                    <pre>{{ year_data|safe }}</pre>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div id="Error999">No data to display.</div>
+    {% endif %}
+</div>

@@ -6,6 +6,9 @@ syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and r
 from requests import get
 from bs4 import BeautifulSoup  # ?
 from datetime import datetime, timedelta
+syspath.append('/usr/local/lib/python2.7/site-packages')  # This is so bs4 and requests will be found #?
+from requests import get  # noqa E402
+from bs4 import BeautifulSoup   # ?  # noqa E402
 
 
 def extract_model_data_from_config_file():

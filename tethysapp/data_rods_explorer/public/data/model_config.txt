@@ -1,44 +1,17 @@
 Model_Display_Name~Model_Key_Name~Official_Model_Short_Name~Model_Version~Model_Data_Url_Pattern
-Model_Key|Data_Rods_Variable_ID|WMS_Layer_Name|Variable_Dropdown_Name|Units|Variable_Layer_Name
+Model_Key|Data_Rods_Variable_ID|WMS_Layer_Name_and_Variable_Name|Variable_Dropdown_Name|Units|Variable_Layer_Name
 
-NLDAS-Forcing (LSM)~NLDASF~NLDAS_FORA0125_H~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_FORA0125_H.002:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-NLDASF|APCPsfc|NLDAS_FORA0125_H_002_apcpsfc|Precipitation hourly|kg/m^2|NLDASF:PrecipHourly
-NLDASF|DLWRFsfc|NLDAS_FORA0125_H_002_dlwrfsfc|Surface DW longwave radiation flux|W/m^2|NLDASF:SurfDWLongWaveRadFlux
-NLDASF|DSWRFsfc|NLDAS_FORA0125_H_002_dswrfsfc|Surface DW shortwave radiation flux|W/m^2|NLDASF:SurfDWShrtWaveRadFlux
-NLDASF|PEVAPsfc|NLDAS_FORA0125_H_002_pevapsfc|Potential evaporation|kg/m^2|NLDASF:PotentialEvaporation
-NLDASF|SPFH2m|NLDAS_FORA0125_H_002_spfh2m|2-m above ground specific humidity|kg/kg|NLDASF:2mAbvGrndSpecifHumid
-NLDASF|TMP2m|NLDAS_FORA0125_H_002_tmp2m|2-m above ground temperature|K|NLDASF:2mAbvGrndTemp
-NLDASF|UGRD10m|NLDAS_FORA0125_H_002_ugrd10m|10-m above ground zonal wind|m/s|NLDASF:10mAbvGrndZonalWind
-NLDASF|VGRD10m|NLDAS_FORA0125_H_002_vgrd10m|10-m above ground meridional wind|m/s|NLDASF:10mAbvGrndMeridWind
+NLDAS 2.0-Forcing (LSM)~NLDAS2F~NLDAS_FORA0125_H~2.0~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
+NLDAS2F|LWdown|NLDAS_FORA0125_H_2_0_LWdown|LW down radiation flux|w/m^2|NLDAS2F:LWFluxDown
+NLDAS2F|SWdown|NLDAS_FORA0125_H_2_0_SWdown|LW down radiation flux|w/m^2|NLDAS2F:SWFluxDown
+NLDAS2F|PotEvap|NLDAS_FORA0125_H_2_0_PotEvap|Potential evaporation|kg/m^2|NLDAS2F:PotEvap
+NLDAS2F|PSurf|NLDAS_FORA0125_H_2_0_PSurf|Surface pressure|Pa|NLDAS2F:SurfPressure
+NLDAS2F|Qair|NLDAS_FORA0125_H_2_0_Qair|2-m above ground specific humidity|kg/kg|NLDAS2F:2mSpecHumidity
+NLDAS2F|Tair|NLDAS_FORA0125_H_2_0_Tair|2-m above ground temperature|K|NLDAS2F:2mAirTemperature
+NLDAS2F|Wind_E|NLDAS_FORA0125_H_2_0_Wind_E|10-meter above ground Zonal wind speed|m/s|NLDAS2F:10mZonalWindSpeed
+NLDAS2F|Wind_N|NLDAS_FORA0125_H_2_0_Wind_N|10-meter above ground Meridional wind speed|m/s|NLDAS2F:10mMeridionalWindSpeed
 
-NLDAS-Noah (LSM)~NLDAS~NLDAS_NOAH0125_H~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS:NLDAS_NOAH0125_H.002:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-NLDAS|EVPsfc|NLDAS_NOAH0125_H_002_evpsfc|Evapotranspiration|kg/m^2|NLDAS:Evapotrans
-NLDAS|GFLUXsfc|NLDAS_NOAH0125_H_002_gfluxsfc|Ground heat flux|w/m^2|NLDAS:GrndHeatFlux
-NLDAS|LHTFLsfc|NLDAS_NOAH0125_H_002_lhtflsfc|Latent heat flux|w/m^2|NLDAS:LatentHeatFlux
-NLDAS|SHTFLsfc|NLDAS_NOAH0125_H_002_shtflsfc|Sensible heat flux|w/m^2|NLDAS:SensHeatFlux
-NLDAS|SSRUNsfc|NLDAS_NOAH0125_H_002_ssrunsfc|Surface runoff|kg/m^2|NLDAS:SurfRunoff
-NLDAS|BGRUNsfc|NLDAS_NOAH0125_H_002_bgrunsfc|Subsurface runoff|kg/m^2|NLDAS:SubsurfRunoff
-NLDAS|SOILM0-10cm|NLDAS_NOAH0125_H_002_soilm0_10cm|0-10cm soil moisture|kg/m^2|NLDAS:0-10cmSoilMoisture
-NLDAS|SOILM0-100cm|NLDAS_NOAH0125_H_002_soilm0_100cm|0-100cm soil moisture|kg/m^2|NLDAS:0-100cmSoilMoisture
-NLDAS|SOILM0-200cm|NLDAS_NOAH0125_H_002_soilm0_200cm|0-200cm soil moisture|kg/m^2|NLDAS:0-200cmSoilMoisture
-NLDAS|SOILM10-40cm|NLDAS_NOAH0125_H_002_soilm10_40cm|10-40cm soil moisture|kg/m^2|NLDAS:10-40cmSoilMoisture
-NLDAS|SOILM40-100cm|NLDAS_NOAH0125_H_002_soilm40_100cm|40-100cm soil moisture|kg/m^2|NLDAS:40-100cmSoilMoisture
-NLDAS|SOILM100-200cm|NLDAS_NOAH0125_H_002_soilm100_200cm|100-200cm soil moisture|kg/m^2|NLDAS:100-200cmSoilMoisture
-NLDAS|TSOIL0-10cm|NLDAS_NOAH0125_H_002_tsoil0_10cm|0-10cm soil temperature|K|NLDAS:0-10cmSoilTemp
-
-NLDAS 2.0-Forcing (LSM)~NLDAS2F~NLDAS_FORA0125_H~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=NLDAS2:NLDAS_FORA0125_H_v2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-NLDAS2F|Rainf|NLDAS_FORA0125_H_v2.0_Rainf|Total precipitation|kg/m^2|NLDAS2F:TotalPrecip
-NLDAS2F|LWdown|NLDAS_FORA0125_H_v2.0_LWdown|LW down radiation flux|w/m^2|NLDAS2F:LWFluxDown
-NLDAS2F|SWdown|NLDAS_FORA0125_H_v2.0_SWdown|LW down radiation flux|w/m^2|NLDAS2F:SWFluxDown
-NLDAS2F|PotEvap|NLDAS_FORA0125_H_v2.0_PotEvap|Potential evaporation|kg/m^2|NLDAS2F:PotEvap
-NLDAS2F|PSurf|NLDAS_FORA0125_H_v2.0_PSurf|Surface pressure|Pa|NLDAS2F:SurfPressure
-NLDAS2F|Qair|NLDAS_FORA0125_H_v2.0_Qair|2-m above ground specific humidity|kg/kg|NLDAS2F:2mSpecHumidity
-NLDAS2F|Tair|NLDAS_FORA0125_H_v2.0_Tair|2-m above ground temperature|K|NLDAS2F:2mAirTemperature
-NLDAS2F|Wind_E|NLDAS_FORA0125_H_v2.0_Wind_E|10-meter above ground Zonal wind speed|m/s|NLDAS2F:10mZonalWindSpeed
-NLDAS2F|Wind_N|NLDAS_FORA0125_H_v2.0_Wind_N|10-meter above ground Meridional wind speed|m/s|NLDAS2F:10mMeridionalWindSpeed
-
-GLDAS 2.1-Noah (LSM) 2000-Present~GLDAS21~GLDAS_NOAH025_3H~2.1~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.1:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
-GLDAS21|Evap_tavg|GLDAS_NOAH025_3H_2_1_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS21:Evapotrans
+GLDAS 2.1-Noah (LSM) 2000-Present~GLDAS21~GLDAS_NOAH025_3H~2.1~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 GLDAS21|Rainf_tavg|GLDAS_NOAH025_3H_2_1_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS21:RainRate
 GLDAS21|Snowf_tavg|GLDAS_NOAH025_3H_2_1_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS21:SnowRate
 GLDAS21|Rainf_f_tavg|GLDAS_NOAH025_3H_2_1_Rainf_f_tavg|Precipitation rate|kg/m^2/s|GLDAS21:PrecipRate
@@ -55,7 +28,7 @@ GLDAS21|Wind_f_inst|GLDAS_NOAH025_3H_2_1_Wind_f_inst|Wind speed|m/s|GLDAS21:Wind
 GLDAS21|Psurf_f_inst|GLDAS_NOAH025_3H_2_1_Psurf_f_inst|Air pressure|Pa|GLDAS21:AirPressure
 GLDAS21|Qair_f_inst|GLDAS_NOAH025_3H_2_1_Qair_f_inst|Specific humidity|kg/kg|GLDAS21:SpecificHumidity
 
-GLDAS 2.0-Noah (LSM) 1948-2014~GLDAS20~GLDAS_NOAH025_3H~2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GLDAS2:GLDAS_NOAH025_3H_v2.0:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+GLDAS 2.0-Noah (LSM) 1948-2014~GLDAS20~GLDAS_NOAH025_3H~2.0~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 GLDAS20|Evap_tavg|GLDAS_NOAH025_3H_2_0_Evap_tavg|Evapotranspiration|kg/m^2/s|GLDAS20:Evapotrans
 GLDAS20|Rainf_tavg|GLDAS_NOAH025_3H_2_0_Rainf_tavg|Rain rate|kg/m^2/s|GLDAS20:RainRate
 GLDAS20|Snowf_tavg|GLDAS_NOAH025_3H_2_0_Snowf_tavg|Snow rate|kg/m^2/s|GLDAS20:SnowRate
@@ -81,16 +54,12 @@ GLDAS20|AvgSurfT_inst|GLDAS_NOAH025_3H_2_0_AvgSurfT_inst|Average Surface Skin te
 GLDAS20|LWdown_f_tavg|GLDAS_NOAH025_3H_2_0_LWdown_f_tavg|LW down radiation flux|W/m^2|GLDAS20:LWdownRadFlux
 GLDAS20|SWdown_f_tavg|GLDAS_NOAH025_3H_2_0_SWdown_f_tavg|SW down radiation flux|W/m^2|GLDAS20:SWdownRadFlux
 
-Smerge-Noah-CCI Root Zone~SMERGE~SMERGE_RZSM0_40CM~2.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=SMERGE:SMERGE_RZSM0_40CM_2.0:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
-SMERGE|RZSM|SMERGE_RZSM0_40CM_2.0_RZSM|0-40cm avg soil moisture|m^3/m^3|SMERGE:0-40cmSoilMoisture
-SMERGE|CCI_ano|SMERGE_RZSM0_40CM_2.0_CCI_ano|0-40cm CCI-based soil moisture anomalies|m^3/m^3|SMERGE:0-40cmCCISoilMoistureAnomalies
-
-GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~4.0~http://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=GRACE:GRACEDADM_CLSM0125US_7D.4:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+GRACE Data Assimilation~GRACE~GRACEDADM_CLSM0125US_7D~4.0~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 GRACE|sfsm_inst|GRACEDADM_CLSM0125US_7D_4_0_sfsm_inst|0-2cm surface soil moisture percentile|%|GRACE:2cmSurfSoilMoist%
 GRACE|rtzsm_inst|GRACEDADM_CLSM0125US_7D_4_0_rtzsm_inst|0-100cm root zone soil moisture percentile|%|GRACE:100cmRootZoneSoilMoist%
 GRACE|gws_inst|GRACEDADM_CLSM0125US_7D_4_0_gws_inst|Shallow groundwater percentile|%|GRACE:GroundWater%
 
-LPRM-AMSRE-D (Retrieval)~AMSRED~LPRM_AMSRE_D_SOILM3~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_D_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSRE-D (Retrieval)~AMSRED~LPRM_AMSRE_D_SOILM3~002~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 AMSRED|soil_moisture_c|LPRM_AMSRE_D_SOILM3_002_soil_moisture_c|Soil moisture C-band descending|%|AMSRE-D:SoilMoistCbandDesc%
 AMSRED|soil_moisture_x|LPRM_AMSRE_D_SOILM3_002_soil_moisture_x|Soil moisture X-band descending|%|AMSRE-D:SoilMoistXbandDesc%
 AMSRED|sm_c_error|LPRM_AMSRE_D_SOILM3_002_sm_c_error|Soil moisture uncertainty C-band descending|%|AMSRE-D:SoilMoistErrCbandDesc%
@@ -99,10 +68,7 @@ AMSRED|opt_depth_c|LPRM_AMSRE_D_SOILM3_002_opt_depth_c|Optical depth C-band desc
 AMSRED|opt_depth_x|LPRM_AMSRE_D_SOILM3_002_opt_depth_x|Optical depth X-band descending|unitless|AMSRE-D:OptDepthXbandDesc
 AMSRED|Ts|LPRM_AMSRE_D_SOILM3_002_Ts|2mm skin temperature AMSRE descending|K|AMSRE-D:2mmSkinTempDesc
 
-LPRM-AMSRE-D-Palmer~AMSREDRZSM~LPRM_AMSRE_D_RZSM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_D_RZSM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
-AMSREDRZSM|soilMoisture|LPRM_AMSRE_D_RZSM3_001_soilMoisture|Root Zone Soil Moisture-Palmer|%|AMSRE-D-Palmer:RootZoneSoilMoisture%
-
-LPRM-AMSRE-A (Retrieval)~AMSREA~LPRM_AMSRE_A_SOILM3~002~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSRE_A_SOILM3.002:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSRE-A (Retrieval)~AMSREA~LPRM_AMSRE_A_SOILM3~002~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 AMSREA|soil_moisture_c|LPRM_AMSRE_A_SOILM3_002_soil_moisture_c|Soil moisture C-band ascending|%|AMSRE-A:SoilMoistCbandAsc%
 AMSREA|soil_moisture_x|LPRM_AMSRE_A_SOILM3_002_soil_moisture_x|Soil moisture X-band ascending|%|AMSRE-A:SoilMoistXbandAsc%
 AMSREA|sm_c_error|LPRM_AMSRE_A_SOILM3_002_sm_c_error|Soil moisture uncertainty C-band ascending|%|AMSRE-A:SoilMoistErrCbandAsc%
@@ -111,52 +77,42 @@ AMSREA|opt_depth_c|LPRM_AMSRE_A_SOILM3_002_opt_depth_c|Optical depth C-band asce
 AMSREA|opt_depth_x|LPRM_AMSRE_A_SOILM3_002_opt_depth_x|Optical depth X-band ascending|unitless|AMSRE-A:OptDepthXbandAsc
 AMSREA|Ts|LPRM_AMSRE_A_SOILM3_002_Ts|2mm skin temperature AMSRE ascending|K|AMSRE-A:2mmSkinTempAsc
 
-LPRM-AMSR2-D 10km (Retrieval)~AMSR2D10~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSR2-D 10km (Retrieval)~AMSR2D10~LPRM_AMSR2_DS_D_SOILM3~001~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 AMSR2D10|soil_moisture_c1|LPRM_AMSR2_DS_D_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Desc-10km|%|AMSR2D10:SoilMoistC1Desc%
 
-LPRM-AMSR2-A 10km (Retrieval)~AMSR2A10~LPRM_AMSR2_DS_A_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_DS_A_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSR2-A 10km (Retrieval)~AMSR2A10~LPRM_AMSR2_DS_A_SOILM3~001~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 AMSR2A10|soil_moisture_c1|LPRM_AMSR2_DS_A_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Asc-10km|%|AMSR2A10:SoilMoistC1Asc%
 
-LPRM-AMSR2-D 25km (Retrieval)~AMSR2D25~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_D_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSR2-D 25km (Retrieval)~AMSR2D25~LPRM_AMSR2_DS_D_SOILM3~001~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 AMSR2D25|soil_moisture_c1|LPRM_AMSR2_DS_D_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Desc-25km|%|AMSR2D25:SoilMoistC1Desc%
 
-LPRM-AMSR2-A 25km (Retrieval)~AMSR2A25~LPRM_AMSR2_DS_D_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_AMSR2_A_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-AMSR2-A 25km (Retrieval)~AMSR2A25~LPRM_AMSR2_DS_D_SOILM3~001~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 AMSR2A25|soil_moisture_c1|LPRM_AMSR2_DS_A_SOILM3_001_soil_moisture_c1|Vol Soil Moisture Asc-25km|%|AMSR2A25:SoilMoistC1Asc%
 
-LPRM-TMI-Day (Retrieval)~TMIDY~LPRM_TMI_DY_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_TMI_DY_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-TMI-Day (Retrieval)~TMIDY~LPRM_TMI_DY_SOILM3~001~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 TMIDY|soil_moisture_x|LPRM_TMI_DY_SOILM3_001_soil_moisture_x|Volumetric soil moisture X-band day|%|TMI-DY:SoilMoistXDay%
 TMIDY|sm_x_error|LPRM_TMI_DY_SOILM3_001_sm_x_error|Soil moisture uncertainty X-band day|m^3/m^3|TMI-DY:SoilMoistUncertXDay
 TMIDY|opt_depth_x|LPRM_TMI_DY_SOILM3_001_opt_depth_x|Optical depth X-band day|unitless|TMI-DY:OptDepthXDay
 TMIDY|Ts|LPRM_TMI_DY_SOILM3_001_ts|2mm skin temperature-day|m^3/m^3|TMI-DY:2mmSkinTempDay
 
-LPRM-TMI-Night (Retrieval)~TMINT~LPRM_TMI_NT_SOILM3~001~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=LPRM:LPRM_TMI_NT_SOILM3.001:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+LPRM-TMI-Night (Retrieval)~TMINT~LPRM_TMI_NT_SOILM3~001~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 TMINT|soil_moisture_x|LPRM_TMI_NT_SOILM3_001_soil_moisture_x|Volumetric soil moisture X-band day|%|TMI-NT:SoilMoistXDay%
 TMINT|sm_x_error|LPRM_TMI_NT_SOILM3_001_sm_x_error|Soil moisture uncertainty X-band day|m^3/m^3|TMI-NT:SoilMoistUncertXDay
 TMINT|opt_depth_x|LPRM_TMI_NT_SOILM3_001_opt_depth_x|Optical depth X-band day|unitless|TMI-NT:OptDepthXDay
 TMINT|Ts|LPRM_TMI_NT_SOILM3_001_ts|2mm skin temperature-day|m^3/m^3|TMI-NT:2mmSkinTempDay
 
-TRMM (Retrieval)~TRMM~TRMM_3B42~7~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=TRMM:TRMM_3B42.7:{0}&type=asc2&location=GEOM:POINT({1})&startDate={2}&endDate={3}
+TRMM (Retrieval)~TRMM~TRMM_3B42~7~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 TRMM|precipitation|TRMM_3B42_7_precipitation|Precipitation|mm/hr|TRMM:Precip
 
-MERRA-Land~MERRA~MST1NXMLD~5.2.0~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:MST1NXMLD.520:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
-MERRA|PRECSNO|MST1NXMLD_5_2_0_PRECSNO|Surface snowfall|kg/m^2/s|MERRA:SurfaceSnowfall
-MERRA|SFMC|MST1NXMLD_5_2_0_SFMC|Top layer soil moisture|m^3/m^3|MERRA:TopLayerSoilMoisture
-MERRA|LHLAND|MST1NXMLD_5_2_0_LHLAND|Latent heat flux from land|W/m^2|MERRA:LatentHeatFluxLand
-MERRA|PRECTOT|MST1NXMLD_5_2_0_PRECTOT|Total surface precip|kg/m^2/s|MERRA:SurfacePrecip
-MERRA|SHLAND|MST1NXMLD_5_2_0_SHLAND|Sensible heat flux from land|W/m^2|MERRA:SensibleHeatFluxLand
-MERRA|BASEFLOW|MST1NXMLD_5_2_0_PRECSNO|Baseflow|kg/m^2/s|MERRA:Baseflow
-MERRA|RUNOFF|MST1NXMLD_5_2_0_RUNOFF|Overland runoff|kg/m^2/s|MERRA:OverlandRunoff
-MERRA|TSOIL1|MST1NXMLD_5_2_0_TSOIL1|Layer 1 soil temp|K|MERRA:SoilTempLayer1
-
-MERRA2-Diagnostic~MERRA2FD~M2T1NXFLX~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXFLX.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA2-Diagnostic~MERRA2FD~M2T1NXFLX~5.12.4~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 MERRA2FD|VLML|M2T1NXFLX_5_12_4_VLML|Surface northward wind t-avg|m/s|MERRA2FD:SurfNorthWind
 MERRA2FD|ULML|M2T1NXFLX_5_12_4_ULML|Surface eastward wind t-avg|m/s|MERRA2FD:SurfEastWind
 
-MERRA2-Forcing~MERRA2F~M2T1NXLFO~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2T1NXLFO.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA2-Forcing~MERRA2F~M2T1NXLFO~5.12.4~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 MERRA2F|LWGAB|M2T1NXLFO_5_12_4_LWGAB|Surface absorbed LW t-avg|W/m^2|MERRA2F:SurfaceLWRad
 MERRA2F|SWGDN|M2T1NXLFO_5_12_4_SWGDN|Incident SW t-avg|W/m^2|MERRA2F:IncidentSWRad
 
-MERRA2-ForcingInst~MERRA2FI~M2I1NXLFO~5.12.4~https://hydro1.gesdisc.eosdis.nasa.gov/daac-bin/access/timeseries.cgi?variable=MERRA:M2I1NXLFO.5124:{0}&startDate={2}&endDate={3}&location=GEOM:POINT({1})&type=asc2
+MERRA2-ForcingInst~MERRA2FI~M2I1NXLFO~5.12.4~https://api.giovanni.earthdata.nasa.gov/timeseries?data={0}&location=[{1}]&time={2}/{3}&version=5.12.4
 MERRA2FI|QLML|M2I1NXLFO_5_12_4_QLML|Surface specific humidity-inst|kg/kg|MERRA2FI:SurfSpecifHumid
 MERRA2FI|TLML|M2I1NXLFO_5_12_4_TLML|Surf air temp over land-inst|K|MERRA2FI:SurfAirTemp
 MERRA2FI|SPEEDLML|M2I1NXLFO_5_12_4_SPEEDLML|Surface wind speed-inst|m/s|MERRA2FI:SurfWindSpeed

@@ -1,5 +1,12 @@
 # coding=utf-8
-import urllib.request, urllib.error, urllib.parse
+import netrc
+import io
+import requests
+from requests.auth import HTTPBasicAuth
+from django.http import HttpResponse
+import urllib.request
+import urllib.error
+import urllib.parse
 from datetime import datetime
 from dateutil import parser as dateparser
 from .model_objects import get_wms_vars, get_datarods_tsb, \
@@ -24,7 +31,8 @@ def create_select_model(modelname):
                                initial=[selected_model if selected_model else None],
                                original=True,
                                options=get_model_options(),
-                               attributes="onchange=oc_model();"
+                               attributes="onchange=oc_model();",
+                               classes="w-100 mb-3 form-control"
                                )
     return select_model
 
@@ -52,19 +60,19 @@ def create_map():
     )
     # Define map view options
     map_view_options = MapView(
-        height='500px',
+        height='100%',
         width='100%',
         controls=['ZoomSlider'],
         layers=[],
         view=view_options,
-        basemap='OpenStreetMap',
+        basemap=['OpenStreetMap',],
         draw=draw_options,
         legend=True,
         disable_basemap=False,
 
     )
     # Return map element
-    return [MapView, map_view_options]
+    return map_view_options
 
 
 def create_map_date_ctrls(model):
@@ -80,7 +88,7 @@ def create_map_date_ctrls(model):
                              end_date=get_model_fences()[model]['end_date'],
                              start_view=0,
                              attributes='onchange=oc_map_dt();',
-                             classes=''
+                             classes='mb-3'
                              )
 
     select_hour = SelectInput(display_text='',
@@ -95,7 +103,7 @@ def create_map_date_ctrls(model):
                                        ('20:00', '20'), ('21:00', '21'), ('22:00', '22'), ('23:00', '23')],
                               initial=['00:00'],
                               attributes='onchange=oc_map_dt();',
-                              classes=''
+                              classes='form-control'
                               )
 
     return [select_date, select_hour]
@@ -154,99 +162,117 @@ def create_years_list(first_year=1979):
         years_list.append((str(yyyy), str(yyyy)))
     return sorted(years_list, key=lambda year: year[0], reverse=True)
 
+def normalize_time_string(time_string):
+    return datetime.strptime(time_string, "%Y-%m-%dT%H").strftime("%Y-%m-%dT%H:%M:%S")
 
-def get_data_from_nasa_server(link, overlap_years=False):
-    data = []
-    error_found = True
-    time = 22
-    found_data = False
-    data_flag_text = 'Date&Time'
-    error_flag_text = 'ERROR:'
-    nasa_error_message = None
-    custom_error_message = ('ERROR 999: Data returned by NASA was either missing the expected "%s” line to '
-                            'indicate the start of the data, or returned with an empty dataset.'
-                            % data_flag_text)
-    s_lines = []
+def get_data_from_nasa_server(request_params, overlap_years=False, full_output=False):
+    time_series_url = "https://api.giovanni.earthdata.nasa.gov/timeseries"
 
-    while error_found and time >= 0:
-        nasa_error_message = None
-        s_file = urllib.request.urlopen(link)
+    lon = request_params['lon']
+    lat = request_params['lat']
+    time_start = normalize_time_string(request_params['start_date'])
+    time_end = normalize_time_string(request_params['end_date'])
+    data = request_params['plot_variable']
+    
+    headers = {"authorizationtoken": get_earthdata_token()}
 
-        for line in s_file.readlines():
-            if data_flag_text.encode() in line:
-                found_data = True
-                error_found = False
-                continue
+    query_parameters = {
+            "data": data,
+            "location": f"[{float(lat)}, {float(lon)}]",
+            "time": f"{time_start}/{time_end}",
+        }
 
-            if not found_data and error_flag_text.encode() in line:
-                nasa_error_message = line
-                link = link[:-2] + "%02d" % time
-                time -= 1
-                break
+    if full_output:
+        response = requests.get(time_series_url, params=query_parameters, headers=headers, stream=True)
 
-            if found_data:
-                s_lines.append(line)
+        if response.status_code != 200:
+            raise Exception(
+                f"ERROR {response.status_code}: NASA GiC service returned an error for {lat},{lon} parameter '{data}'."
+            )
+        return {"content": response.content, "content_type": response.headers.get('Content-Type', 'application/octet-stream')}
 
-        s_file.close()
+    else:
+        response = requests.get(time_series_url, params=query_parameters, headers=headers)
 
-    if len(s_lines) < 1:
-        raise Exception(custom_error_message)
-    elif nasa_error_message:
-        raise Exception(nasa_error_message)
+        data_list = []
 
-    for row in s_lines:
-        row_ls = row.strip()
-        row_ls = row_ls.decode().replace(' ', '-', 1)
-        row_ls = row_ls.split()
-        try:
-            date = '2000' + row_ls[0][4:] if overlap_years else row_ls[0]
-            val = row_ls[1]
-            date_val_pair = [dateparser.parse(date), float(val)]
-        except Exception as e:
-            print(str(e))
-            continue
-        data.append(date_val_pair)
+        with io.StringIO(response.text) as f:
+            for line in f:
+                if line.strip().startswith("Timestamp"):
+                    break
 
-    return data
+            for line in f:
+                if not line.strip():
+                    continue
+
+                parts = line.strip().split(",")
+                if len(parts) < 2:
+                    continue
+
+                date = parts[0]
+                value = float(parts[1])
+
+                try:
+                    if overlap_years:
+                        date = "2000" + date[4:]
+                    date = dateparser.parse(date)
+                    data_list.append([date, value])
+                except Exception:
+                    continue
+                
+        if not data_list:
+            raise Exception(
+                f"ERROR 999: NASA GiC service returned no usable data for {lat},{lon} parameter '{data}'."
+            )
+        
+        return data_list
 
 
 def get_data_rod_plot(req_get, point_lon_lat):
-    model = req_get['model']
-    variable = req_get['variable']
-    superstring = get_datarods_tsb()[model]
+    lon, lat = point_lon_lat.split(',')
 
-    dr_link = str(superstring.format(variable, point_lon_lat.replace(',', ',%20'),
-                                     req_get['startDate'], req_get['endDate']))
+    request_params = {
+        "plot_variable": req_get['plot_variable'],
+        "lon": lon,
+        "lat": lat,
+        "start_date": req_get['startDate'],
+        "end_date": req_get['endDate'],
+    }
+    dr_ts = get_data_from_nasa_server(request_params)
 
-    dr_ts = get_data_from_nasa_server(dr_link)
-
-    datarods_urls_dict = generate_datarods_urls_dict([dr_link])
-
-    return dr_ts, datarods_urls_dict
+    return dr_ts
 
 
 def get_data_rod_plot2(req_get, point_lon_lat):
-    start_date = req_get['startDate']
-    end_date = req_get['endDate']
+    lon, lat = point_lon_lat.split(',')
 
-    # 1st variable
+    request_params_1 = {
+        "plot_variable": req_get['plot_variable'],
+        "lon": lon,
+        "lat": lat,
+        "start_date": req_get['startDate'],
+        "end_date": req_get['endDate']
+    }
+
+    data1 = get_data_from_nasa_server(request_params_1)
+
+    request_params_2 = {
+        "plot_variable" : req_get['plot_variable2'],
+        "lon": lon,
+        "lat": lat,
+        "start_date": req_get['startDate'],
+        "end_date": req_get['endDate'],
+    }
+
+    data2 = get_data_from_nasa_server(request_params_2)
+
+
     model1 = req_get['model']
-    variable1 = req_get['variable']
-    superstring1 = get_datarods_tsb()[model1]
-
-    dr_link1 = str(superstring1.format(variable1, point_lon_lat.replace(',', ',%20'),
-                                       start_date, end_date))
-
-    data1 = get_data_from_nasa_server(dr_link1)
-
-    # 2nd variable
     model2 = req_get['model2']
-    variable2 = req_get['variable2']
-    superstring2 = get_datarods_tsb()[model2]
 
-    dr_link2 = str(superstring2.format(variable2, point_lon_lat.replace(',', ',%20'),
-                                       start_date, end_date))
-    data2 = get_data_from_nasa_server(dr_link2)
+    variable1 = req_get['map_variable']
+    variable2 = req_get['map_variable2']
+
     # Create list
     dr_ts = [{'name': get_wms_vars()[model1][variable1][1] + ' (' + get_wms_vars()[model1][variable1][2] + ')',
               'data': data1,
@@ -255,42 +281,50 @@ def get_data_rod_plot2(req_get, point_lon_lat):
               'data': data2,
               'code': str(variable2) + ' (' + get_wms_vars()[model2][variable2][2] + ')'}]
 
-    datarods_urls_dict = generate_datarods_urls_dict([dr_link1, dr_link2])
-    return dr_ts, datarods_urls_dict
-
+    return dr_ts
 
 def get_data_rod_years(req_post, point_lon_lat):
-    variable = req_post['variable']
-    model = req_post['model']
-    superstring = get_datarods_tsb()[model]
-    overlap_years = True if 'true' in req_post['overlap_years'] else False
-
+    variable = req_post['plot_variable']
+    lon, lat = point_lon_lat.split(',')
+    if 'overlap_years' in req_post:
+        overlap_years = True if 'true' in req_post['overlap_years'] else False
+    else:
+        overlap_years = False
+        
     dr_ts = []
-    dr_links = []
     for year in req_post['years'].split(','):
         if '-' in year:
             year_range = year.split('-')
             for yyyy in range(int(year_range[0]), int(year_range[1]) + 1):
-                dr_link = superstring.format(variable, point_lon_lat.replace(',', ',%20'),
-                                             '{0}-01-01T00'.format(yyyy),
-                                             '{0}-12-31T23'.format(yyyy))
-                data = get_data_from_nasa_server(dr_link, overlap_years)
+                start_date = '{0}-01-01T00'.format(yyyy)
+                end_date = '{0}-12-31T23'.format(yyyy)
+                request_params = {
+                    "plot_variable": variable,
+                    "lon": lon,
+                    "lat": lat,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                }
+
+                data = get_data_from_nasa_server(request_params, overlap_years=overlap_years)
                 dr_ts.append({'name': yyyy,
                               'data': data})
-                dr_links.append(dr_link)
         else:
-            dr_link = str(superstring.format(variable, point_lon_lat.replace(',', ',%20'),
-                                             '{0}-01-01T00'.format(year),
-                                             '{0}-12-31T23'.format(year)))
+            start_date = '{0}-01-01T00'.format(year)
+            end_date = '{0}-12-31T23'.format(year)
+            request_params = {
+                "plot_variable": variable,
+                "lon": lon,
+                "lat": lat,
+                "start_date": start_date,
+                "end_date": end_date,
+            }
 
-            data = get_data_from_nasa_server(dr_link, overlap_years)
+            data = get_data_from_nasa_server(request_params, overlap_years=overlap_years)
             dr_ts.append({'name': year,
                           'data': data})
-            dr_links.append(dr_link)
 
-    datarods_urls_dict = generate_datarods_urls_dict(dr_links)
-
-    return dr_ts, datarods_urls_dict
+    return dr_ts
 
 
 def generate_datarods_urls_dict(asc2_urls):
@@ -309,3 +343,34 @@ def generate_datarods_urls_dict(asc2_urls):
         'waterml': waterml_urls,
         'netcdf': netcdf_urls
     }
+
+def get_earthdata_token():
+    url = "https://api.giovanni.earthdata.nasa.gov/signin"
+    token = requests.get(url, auth=HTTPBasicAuth(netrc.netrc().hosts["urs.earthdata.nasa.gov"][0],
+                         netrc.netrc().hosts["urs.earthdata.nasa.gov"][2]),
+                         allow_redirects=True).text.replace('"','')
+    return token
+
+def format_csv_data(raw_data):
+    if isinstance(raw_data, bytes):
+        raw_data = raw_data.decode('utf-8')
+        
+    lines = raw_data.strip().splitlines()
+    meta_lines = []
+    data_lines = []
+
+    # Separate metadata from data
+    for i, line in enumerate(lines):
+        if line.startswith("Timestamp"):
+            meta_lines = lines[:i]
+            data_lines = lines[i:]
+            break
+
+    # Pretty print metadata
+    formatted_meta = "\n".join(f"{k.strip():<20} {v.strip()}" for k, v in 
+                               (m.split(",", 1) for m in meta_lines if "," in m))
+
+    # Add spacing and simple column headers
+    formatted_data = "\n".join(data_lines)
+
+    return f"{formatted_meta}\n\n{formatted_data}"

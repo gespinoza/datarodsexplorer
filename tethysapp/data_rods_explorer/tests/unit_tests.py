@@ -5,6 +5,7 @@ from urllib.request import urlopen
 from django.http import JsonResponse
 from json import dumps
 from threading import Thread
+from tethys_sdk.routing import controller
 
 
 class TestManager:
@@ -94,8 +95,9 @@ class TestManager:
         cls.complete = True
 
 
+@controller(name='run_tests', url='data-rods-explorer/run-tests')
 def test_nasa_endpoints(request):
-    if request.is_ajax() and request.method == 'GET':
+    if request.headers.get("x-requested-with") == "XMLHttpRequest" and request.method == 'GET':
         if TestManager.complete:
             context = {
                 'results': TestManager.results,

@@ -1,21 +1,20 @@
 {% if error %}
-    <div id="Error999">{{ error }}</div>
+<div id="Error999">{{ error }}</div>
 {% else %}
     {% load tethys_gizmos %}
     <div class="dropdown">
-        <button class="btn dropdown-toggle" type="button" id="dropdown-viewData" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            View Raw Data from NASA in New Tab...
-            <span class="caret"></span>
+        <button class="btn dropdown-toggle" type="button" id="dropdown-viewData" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            View Raw Data from NASA
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdown-export">
-            <li class="option-viewData" id="optn-viewDataAscii" onclick="openDataRodsUrls({{ datarods_urls_dict.asc2 }})">
-                ASCII
+            <li class="option-viewData" id="optn-downloadDataCSV" onclick="getRawData('csv')">
+                Download CSV File
             </li>
-            <li class="option-viewData" id="optn-viewDataNetCDF" onclick="openDataRodsUrls({{ datarods_urls_dict.netcdf }})">
-                NetCDF
+            <li class="option-viewData" id="optn-downloadDataTXT" onclick="getRawData('txt')">
+                Download TXT File
             </li>
-            <li class="option-viewData" id="optn-viewDataPlot" onclick="openDataRodsUrls({{ datarods_urls_dict.plot }})">
-                Plot
+            <li class="option-viewData" id="optn-viewInBrowser" onclick="getRawData('browser')">
+                View in Browser
             </li>
         </ul>
     </div>
@@ -39,11 +38,13 @@
         <div id='plot2container' style="height: 250px; width: 100%"></div>
         {% gizmo plot_view timeseries_plot %}
         <div id="plot2-options"
-             data-series="{{ timeseries_plot.series }}"
-             data-y1units="{{ timeseries_plot.y1_axis_units }}"
-             data-y2units="{{ timeseries_plot.y2_axis_units }}"
-             class="hidden"></div>
+            data-series="{{ timeseries_plot.series }}"
+            data-y1units="{{ timeseries_plot.y1_axis_units }}"
+            data-y2units="{{ timeseries_plot.y2_axis_units }}"
+            class="d-none"></div>
     {% else %}
         {% gizmo plot_view timeseries_plot %}
     {% endif %}
 {% endif %}
+
+

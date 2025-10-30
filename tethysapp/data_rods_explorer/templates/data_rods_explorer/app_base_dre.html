@@ -1,7 +1,7 @@
 {% extends "tethys_apps/app_base.html" %}
 {% block title %}{{ block.super }} Data Rods Explorer{% endblock %}
 
-{% load staticfiles tethys_gizmos %}
+{% load static tethys_gizmos %}
 {% block htmltag %}
 {% endblock %}
 
@@ -28,14 +28,11 @@
     {% endblock %}
 {% block styles %}
     {{ block.super }}
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
     <link href="{% static 'data_rods_explorer/css/main.css' %}" rel="stylesheet"/>
 {% endblock %}
-
-    {% block global_scripts %}
-        <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
-    {% endblock %}
+{% block global_scripts %}
+    {{ block.super }}
+{% endblock %}
 </head>
 
 {# Allows custom attributes to be added to the body tag #}
@@ -87,34 +84,33 @@
             </div>
         {% endblock %}
 
-
+        {% block flash %} {% endblock %}
         {% block app_content_override %}
             <div id="app-content">
-                {% block flash %}
-                    <div class="flash-messages">
-                        <div id="query-point-info" class="alert alert-info alert-dismissible" role="alert">
-                            <b><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-                                Click on the map to define data query location, or enter a coordinate:
-                                <input type="number" min="-180" max="180" id="lon" placeholder="Longitude" style="width: 100px">
-                                <input type="number" min="-90" max="90" id="lat" placeholder="Latitude" style="width: 100px">
-                                <button type="button" id="btn-addPoint">Go</button>
-                            </b></div>
-                    </div>
-                {% endblock %}
+                <div id="top-info-container">
+                    <div id="query-point-info" class="alert alert-info alert-dismissible" role="alert">
+                        <b><span class="bi bi-info-circle" aria-hidden="true"></span>
+                            Click on the map to define data query location, or enter a coordinate:
+                            <input type="number" min="-180" max="180" id="lon" placeholder="Longitude" style="width: 100px">
+                            <input type="number" min="-90" max="90" id="lat" placeholder="Latitude" style="width: 100px">
+                            <button type="button" id="btn-addPoint">Go</button>
+                        </b></div>
+                </div>
+                
 
                 {% block app_navigation_override %}
                     <div id="app-navigation">
                         {% block app_navigation %}
-                            <ul class="nav nav-pills nav-stacked">
+                            <ul class="nav flex-column">
                                 {% block app_navigation_items %}
-                                    <li class="title">Product-Model</li>
+                                    <li class="nav-item title">Product-Model</li>
                                     <div style="padding-left:20px;padding-bottom:10px;">
                                         {% gizmo select_input select_model %}
 
-                                        <li>Select Variable</li>
+                                        <li class="nav-item">Select Variable</li>
                                         <select id="variable" name='var_case' class="form-control" style="width:100%;" onchange="oc_variable();"></select>
-                                        <li class="separator"></li>
-                                        <li>Select Map date & time</li>
+                                        <li class="nav-item separator"></li>
+                                        <li class="nav-item">Select Map date & time</li>
                                         {% gizmo date_picker select_date %}
                                         {% gizmo select_input select_hour %}
 
@@ -128,22 +124,22 @@
                                             <input name="centerX" id="centerX" value=-96.5 hidden >
                                             <input name="centerY" id="centerY" value=38.5 hidden >
                                             <input name="pointLonLat" id="pointLonLat" value=-9999 hidden ><!-- Add hidden end-->
-                                            <button id="btnDisplayMap" type="button" class="btn btn-default" onclick="load_map()" disabled="true">Display map</button>
+                                            <button id="btnDisplayMap" type="button" class="btn btn-light border border-secondary text-dark disabled" onclick="load_map()">Display map</button>
                                         </form>
                                     </div>
 
                                     <li class="nav-divider"></li>
-                                    <li style="padding-top:0px;" class="title">Time series</li>
-                                    <li><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, 'plot');">Plot one variable</a></li>
-                                    <div id="nav-plot" class="nav-item hidden" style="padding-left:30px;padding-bottom:15px;">
+                                    <li style="padding-top:0px;" class="nav-item title">Time series</li>
+                                    <li class="nav-item"><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, 'plot');">Plot one variable</a></li>
+                                    <div id="nav-plot" class="nav-item plot-form d-none" style="padding-left:30px;padding-bottom:15px;">
                                         <label style="padding-top:15px;">Start date:</label>
                                         {% gizmo date_picker start_date1 %}
                                         <label>End date:</label>
                                         {% gizmo date_picker end_date1 %}
                                         {% gizmo button plot_button1 %}
                                     </div>
-                                    <li><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, 'plot2');">Compare two variables</a></li>
-                                    <div id="nav-plot2" class="nav-item hidden" style="padding-left:30px;padding-bottom:15px;">
+                                    <li class="nav-item"><a class="nav-link" href="javascript:void(0)" onclick="onClickLink(this, 'plot2');">Compare two variables</a></li>
+                                    <div id="nav-plot2" class="nav-item plot-form d-none" style="padding-left:30px;padding-bottom:15px;">
                                         <label style="padding-top:15px;">Select Second Model</label>
                                         {% gizmo select_input select_model2 %}
                                         <label for="variable2">Select Second Variable</label>
@@ -154,8 +150,8 @@
                                         {% gizmo date_picker end_date2 %}
                                         {% gizmo button plot_button2 %}
                                     </div>
-                                    <li><a class="nav-link" style="padding-bottom:15px;" href="javascript:void(0)" onclick="onClickLink(this, 'years');">Year-on-year changes</a></li>
-                                    <div id="nav-years" class="nav-item hidden" style="padding-left:30px;padding-bottom:15px;">
+                                    <li class="nav-item"><a class="nav-link" style="padding-bottom:15px;" href="javascript:void(0)" onclick="onClickLink(this, 'years');">Year-on-year changes</a></li>
+                                    <div id="nav-years" class="nav-item plot-form d-none" style="padding-left:30px;padding-bottom:15px;">
                                         <label style="padding-top:15px;">Select years:</label>
                                         {% gizmo select_input select_years %}
                                         <fieldset>
@@ -173,19 +169,18 @@
                 {# App content starts here #}
                 <div id="inner-app-content">
                     {% block app_content %}
-                        <div id="map-loading" class="hidden">
+                        <div id="map-loading" class="d-none">
                             <img src="/static/data_rods_explorer/images/main-loading-anim.gif" />
                         </div>
-                        {% gizmo map_view map_view_options %}
-                        <div style="position: relative;">
-                            <div id="plot-loading" class="hidden">
+                        {% gizmo map_view_options %}
+                        <div>
+                            <div id="plot-loading" class="d-none">
                                 <img src="/static/data_rods_explorer/images/main-loading-anim.gif" />
                             </div>
-                            <br>
                             <div id="plot-container"></div>
                         </div>
                     {% endblock %}
-
+                    
                     {# App actions are fixed to the bottom #}
                     {% block app_actions_override %}
                         <div id="app-actions">
@@ -202,7 +197,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'tethys_apps/vendor/cookies.js' %}" type="text/javascript"></script>
+    {{ tethys.doc_cookies.script_tag|safe }}
     <script src="{% static 'tethys_apps/js/app_base.js' %}" type="text/javascript"></script>
     {% gizmo_dependencies %}
     <script src="{% static 'data_rods_explorer/vendor/highcharts4.1.7/hc.js' %}" type="text/javascript"></script>

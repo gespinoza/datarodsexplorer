@@ -1,14 +1,18 @@
 from os import path
 from datetime import datetime, timedelta
 from requests import get
-from tethys_sdk.services import get_spatial_dataset_engine
 import os
 from threading import Thread
 from tempfile import NamedTemporaryFile
-import urllib.request, urllib.error, urllib.parse
+import urllib.request
+import urllib.error
+import urllib.parse
 import zipfile
+from zipfile import ZipFile, is_zipfile
 from math import copysign
 from tethysapp.data_rods_explorer.app import DataRodsExplorer as app
+
+import xml.etree.ElementTree as ET
 
 WORKSPACE = 'data_rods_explorer'
 DATARODS_PNG = ('http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1'
@@ -106,36 +110,54 @@ class TiffLayerManager:
         try:
             minx, miny, maxx, maxy = self.latlonbox
             # Create tiff file
-
+            
             url = get_datarods_png().format(minx, miny, maxx, maxy, self.time_st,
                                             get_wms_vars()[self.model][self.variable][0])
             print(url)
+            # test url for error testing
+            # url = 'http://giovanni.gsfc.nasa.gov/giovanni/daac-bin/wms_ag4?VERSION=1.1.1&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG:4326&WIDTH=512&HEIGHT=256&LAYERS=Time-Averaged.LPRM_AMSR2_DS_A_SOILM3_001_soil_moisture_c1&STYLES=default&TRANSPARENT=TRUE&FORMAT=image/tiff&time=2012-07-04T00&bbox=-31.207092647775923,-34.15463308264707,-136.31376650786763,85.05112877980659'
             url_image = urllib.request.urlopen(url)  # error
+            content_type = url_image.info().get_content_type()
+            if content_type == 'image/tiff':
 
-            self.tiff_file.write(url_image.read())
-            self.tiff_file.close()
-            # Create prj file
-            self.create_prj_file()
-            # Create tfw file
-            self.create_tfw_file()
-            # Create zipfile
-            self.create_zip_file()
-            self.upload_layer_to_geoserver()
+          
+
+                self.tiff_file.write(url_image.read())
+                self.tiff_file.close()
+                # Create prj file
+                self.create_prj_file()
+                # Create tfw file
+                self.create_tfw_file()
+                # Create zipfile
+                self.create_zip_file()
+                self.upload_layer_to_geoserver()
+            else:
+                if content_type == 'application/vnd.ogc.se_xml':
+                    content = url_image.read().decode('utf-8')
+                    root = ET.fromstring(content)
+                    error_tags = []
+
+                    for child in root.iter():
+                        if child.tag == 'ServiceException':
+                            self.error = str(child.text)
+                            print(child.text)
+
+
         except Exception as e:
             print('download raster from nasa error')
             print(str(e))
-            self.message = str(e)
+            self.error = str(e)
 
     def upload_layer_to_geoserver(self):
         # Geoserver parameters
+        
         geo_eng = app.get_spatial_dataset_service('default', as_engine=True)
         # Create raster in geoserver
-        response = geo_eng.create_coverage_resource(store_id=self.store_id,
-                                                    coverage_file=self.zip_path,
-                                                    coverage_type='worldimage',
-                                                    overwrite=True,
-                                                    debug=False,
-                                                    )
+        response = geo_eng.create_coverage_layer(layer_id=self.store_id,   # error
+                                                coverage_file=self.zip_path,
+                                                coverage_type='WorldImage',
+                                                debug=False,
+                                                )
         if not response['success']:
             result = geo_eng.create_workspace(workspace_id=get_workspace(),
                                               uri='tethys_app-%s' % get_workspace(),
@@ -144,11 +166,11 @@ class TiffLayerManager:
             if result['success']:
                 self.upload_layer_to_geoserver()
         else:
-            response = geo_eng.update_resource(resource_id=self.store_id, store=self.store_id, debug=False, EPSG=4326,
+            workspace, store_name = self.store_id.split(':')
+            response = geo_eng.update_resource(resource_id=self.store_id, store=store_name, debug=False, EPSG=4326,
                                                enabled=True)
-            self.geoserver_url = geo_eng.public_endpoint.replace('rest', 'wms')
+            self.geoserver_url = geo_eng.endpoint.replace('rest', 'wms')
             self.loaded = True
-
     def create_tfw_file(self, h=256, w=512):
         minx, miny, maxx, maxy = self.latlonbox
         hscx = copysign((float(maxx) - float(minx)) / w, 1)
@@ -158,8 +180,12 @@ class TiffLayerManager:
         tfw_file.write('0.0\n')
         tfw_file.write('0.0\n')
         tfw_file.write('{0}\n'.format(-hscy))
-        tfw_file.write('{0}\n'.format(float(minx) - hscx / 2, float(minx)))
-        tfw_file.write('{0}\n'.format(float(maxy) - hscy / 2, float(maxy)))
+        # Next two lines are backups of what was originally here for future reference/warning
+        # The format string was given two values, but only one place to put it.
+        # tfw_file.write('{0}\n'.format(float(minx) - hscx / 2, float(minx)))
+        # tfw_file.write('{0}\n'.format(float(maxy) - hscy / 2, float(maxy)))
+        tfw_file.write('{0}\n'.format(float(minx) - hscx / 2))
+        tfw_file.write('{0}\n'.format(float(maxy) - hscy / 2))
         tfw_file.write('')
         tfw_file.close()
 
@@ -244,31 +270,34 @@ def parse_fences_from_file():
             if not (line == '' or 'Model name' in line):  # end condition
                 line = line.strip()
                 linevals = line.split('|')
-                start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1)) \
-                    .strftime('%m/%d/%Y')
-                # begin_time = linevals[1].split(' ')[1]
-                end_date = (datetime.strptime(linevals[2].split(' ')[0], '%m/%d/%Y') - timedelta(days=1)) \
-                    .strftime('%m/%d/%Y')
-                # end_time = linevals[2].split(' ')[1]
-                nbound = linevals[3].split(', ')[0]
-                ebound = linevals[3].split(', ')[1]
-                sbound = linevals[3].split(', ')[2]
-                wbound = linevals[3].split(', ')[3]
-                model_fences[linevals[0]] = {
-                    'start_date': start_date,
-                    'end_date': end_date,
-                    'extents': {
-                        'maxY': nbound,
-                        'maxX': ebound,
-                        'minY': sbound,
-                        'minX': wbound
+                if len(linevals) > 3:
+                    start_date = (datetime.strptime(linevals[1].split(' ')[0], '%m/%d/%Y') + timedelta(days=1)) \
+                        .strftime('%m/%d/%Y')
+                    # begin_time = linevals[1].split(' ')[1]
+                    end_date = (datetime.strptime(linevals[2].split(' ')[0], '%m/%d/%Y') - timedelta(days=1)) \
+                        .strftime('%m/%d/%Y')
+                    # end_time = linevals[2].split(' ')[1]
+                    nbound = linevals[3].split(', ')[0]
+                    ebound = linevals[3].split(', ')[1]
+                    sbound = linevals[3].split(', ')[2]
+                    wbound = linevals[3].split(', ')[3]
+                    model_fences[linevals[0]] = {
+                        'start_date': start_date,
+                        'end_date': end_date,
+                        'extents': {
+                            'maxY': nbound,
+                            'maxX': ebound,
+                            'minY': sbound,
+                            'minX': wbound
+                        }
                     }
-                }
 
     return model_fences
 
 
 def parse_model_database_from_file():
+    
+
     # Attempt to parse model_config.txt from GitHub repo master branch
     db_file_url = ('https://raw.githubusercontent.com/CUAHSI-APPS/datarodsexplorer/master/tethysapp/'
                     'data_rods_explorer/public/data/model_config.txt')
@@ -323,7 +352,8 @@ def parse_model_database_from_file():
             var_dict[model_key].append({
                 "text": "%s %s" % (linevals[3], linevals[4]),
                 "value": linevals[1],
-                "layerName": linevals[5]
+                "layerName": linevals[5],
+                "variable": linevals[2]
             })
-
+    # print(wms_vars)
     return model_options, var_dict, wms_vars, datarods_tsb

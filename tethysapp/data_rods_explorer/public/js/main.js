@@ -1,4 +1,5 @@
 $(function() {
+    
     var map;
 
     $('.app-title').css({'width': '480px'});
@@ -81,7 +82,7 @@ $(function() {
             'rods_endpoints': $('#rodsEndpoint').val(),
             'plot_type': $('#plotType').val()
         };
-        removeFlashMessage(uploadToHSFlashMessageID);
+        removeFlashMessageById(uploadToHSFlashMessageID);
         displayFlashMessage(uploadToHSFlashMessageID, 'info', 'Creating HydroShare resource...');
 
         $('#modalUploadToHS').modal('hide');
@@ -93,7 +94,7 @@ $(function() {
             dataType: 'json',
             contentType: 'json',
             success: function (response) {
-                removeFlashMessage(uploadToHSFlashMessageID);
+                removeFlashMessageById(uploadToHSFlashMessageID);
                 if (response.hasOwnProperty('success')) {
                     if (response.success) {
                         displayFlashMessage(uploadToHSFlashMessageID, 'success', 'The HydroShare resource was created successfully! ' +

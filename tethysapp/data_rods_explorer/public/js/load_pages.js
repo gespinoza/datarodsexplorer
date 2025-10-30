@@ -1,10 +1,10 @@
 function onClickLink(link, navItem) {
     if ($(link).hasClass('open')) {
         $(link).removeClass('open');
-        $('#nav-' + navItem).addClass('hidden');
+        $('#nav-' + navItem).addClass('d-none');
 
         if (navItem == 'plot2') {
-            removeFlashMessage('bound-adjusted');
+            removeFlashMessageById('bound-adjusted');
             TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
             update_legend();
             COMPARE_TWO = false;
@@ -12,8 +12,8 @@ function onClickLink(link, navItem) {
     } else {
         $('.nav-link').removeClass('open');
         $(link).addClass('open');
-        $('.nav-item').addClass('hidden');
-        $('#nav-' + navItem).removeClass('hidden');
+        $('.plot-form').addClass('d-none');
+        $('#nav-' + navItem).removeClass('d-none');
 
         loadNavOptionsAndParams(navItem);
 
@@ -21,19 +21,21 @@ function onClickLink(link, navItem) {
             TETHYS_MAP_VIEW.getMap().addLayer(MODEL2_LAYER);
             update_legend();
             COMPARE_TWO = true;
+            oc_model2();
         } else {
-            removeFlashMessage('bound-adjusted');
+            removeFlashMessageById('bound-adjusted');
             TETHYS_MAP_VIEW.getMap().removeLayer(MODEL2_LAYER);
+            removeFlashMessageByClass('model2-plot-flash-message');
             update_legend();
             COMPARE_TWO = false;
+            oc_model();
         }
-        validateClickPoint()
     }
 }
 
 function loadNavOptionsAndParams(navItem) {
     var GET = getUrlVars();
-    var data, model, varia, plotDate, plotTime, endDate, startDate, model2, varia2, years;
+    var data, model, map_var, plot_var, plotDate, plotTime, endDate, startDate, model2, varia2, years;
 
     if (GET['model']) {
         model = GET['model'];
@@ -41,10 +43,16 @@ function loadNavOptionsAndParams(navItem) {
         model = $('#model1').val();
     }
 
-    if (GET['variable']) {
-        varia = GET['variable'];
+    if (GET['map_variable']) {
+        map_var = GET['map_variable'];
     } else {
-        varia = VAR_DICT[model][0].value;
+        map_var = VAR_DICT[model][0].value;
+    }
+
+    if (GET['plot_variable']) {
+        plot_var = GET['plot_variable'];
+    } else {
+        plot_var = VAR_DICT[model][0].variable;
     }
 
     if (GET['plotTime']) {
@@ -56,7 +64,8 @@ function loadNavOptionsAndParams(navItem) {
 
     data = {
         'model': model,
-        'variable': varia,
+        'map_variable': map_var,
+        'plot_variable': plot_var,
         'plotTime': plotDate
     };
 
@@ -91,18 +100,21 @@ function loadNavOptionsAndParams(navItem) {
             if (GET['model2']) {
                 model2 = GET['model2'];
             } else {
-                model2 = 'NLDASF'; //1st element
+                model2 = 'NLDAS2F'; //1st element
             }
 
             data['model2'] = model2;
-
-            if (model === model2 && varia == VAR_DICT[model][0].value) {
-                varia2 = VAR_DICT[model2][1].value;
+            
+            if (model === model2 && map_var == VAR_DICT[model][0].value) {
+                varia2 = VAR_DICT[model2][1].variable;
+                map_var2 = VAR_DICT[model2][1].value;
             } else {
-                varia2 = VAR_DICT[model2][0].value;
+                varia2 = VAR_DICT[model2][0].variable;
+                map_var2 = VAR_DICT[model2][0].value;
             }
 
-            data['variable2'] = varia2;
+            data['plot_variable2'] = varia2;
+            data['map_variable2'] = map_var2;
         }
 
     } else if (navItem == 'years') {
@@ -136,8 +148,12 @@ function loadDefaultHome() {
         GET['model'] = model;
     }
 
-    if (GET['variable'] === undefined) {
-        GET['variable'] = VAR_DICT[model][0].value;
+    if (GET['map_variable'] === undefined) {
+        GET['map_variable'] = VAR_DICT[model][0].value;
+    }
+
+    if (GET['plot_variable'] === undefined) {
+        GET['plot_variable'] = VAR_DICT[model][0].variable;
     }
 
     if (GET['plotTime']) {
@@ -149,7 +165,7 @@ function loadDefaultHome() {
     }
 
     $('#model1').val(model);
-    $('#variable').val(GET['variable']);
+    $('#variable').val(GET['map_variable']);
     $('#plot_date').val(plotTime['date']);
     $('#plot_hour').val(plotTime['hour']);
 
@@ -182,6 +198,7 @@ function loadDefaultHome() {
     if (navItem) {
         onClickLink($('#nav-' + navItem).prev().children()[0], navItem);
     }
+    oc_model()
 }
 
 function loadDefaultsForPlotNav(data) {
@@ -213,7 +230,7 @@ function loadDefaultsForPlot2Nav(data) {
     if (GET['model2']) {
         model2 = GET['model2'];
     } else {
-        model2 = 'NLDASF'; //1st element
+        model2 = 'NLDAS2F'; //1st element
     }
 
     if (GET['endDate']) {
@@ -228,7 +245,7 @@ function loadDefaultsForPlot2Nav(data) {
         startDate = getPrevRodsDate(endDate, 7);
     }
 
-    if (GET['model'] === model2 && GET['variable'] == VAR_DICT[GET['model']][0].value) {
+    if (GET['model'] === model2 && GET['map_variable'] == VAR_DICT[GET['model']][0].value) {
         varia2 = VAR_DICT[model2][1].value;
     } else {
         varia2 = VAR_DICT[model2][0].value;

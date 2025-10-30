@@ -1,21 +1,13 @@
 function oc_model() {
-    var NLDASFlashMessageID = 'NLDAS-get-map-disabled';
-    var NLDASFlashMessageText = 'NLDAS does not support the "Display Map" function, ' +
-        'but data rods data can still be obtained under the "Plot one variable", "Compare two variables", ' +
-        'or "Year-on-year changes" options.';
-    var SMERGEFlashMessageID = 'Smerge-get-map-disabled';
-    var SMERGEFlashMessageText = 'Smerge does not support the "Display Map" function, ' +
-        'but data rods data can still be obtained under the "Plot one variable", "Compare two variables", ' +
-        'or "Year-on-year changes" options.';
     var href;
     var GET = getUrlVars();
     var model = $('#model1').val();
-    var btnDisplayMap = $('#btnDisplayMap');
 
     // All datepickers (plotTime, startDate`, endDate), the model and variable are affected by this change event. Everything else stays the same.
     updateFences('1', model); // The "1" refers to "Model 1". Thus Model 1's fences will be updated.
     GET['model'] = model;
-    GET['variable'] = VAR_DICT[model][0].value; //1st element
+    GET['map_variable'] = VAR_DICT[model][0].value; //1st element
+    GET['plot_variable'] = VAR_DICT[model][0].variable;
     GET['plotTime'] = dateHourPickerToRodsDate($('#plot_date').val(), $('#plot_hour').val());
 
     if ($('#endDate1').val()) {
@@ -29,18 +21,9 @@ function oc_model() {
     href = constructHref(GET);
     history.pushState("", "", href);
     loadVariableOptions('model', 'variable');
-    validateClickPoint();
-
-    if (model.includes('NLDAS')) {
-        btnDisplayMap.prop('disabled', true);
-        displayFlashMessage(NLDASFlashMessageID, 'info', NLDASFlashMessageText)
-    } else if (model.includes('SMERGE')) {
-        btnDisplayMap.prop('disabled', true);
-        displayFlashMessage(SMERGEFlashMessageID, 'info', SMERGEFlashMessageText)
-    } else {
-        btnDisplayMap.prop('disabled', false);
-        removeFlashMessage(NLDASFlashMessageID)
-    }
+    
+    updateMapButtonState();
+    updatePlotButtonsState();
 }
 
 function oc_variable() {
@@ -48,7 +31,9 @@ function oc_variable() {
     var GET = getUrlVars();
 
     // Only the variable is affected by this change event. Everything else stays the same.
-    GET['variable'] = $('#variable').val();
+    var $selectedOption = $('#variable option:selected');
+    GET['map_variable'] = $selectedOption.data('wms-name');
+    GET['plot_variable'] = $selectedOption.data('variable-name');
 
     href = constructHref(GET);
     history.pushState("", "", href);
@@ -103,7 +88,8 @@ function oc_model2() {
 
     updateFences('2', model2);
     GET['model2'] = model2;
-    GET['variable2'] = VAR_DICT[model2][0].value; //1st element
+    GET['map_variable2'] = VAR_DICT[model2][0].value; //1st element
+    GET['plot_variable2'] = VAR_DICT[model2][0].variable;
     var endDate = dateHourPickerToRodsDate($('#endDate2').val(), '23');
     var startDate = dateHourPickerToRodsDate($('#startDate2').val(), '00');
 
@@ -113,7 +99,8 @@ function oc_model2() {
     href = constructHref(GET);
     history.pushState("", "", href);
     loadVariableOptions('model2', 'variable2');
-    validateClickPoint();
+    
+    updatePlotButtonsState();
 }
 
 function oc_variable2() {
@@ -135,7 +122,6 @@ function oc_years() {
 
     if (yearsList && yearsList.length > 0) {
         GET['years'] = yearsList.join(',');
-        validateClickPoint();
     } else {
         $('a[name=years]').addClass('disabled');
     }

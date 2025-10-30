@@ -10,7 +10,7 @@ function checkTests() {
             if (response.hasOwnProperty('results')) {
                 $('#progressTotal').css('width', '100%');
                 $('#progressText').text('100%');
-                $('#header').addClass('hidden');
+                $('#header').addClass('d-none');
                 $('#results').html(response.results);
                 var failedUrls = JSON.parse(response.failed_urls.replace(/&quot;/g, '"'));
                 var failedUrlHTML = '';
